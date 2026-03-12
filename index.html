@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio de Cédric AUGUSTO - Développeur Web en formation. Découvrez mes projets en HTML, CSS, JavaScript. Recherche stage/alternance.">
+    <meta name="keywords" content="portfolio, développeur web, HTML, CSS, JavaScript, Cédric AUGUSTO, stage, alternance">
+    <meta name="author" content="Cédric AUGUSTO">
+
+    <!-- Open Graph (Réseaux sociaux) -->
+    <meta property="og:title" content="Cédric AUGUSTO — Portfolio Développeur Web">
+    <meta property="og:description" content="Découvrez mes projets en développement web. HTML, CSS, JavaScript.">
+    <meta property="og:type" content="website">
+
+    <title>Cédric AUGUSTO — Portfolio</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Toggle Mode Couleurs -->
+    <button id="theme-toggle" class="theme-toggle" title="Changer le thème" aria-label="Changer le thème">
+        <span class="theme-icon">🎨</span>
+    </button>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- HEADER & NAVIGATION -->
+    <header class="en-tete">
+        <div class="conteneur">
+            <div class="logo">
+                <span class="prenom">Cédric</span>
+                <span class="separateur"> — </span>
+                <span class="nom">AUGUSTO</span>
+                <span class="curseur">_</span>
+            </div>
+            <button class="bouton-menu" id="menu-toggle">☰</button>
+            <nav>
+                <ul class="liste-liens" id="liste-liens">
+                    <li><a href="#about">À propos</a></li>
+                    <li><a href="#competences">Compétences</a></li>
+                    <li><a href="#soft-skills">Soft Skills</a></li>
+                    <li><a href="#projets">Projets</a></li>
+                    <li><a href="#ia">IA & LLM</a></li>
+                    <li><a href="videos.html">📺 Vidéos</a></li>
+                    <li><a href="wuthering-waves.html">🌊 Wuthering Waves</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="conteneur">
+            <div class="hero-contenu">
+                <h1 class="hero-titre">
+                    <span class="hero-prenom" data-text="Cédric">Cédric</span>
+                    <span class="hero-separateur"> — </span>
+                    <span class="hero-nom" data-text="AUGUSTO">AUGUSTO</span>
+                </h1>
+                <p class="hero-sous-titre">Développeur Web en formation</p>
+                <p class="hero-description">Recherche stage/alternance à partir de 2026</p>
+                <div class="hero-boutons">
+                    <a href="#projets" class="bouton-hero primaire">📂 Voir projets</a>
+                    <a href="#contact" class="bouton-hero secondaire">✉️ Me contacter</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION À PROPOS -->
+    <section id="about" class="section">
+        <div class="conteneur">
+            <h2 class="anime-lettres">À propos de moi</h2>
+            <p class="texte-presentatation">
+                Développeur web en formation, je suis activement à la recherche d'un stage ou d'une alternance.
+                Animé par une forte curiosité technique, je mets mon esprit d'apprentissage au service de la création
+                d'interfaces propres, fonctionnelles et adaptées aux besoins utilisateurs.
+            </p>
+            <p class="texte-coordonnees">
+                <span class="coordonnee">📍 [Ta ville]</span>
+                <span class="separateur-coord">|</span>
+                <span class="coordonnee">📧 [ton.email@example.com]</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION COMPÉTENCES TECHNIQUES -->
+    <section id="competences" class="section fond-sombre">
+        <div class="conteneur">
+            <h2 class="anime-lettres">Mes Compétences Techniques</h2>
+            <div class="grille-competences">
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    <img src="assets/HTML5_logo_and_wordmark.svg.png" alt="HTML5" class="logo-competence">
+                </div>
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    <img src="assets/CSS3_logo_and_wordmark.svg.png" alt="CSS3" class="logo-competence">
+                </div>
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    <img src="assets/javascript-logo-javascript-icon-transparent-free-png.webp" alt="JavaScript" class="logo-competence">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION SOFT SKILLS -->
+    <section id="soft-skills" class="section">
+        <div class="conteneur">
+            <h2 class="anime-lettres">Soft Skills</h2>
+            <div class="grille-competences">
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    Curiosité
+                </div>
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    Ponctualité
+                </div>
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    Communication
+                </div>
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    Organisation & Autonomie
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION PROJETS -->
+    <section id="projets" class="section fond-sombre">
+        <div class="conteneur">
+            <h2 class="anime-lettres">Mes Projets</h2>
+            <div class="grille-projets">
+                <article class="projet">
+                    <span class="ligne-lumineuse"></span>
+                    <h3>Jeu Voiture (Scratch)</h3>
+                    <p>Jeu de voiture interactif créé avec Scratch, avec gestion des déplacements et des obstacles.</p>
+                    <div class="tags-technos">
+                        <span class="tag">🏷️ Scratch</span>
+                    </div>
+                </article>
+                <article class="projet">
+                    <span class="ligne-lumineuse"></span>
+                    <h3>Site Portfolio</h3>
+                    <p>Conception et développement de mon portfolio personnel en HTML et CSS.</p>
+                    <div class="tags-technos">
+                        <span class="tag">🏷️ HTML</span>
+                        <span class="tag">🏷️ CSS</span>
+                    </div>
+                    <a href="index.html" target="_blank" class="bouton-projet">Voir le portfolio</a>
+                </article>
+                <article class="projet">
+                    <span class="ligne-lumineuse"></span>
+                    <h3>Figurine (Cap Sciences)</h3>
+                    <p>Création d'une figurine lors d'un atelier au Cap Sciences.</p>
+                    <img src="assets/Capture d'écran 2026-03-03 141359.png" alt="Figurine Cap Sciences" class="projet-image">
+                    <div class="tags-technos">
+                        <span class="tag">🏷️ Modélisation 3D</span>
+                    </div>
+                </article>
+                <article class="projet">
+                    <span class="ligne-lumineuse"></span>
+                    <h3>Montage Vidéo</h3>
+                    <p>Réalisation d'un montage vidéo soigné avec effets, transitions et synchronisation audio.</p>
+                    <div class="tags-technos">
+                        <span class="tag">🏷️ Montage</span>
+                    </div>
+                </article>
+                <article class="projet">
+                    <span class="ligne-lumineuse"></span>
+                    <h3>🎬 OpenShot Vidéo</h3>
+                    <p>Création et montage de vidéos avec OpenShot : effets visuels, transitions dynamiques, synchronisation audio et titrage professionnel.</p>
+                    <div class="tags-technos">
+                        <span class="tag">🏷️ OpenShot</span>
+                        <span class="tag">🏷️ Montage Vidéo</span>
+                        <span class="tag">🏷️ Effets</span>
+                    </div>
+                </article>
+                <article class="projet">
+                    <span class="ligne-lumineuse"></span>
+                    <h3>Jeu dans l'Espace (HTML/CSS/JS)</h3>
+                    <p>Jeu sur le thème spatial développé en HTML, CSS et JavaScript avec interactions dynamiques.</p>
+                    <div class="tags-technos">
+                        <span class="tag">🏷️ HTML</span>
+                        <span class="tag">🏷️ CSS</span>
+                        <span class="tag">🏷️ JavaScript</span>
+                    </div>
+                    <a href="espase/index.html" target="_blank" class="bouton-projet">Voir le projet</a>
+                </article>
+                <article class="projet">
+                    <span class="ligne-lumineuse"></span>
+                    <h3>📄 Google Docs</h3>
+                    <p>Création et mise en forme de documents professionnels : rapports, lettres, CV, dossiers de présentation avec une mise en page soignée.</p>
+                    <img src="assets/google docs.png" alt="Google Docs - Exemple de document" class="projet-image">
+                    <div class="tags-technos">
+                        <span class="tag">🏷️ Traitement de texte</span>
+                        <span class="tag">🏷️ Mise en page</span>
+                        <span class="tag">🏷️ Rédaction</span>
+                    </div>
+                </article>
+                <article class="projet">
+                    <span class="ligne-lumineuse"></span>
+                    <h3>📊 Google Sheets</h3>
+                    <p>Conception de tableaux de bord, tableaux de calculs et de suivi : formules, mises en forme conditionnelles, graphiques et organisation de données.</p>
+                    <img src="assets/google sheets.png" alt="Google Sheets - Exemple de tableau" class="projet-image">
+                    <span class="projet-image-legende">📊 Tableau de bord & Formules</span>
+                    <div class="tags-technos">
+                        <span class="tag">🏷️ Tableur</span>
+                        <span class="tag">🏷️ Formules</span>
+                        <span class="tag">🏷️ Graphiques</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION IA & LLM -->
+    <section id="ia" class="section fond-sombre">
+        <div class="conteneur">
+            <h2 class="anime-lettres">IA & LLM</h2>
+            <p class="texte-presentation" style="margin-bottom: 2rem;">
+                Intégration et utilisation de l'Intelligence Artificielle et des modèles de langage (LLM) dans mes projets.
+            </p>
+            <div class="grille-projets">
+                <article class="projet" data-scroll>
+                    <span class="ligne-lumineuse"></span>
+                    <h3>Dev LLM Prompt</h3>
+                    <img src="assets/Qwen IA.jpeg" alt="Intelligence Artificielle - Qwen" class="projet-image">
+                    <div class="tags-technos">
+                        <span class="tag">🏷️ Dev LLM</span>
+                        <span class="tag">🏷️ Prompt</span>
+                        <span class="tag">🏷️ IA</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION CONTACT -->
+    <section id="contact" class="section">
+        <div class="conteneur">
+            <h2 class="anime-lettres">Contact & Opportunités</h2>
+            <p class="texte-contact">Je suis disponible pour un stage ou une alternance.</p>
+
+            <div class="contact-coordonnees">
+                <a href="mailto:[ton.email@example.com]" class="contact-lien">
+                    <span class="contact-icone">📧</span> [ton.email@example.com]
+                </a>
+                <a href="#" class="contact-lien">
+                    <span class="contact-icone">💼</span> LinkedIn
+                </a>
+                <a href="#" class="contact-lien">
+                    <span class="contact-icone">🐙</span> GitHub
+                </a>
+            </div>
+
+            <form class="formulaire">
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" required>
+
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message :</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+
+                <button type="submit" class="bouton-envoi">Envoyer ma candidature</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="pied-de-page">
+        <div class="conteneur">
+            <p>© 2026 - Cédric AUGUSTO <span class="curseur">_</span></p>
+            <div class="footer-reseaux">
+                <a href="mailto:[ton.email@example.com]" class="footer-lien">
+                    <span>📧</span> Email
+                </a>
+                <a href="#" class="footer-lien">
+                    <span>💼</span> LinkedIn
+                </a>
+                <a href="#" class="footer-lien">
+                    <span>🐙</span> GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bouton Retour en haut -->
+    <button id="bouton-haut" class="bouton-haut" title="Retour en haut">
+        ⬆
+    </button>
+
+    <!-- Lecteur de musique de fond -->
+    <div class="music-player">
+        <span class="music-icon">🎵</span>
+        <select id="music-selector" class="music-selector">
+            <option value="sparkle">Sparkle</option>
+            <option value="bernice">Bernice</option>
+            <option value="cartethyia">Cartethyia - Against the Tide</option>
+            <option value="sparxie">Sparxie</option>
+            <option value="herta">la Grande Herta</option>
+        </select>
+        <audio controls loop id="audio-player">
+            <source src="assets/Sparkle.mp3" type="audio/mpeg">
+            Votre navigateur ne supporte pas la lecture audio.
+        </audio>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

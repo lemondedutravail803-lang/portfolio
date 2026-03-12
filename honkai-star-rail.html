@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Honkai: Star Rail - Vidéos et présentations">
+    <meta name="author" content="Cédric AUGUSTO">
+    <title>Honkai: Star Rail — Cédric AUGUSTO</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <button id="theme-toggle" class="theme-toggle" title="Changer le thème" aria-label="Changer le thème">
+        <span class="theme-icon">🎨</span>
+    </button>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="en-tete">
+        <div class="conteneur">
+            <div class="logo">
+                <span class="prenom">Cédric</span>
+                <span class="separateur"> — </span>
+                <span class="nom">AUGUSTO</span>
+                <span class="curseur">_</span>
+            </div>
+            <button class="bouton-menu" id="menu-toggle">☰</button>
+            <nav>
+                <ul class="liste-liens" id="liste-liens">
+                    <li><a href="index.html">🏠 Accueil</a></li>
+                    <li><a href="videos.html">📺 Vidéos</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="videos" class="section">
+        <div class="conteneur">
+            <h2 class="anime-lettres">⭐ Honkai: Star Rail</h2>
+            <p class="texte-presentation" style="margin-bottom: 2rem;">
+                Découvrez l'univers de Honkai: Star Rail à travers mes vidéos de présentation.
+            </p>
+
+            <!-- GRANDE HERTA -->
+            <article class="projet" data-scroll>
+                <span class="ligne-lumineuse"></span>
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--couleur-emeraude);">
+                    ❄️ Grande Herta
+                </h3>
+
+                <div class="video-container">
+                    <video controls poster="assets/honkai.jpg">
+                        <source src="assets/Grande Herta.mp4" type="video/mp4">
+                        Votre navigateur ne supporte pas la lecture vidéo.
+                    </video>
+                </div>
+
+                <p style="margin-top: 1rem; color: var(--couleur-texte);">
+                    Découvrez la Grande Herta, un personnage emblématique de Honkai: Star Rail.
+                </p>
+
+                <div class="tags-technos" style="margin-top: 1rem;">
+                    <span class="tag">🏷️ Herta</span>
+                    <span class="tag">🏷️ RPG</span>
+                    <span class="tag">🏷️ HoYoverse</span>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="section fond-sombre">
+        <div class="conteneur">
+            <h2 class="anime-lettres">🎮 Déroulement d'une Session de Jeu</h2>
+            <div class="grille-competences" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    <h4 style="color: var(--couleur-emeraude); margin-bottom: 0.5rem;">1️⃣ Connexion & Quotidiens</h4>
+                    <p style="font-size: 0.9rem;">Récompenses de connexion, missions quotidiennes et entraînements.</p>
+                </div>
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    <h4 style="color: var(--couleur-emeraude); margin-bottom: 0.5rem;">2️⃣ Quêtes d'Histoire</h4>
+                    <p style="font-size: 0.9rem;">Progression dans le scénario principal et découverte de nouvelles zones.</p>
+                </div>
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    <h4 style="color: var(--couleur-emeraude); margin-bottom: 0.5rem;">3️⃣ Combats & Exploration</h4>
+                    <p style="font-size: 0.9rem;">Affrontez des ennemis, explorez les donjons et récupérez du butin.</p>
+                </div>
+                <div class="carte">
+                    <span class="ligne-lumineuse"></span>
+                    <h4 style="color: var(--couleur-emeraude); margin-bottom: 0.5rem;">4️⃣ Collection & Amélioration</h4>
+                    <p style="font-size: 0.9rem;">Gacha pour nouveaux personnages, amélioration d'armes et de reliques.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="pied-de-page">
+        <div class="conteneur">
+            <p>© 2026 - Cédric AUGUSTO <span class="curseur">_</span></p>
+            <div class="footer-reseaux">
+                <a href="index.html#contact" class="footer-lien"><span>📧</span> Contact</a>
+                <a href="#" class="footer-lien"><span>💼</span> LinkedIn</a>
+                <a href="#" class="footer-lien"><span>🐙</span> GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="bouton-haut" class="bouton-haut" title="Retour en haut">⬆</button>
+    <script src="script.js"></script>
+</body>
+</html>

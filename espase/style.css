@@ -1,0 +1,252 @@
+/* ==================== BASE ==================== */
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    user-select: none;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1s ease-in-out;
+}
+
+canvas { 
+    display: block; 
+}
+
+/* ==================== UI LAYER ==================== */
+#ui-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+    text-shadow: 0 0 10px #0ff;
+    gap: 20px;
+}
+
+.hud-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: auto;
+}
+
+/* ==================== COMBO DISPLAY ==================== */
+#comboEl {
+    font-size: 24px;
+    font-weight: bold;
+    animation: comboPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes comboPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* ==================== ÉCRANS ==================== */
+#menu-screen, #victory-screen, #game-over-screen, #pause-screen {
+    background: rgba(0, 0, 0, 0.95);
+    padding: 50px;
+    border: 3px solid #0ff;
+    border-radius: 15px;
+    display: none;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.5),
+                inset 0 0 30px rgba(0, 255, 255, 0.1);
+    min-width: 400px;
+}
+
+#menu-screen.active, #victory-screen.active, #game-over-screen.active, #pause-screen.active {
+    display: block;
+    animation: screenFadeIn 0.3s ease-out;
+}
+
+@keyframes screenFadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ==================== TITRE NÉON ==================== */
+.neon-title {
+    color: #0ff;
+    font-size: 48px;
+    margin: 0 0 10px 0;
+    text-shadow: 0 0 10px #0ff,
+                 0 0 20px #0ff,
+                 0 0 40px #0ff,
+                 0 0 80px #0ff;
+    animation: neonFlicker 2s ease-in-out infinite;
+}
+
+@keyframes neonFlicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+    52% { opacity: 1; }
+    54% { opacity: 0.9; }
+    56% { opacity: 1; }
+}
+
+.subtitle {
+    color: #f0f;
+    font-size: 24px;
+    margin: 0 0 20px 0;
+    text-shadow: 0 0 10px #f0f,
+                 0 0 20px #f0f;
+}
+
+.difficulty-hard {
+    color: #f00;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+    text-shadow: 0 0 10px #f00,
+                 0 0 20px #f00;
+    animation: warningBlink 1s ease-in-out infinite;
+}
+
+@keyframes warningBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ==================== BOUTONS ==================== */
+button {
+    background: linear-gradient(180deg, #0ff, #088);
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    margin: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: inherit;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+button:hover {
+    background: linear-gradient(180deg, #fff, #0ff);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.difficulty-buttons {
+    margin: 20px 0;
+}
+
+/* ==================== TEXTES SPÉCIAUX ==================== */
+.victory-text {
+    color: #0f0;
+    font-size: 42px;
+    margin: 0;
+    text-shadow: 0 0 10px #0f0,
+                 0 0 20px #0f0,
+                 0 0 40px #0f0;
+    animation: victoryGlow 1s ease-in-out infinite;
+}
+
+@keyframes victoryGlow {
+    0%, 100% { text-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 40px #0f0; }
+    50% { text-shadow: 0 0 20px #0f0, 0 0 40px #0f0, 0 0 80px #0f0; }
+}
+
+.gameover-text {
+    color: #f00;
+    font-size: 42px;
+    margin: 0;
+    text-shadow: 0 0 10px #f00,
+                 0 0 20px #f00,
+                 0 0 40px #f00;
+    animation: gameoverPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes gameoverPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.pause-text {
+    color: #ff0;
+    font-size: 48px;
+    margin: 0 0 20px 0;
+    text-shadow: 0 0 10px #ff0,
+                 0 0 20px #ff0,
+                 0 0 40px #ff0;
+}
+
+/* ==================== CONTROLES ==================== */
+.controls {
+    color: #aaa;
+    font-size: 14px;
+    margin: 20px 0;
+}
+
+.controls span {
+    color: #0ff;
+}
+
+/* ==================== GAMEPAD INDICATOR ==================== */
+#gamepad-indicator {
+    position: absolute;
+    top: 20px; right: 20px;
+    color: #0f0;
+    display: none;
+    font-size: 16px;
+    text-shadow: 0 0 10px #0f0;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #0f0;
+}
+
+#gamepad-indicator.active { 
+    display: block;
+    animation: gamepadBlink 2s ease-in-out infinite;
+}
+
+@keyframes gamepadBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ==================== PARAGRAPHES ==================== */
+p {
+    margin: 10px 0;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 600px) {
+    .hud-top {
+        font-size: 14px;
+        flex-wrap: wrap;
+    }
+    
+    .neon-title {
+        font-size: 32px;
+    }
+    
+    #menu-screen, #victory-screen, #game-over-screen, #pause-screen {
+        padding: 30px;
+        min-width: auto;
+    }
+}

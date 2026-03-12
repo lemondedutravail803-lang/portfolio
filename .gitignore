@@ -1,0 +1,8 @@
+# Fichiers vidéo volumineux (>100MB)
+*.mp4
+
+# Fichiers audio volumineux
+*.mp3
+
+# Garde les petites vidéos si nécessaire
+# !assets/small-video.mp4

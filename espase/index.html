@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Defender - Ultimate Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="ui-layer">
+        <div class="hud-top">
+            <div>SCORE: <span id="scoreEl">0</span></div>
+            <div id="comboEl" class="combo-display" style="display: none;">COMBO x<span id="comboCount">0</span></div>
+            <div>VIES: <span id="livesEl">3</span></div>
+            <div>ENNEMIS: <span id="enemyCountEl">100</span></div>
+        </div>
+        <div id="gamepad-indicator">🎮 MANETTE</div>
+        <div class="hud-center">
+            <div id="menu-screen" class="active">
+                <h1 class="neon-title">Space Defender</h1>
+                <p class="subtitle">🚀 ULTIMATE EDITION 🚀</p>
+                <p>Détruis les 100 vaisseaux ennemis !</p>
+                <p>❤️ +1 vie tous les 5000 points</p>
+                <p>⚡ Power-ups: Triple tir | Bouclier | Vitesse | Coeur</p>
+                <p>👑 Détruisez 80 ennemis pour le BOSS FINAL !</p>
+                <p class="controls">
+                    <span>🎮 ZQSD / Flèches</span> | 
+                    <span>ESPACE pour tirer</span> | 
+                    <span>P pour Pause</span>
+                </p>
+                <p>Difficulté :</p>
+                <div class="difficulty-buttons">
+                    <button onclick="startGame('easy')">Facile</button>
+                    <button onclick="startGame('medium')">Moyen</button>
+                    <button onclick="startGame('hard')">Difficile</button>
+                </div>
+            </div>
+            <div id="pause-screen">
+                <h1 class="pause-text">PAUSE</h1>
+                <p>Appuyez sur P pour reprendre</p>
+                <button onclick="togglePause()">Reprendre</button>
+                <button onclick="resetGame()">Quitter</button>
+            </div>
+            <div id="victory-screen">
+                <h1 class="victory-text">🏆 VICTOIRE ! 🏆</h1>
+                <p>Vous avez vaincu le Boss Final !</p>
+                <p>Score: <span id="victoryScore">0</span></p>
+                <button onclick="closeOverlay()">Mode Endless</button>
+                <button onclick="resetGame()">Menu</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
