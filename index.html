@@ -318,6 +318,43 @@
         </audio>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Lecteur de musique - Configuration
+        const musicTracks = {
+            'sparxie': 'assets/Sparxie.m4a',
+            'sparkle': 'assets/Sparkle Mélodrame.m4a',
+            'bernice': 'assets/Bernice Boisson spéciale.m4a',
+            'cartethyia': 'assets/Wuthering Waves Cartethyia m4a'
+        };
+
+        const audioPlayer = document.getElementById('audio-player');
+        const musicSelector = document.getElementById('music-selector');
+
+        if (musicSelector && audioPlayer) {
+            // Changer de musique quand on sélectionne une option
+            musicSelector.addEventListener('change', function() {
+                const selectedMusic = musicSelector.value;
+                const selectedTrack = musicTracks[selectedMusic];
+
+                // Changer la source audio
+                audioPlayer.src = selectedTrack;
+                audioPlayer.load();
+
+                // Lancer la nouvelle musique
+                audioPlayer.play().catch(e => console.log('Lecture automatique bloquée:', e));
+
+                // Sauvegarder le choix
+                localStorage.setItem('selectedMusic', selectedMusic);
+            });
+
+            // Charger la dernière musique sélectionnée
+            const savedMusic = localStorage.getItem('selectedMusic');
+            if (savedMusic && musicTracks[savedMusic]) {
+                musicSelector.value = savedMusic;
+                audioPlayer.src = musicTracks[savedMusic];
+                audioPlayer.load();
+            }
+        }
+    </script>
 </body>
 </html>
