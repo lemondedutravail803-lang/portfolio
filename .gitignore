@@ -4,5 +4,9 @@
 # Fichiers audio volumineux
 *.mp3
 
-# Garde les petites vidéos si nécessaire
-# !assets/small-video.mp4
+# Exceptions - Petits fichiers audio autorisés
+!assets/Sparkle.mp3
+!assets/Bernice .mp3
+!assets/Skirk .mp3
+!assets/Sparxie.mp3
+!assets/Wuthering_Waves_EP2.4_--_Cartethyia_-_Against_the_Tide.mp3
