@@ -186,11 +186,9 @@ const musicSelector = document.getElementById('music-selector');
 
 // Liste des musiques
 const musicTracks = {
-    'sparkle': 'assets/Sparkle.mp3',
-    'bernice': 'assets/Bernice .mp3',
-    'cartethyia': 'assets/Wuthering_Waves_EP2.4_--_Cartethyia_-_Against_the_Tide.mp3',
-    'sparxie': 'assets/Sparxie.mp3',
-    'herta': 'assets/la Grande Herta.mp3'
+    'sparxie': 'assets/Sparxie.m4a',
+    'sparkle': 'assets/Sparkle Mélodrame.m4a',
+    'bernice': 'assets/Bernice Boisson spéciale.m4a'
 };
 
 if (audioPlayer) {

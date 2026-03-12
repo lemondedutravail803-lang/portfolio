@@ -3,3 +3,8 @@
 
 # Fichiers audio volumineux
 *.mp3
+
+# Exceptions - Musiques du portfolio autorisées
+!assets/Sparxie.m4a
+!assets/Sparkle Mélodrame.m4a
+!assets/Bernice Boisson spéciale.m4a
