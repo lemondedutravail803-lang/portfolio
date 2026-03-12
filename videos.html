@@ -14,6 +14,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* Agrandir la page vidéos */
+        #videos .conteneur {
+            max-width: 1400px;
+            padding: 2rem;
+        }
+        #videos .projet {
+            max-width: 100%;
+        }
+        #videos .video-container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        #videos .video-container iframe {
+            width: 100%;
+            height: 600px;
+        }
+        @media (max-width: 768px) {
+            #videos .video-container iframe {
+                height: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="en-tete">
@@ -120,6 +143,28 @@
                 <div class="tags-technos" style="margin-top: 1rem;">
                     <span class="tag">🏷️ Herta</span>
                     <span class="tag">🏷️ RPG</span>
+                    <span class="tag">🏷️ HoYoverse</span>
+                </div>
+            </article>
+
+            <!-- HONKAI: STAR RAIL - VIDÉO 3 -->
+            <article class="projet" data-scroll>
+                <span class="ligne-lumineuse"></span>
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--couleur-emeraude);">
+                    🎬 Honkai: Star Rail - Vidéo 3
+                </h3>
+
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/u1tkz0Sxa7Q" title="Honkai Star Rail Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+
+                <p style="margin-top: 1rem; color: var(--couleur-texte);">
+                    Découvrez une nouvelle vidéo de Honkai: Star Rail.
+                </p>
+
+                <div class="tags-technos" style="margin-top: 1rem;">
+                    <span class="tag">🏷️ Honkai Star Rail</span>
+                    <span class="tag">🏷️ Vidéo</span>
                     <span class="tag">🏷️ HoYoverse</span>
                 </div>
             </article>
