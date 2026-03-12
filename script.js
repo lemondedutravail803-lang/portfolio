@@ -188,7 +188,8 @@ const musicSelector = document.getElementById('music-selector');
 const musicTracks = {
     'sparxie': 'assets/Sparxie.m4a',
     'sparkle': 'assets/Sparkle Mélodrame.m4a',
-    'bernice': 'assets/Bernice Boisson spéciale.m4a'
+    'bernice': 'assets/Bernice Boisson spéciale.m4a',
+    'cartethyia': 'assets/Wuthering Waves Cartethyia m4a'
 };
 
 if (audioPlayer) {
