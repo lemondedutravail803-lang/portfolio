@@ -5,5 +5,5 @@ git config user.email "lemondedutravail803@gmail.com"
 git config user.name "Cédric AUGUSTO"
 
 git add .
-git commit -m "Update video pages with YouTube embeds"
-git push -u origin main
+git commit -m "Fix YouTube video links"
+git push -u origin main --force
