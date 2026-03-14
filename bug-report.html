@@ -114,11 +114,39 @@
             margin: 1rem 0;
             transition: all 0.3s ease;
         }
-        
+
         .copy-btn:hover {
             background: var(--couleur-violet);
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(52, 211, 153, 0.4);
+        }
+
+        .copy-section-btn {
+            background: var(--couleur-violet);
+            color: var(--couleur-texte);
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+            vertical-align: middle;
+        }
+
+        .copy-section-btn:hover {
+            background: var(--couleur-emeraude);
+            color: var(--couleur-fond);
+            transform: translateY(-1px);
+        }
+
+        .bug-section h2 {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         
         .instructions {
@@ -194,21 +222,21 @@
         </section>
 
         <section class="bug-section">
-            <h2>📊 ÉTAT DU SITE (TEMPS RÉEL)</h2>
+            <h2>📊 ÉTAT DU SITE (TEMPS RÉEL) <button class="copy-section-btn" onclick="copySection('site-status')">📋 COPIER</button></h2>
             <div id="site-status" class="bug-list">
                 <p>Chargement de l'état du site...</p>
             </div>
         </section>
 
         <section class="bug-section">
-            <h2>📝 JOURNAL DES ERREURS (TEMPS RÉEL)</h2>
+            <h2>📝 JOURNAL DES ERREURS (TEMPS RÉEL) <button class="copy-section-btn" onclick="copySection('error-log')">📋 COPIER</button></h2>
             <div id="error-log" class="bug-list">
                 <p>Aucune erreur détectée pour le moment.</p>
             </div>
         </section>
 
         <section class="bug-section">
-            <h2>📄 INFORMATIONS TECHNIQUES</h2>
+            <h2>📄 INFORMATIONS TECHNIQUES <button class="copy-section-btn" onclick="copySection('tech-info')">📋 COPIER</button></h2>
             <div id="tech-info" class="bug-list tech-info">
                 <p>Chargement des informations...</p>
             </div>
@@ -217,8 +245,8 @@
         <button class="copy-btn" onclick="copyBugReport()">📋 COPIER LE RAPPORT COMPLET</button>
 
         <section class="bug-section">
-            <h2>📁 STRUCTURE COMPLÈTE DU PORTFOLIO</h2>
-            <div class="bug-list" style="white-space: pre-wrap; font-family: 'Space Mono', monospace; font-size: 0.85rem; overflow-x: auto;">
+            <h2>📁 STRUCTURE COMPLÈTE DU PORTFOLIO <button class="copy-section-btn" onclick="copySection('structure-content')">📋 COPIER</button></h2>
+            <div id="structure-content" class="bug-list" style="white-space: pre-wrap; font-family: 'Space Mono', monospace; font-size: 0.85rem; overflow-x: auto;">
                 <strong>📁 c:\Users\keqin\Desktop\portfolio\</strong>
 │
 ├── 📄 index.html (Page d'accueil)
@@ -254,8 +282,8 @@
         </section>
 
         <section class="bug-section">
-            <h2>🛠️ FONCTIONNALITÉS IMPLÉMENTÉES</h2>
-            <div class="bug-list">
+            <h2>🛠️ FONCTIONNALITÉS IMPLÉMENTÉES <button class="copy-section-btn" onclick="copySection('features-content')">📋 COPIER</button></h2>
+            <div id="features-content" class="bug-list">
                 <ul style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li><strong>🎨 4 Thèmes</strong> (Normal, Bleu, Or, Argent) - Bouton 🎨 en haut à droite</li>
                     <li><strong>🎵 Lecteur de musique</strong> - 4 titres (Sparxie, Sparkle, Bernice, Cartethyia)</li>
@@ -270,8 +298,8 @@
         </section>
 
         <section class="bug-section">
-            <h2>📂 SECTION PROJETS (INDEX.HTML)</h2>
-            <div class="bug-list">
+            <h2>📂 SECTION PROJETS <button class="copy-section-btn" onclick="copySection('projects-content')">📋 COPIER</button></h2>
+            <div id="projects-content" class="bug-list">
                 <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li>Jeu Voiture (Scratch)</li>
                     <li>Site Portfolio</li>
@@ -287,8 +315,8 @@
         </section>
 
         <section class="bug-section">
-            <h2>📺 VIDÉOS YOUTUBE INTÉGRÉES (AUTOMATIQUE)</h2>
-            <div class="bug-list">
+            <h2>📺 VIDÉOS YOUTUBE INTÉGRÉES (AUTOMATIQUE) <button class="copy-section-btn" onclick="copySection('videos-content')">📋 COPIER</button></h2>
+            <div id="videos-content" class="bug-list">
                 <strong>Honkai Star Rail :</strong>
                 <ul id="hsr-videos-list" style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li>Chargement...</li>
@@ -304,8 +332,8 @@
         </section>
 
         <section class="bug-section">
-            <h2>📝 HISTORIQUE DE NOTRE TRAVAIL</h2>
-            <div class="bug-list">
+            <h2>📝 HISTORIQUE DE NOTRE TRAVAIL <button class="copy-section-btn" onclick="copySection('history-content')">📋 COPIER</button></h2>
+            <div id="history-content" class="bug-list">
                 <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li>Mise en ligne sur GitHub</li>
                     <li>Ajout des vidéos YouTube (remplacement fichiers lourds)</li>
@@ -628,6 +656,30 @@
             event.preventDefault();
             return true;
         });
+
+        // Fonction pour copier une section individuelle
+        function copySection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (!section) {
+                alert('❌ Section introuvable');
+                return;
+            }
+
+            // Récupérer le texte de la section
+            let text = section.innerText;
+
+            // Ajouter le titre de la section
+            const sectionTitle = section.closest('.bug-section').querySelector('h2').childNodes[0].textContent.trim();
+            text = `${sectionTitle}\n${'═'.repeat(50)}\n\n${text}`;
+
+            // Copier dans le presse-papiers
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`✅ Section "${sectionTitle}" copiée !\n\nTu peux la coller maintenant.`);
+            }).catch(err => {
+                console.error('Erreur lors de la copie :', err);
+                alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
+            });
+        }
 
         // Initialiser le scanner automatique
         if (typeof PortfolioScanner !== 'undefined') {
