@@ -197,9 +197,14 @@ const PortfolioScanner = {
         const elementsImportants = [
             { id: 'theme-toggle', nom: 'Bouton Thème' },
             { id: 'menu-toggle', nom: 'Bouton Menu' },
-            { id: 'audio-player', nom: 'Lecteur Musique' },
             { id: 'bouton-haut', nom: 'Bouton Retour Haut' }
         ];
+        
+        // N'ajoute audio-player QUE sur index.html (pas sur bug-report.html)
+        const currentPage = window.location.pathname.split('/').pop();
+        if (currentPage === 'index.html' || currentPage === '' || currentPage === '/') {
+            elementsImportants.push({ id: 'audio-player', nom: 'Lecteur Musique' });
+        }
         
         elementsImportants.forEach(element => {
             if (!document.getElementById(element.id)) {
