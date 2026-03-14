@@ -180,6 +180,17 @@
             50% { opacity: 0.7; }
         }
 
+        @keyframes highlightError {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(239, 68, 68, 0);
+            }
+            50% { 
+                transform: scale(1.02);
+                box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+            }
+        }
+
         .scan-result {
             text-align: center;
             padding: 1rem;
@@ -761,6 +772,7 @@
             const scanBtn = document.getElementById('scan-btn');
             const scanResult = document.getElementById('scan-result');
             const lastUpdate = document.getElementById('last-update');
+            const errorSection = document.getElementById('error-log').closest('.bug-section');
 
             // Mettre à jour l'heure
             lastUpdate.textContent = new Date().toLocaleString('fr-FR');
@@ -792,6 +804,8 @@
                             ✅ AUCUNE ERREUR DÉTECTÉE !<br>
                             <small>${successCount} succès détectés - Tout fonctionne parfaitement</small>
                         `;
+                        // Scroll vers le résultat
+                        scanResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     } else {
                         // ❌ Il y a des erreurs
                         scanResult.className = 'scan-result error';
@@ -799,13 +813,18 @@
                             ❌ ${errorCount} ERREUR(S) DÉTECTÉE(S) !<br>
                             <small>${successCount} succès - ${errorCount} erreurs à corriger</small>
                         `;
+
+                        // ⚠️ SCROLL AUTOMATIQUE VERS LA SECTION DES ERREURS
+                        setTimeout(() => {
+                            errorSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            
+                            // Mettre en évidence la section des erreurs
+                            errorSection.style.animation = 'highlightError 2s ease';
+                        }, 500);
                     }
 
                     // Mettre à jour l'affichage
                     PortfolioScanner.updateBugReport();
-
-                    // Scroll vers le résultat
-                    scanResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 });
             } else {
                 // PortfolioScanner non chargé
