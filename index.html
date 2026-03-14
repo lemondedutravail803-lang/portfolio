@@ -315,6 +315,44 @@
         </div>
     </footer>
 
+    <!-- Overlay pour le panneau de bug -->
+    <div id="bug-report-overlay"></div>
+
+    <!-- Panneau de Rapport de Bug (Caché - Touche D) -->
+    <div id="bug-report-panel">
+        <div class="panel-header">
+            <h2>🐛 RAPPORT DE BUG</h2>
+            <button class="close-btn" onclick="toggleBugPanel()">✕ Fermer</button>
+        </div>
+        
+        <p class="shortcut-hint">Raccourci : Appuie sur <strong>D</strong> pour ouvrir/fermer</p>
+        
+        <h3>📊 ÉTAT DU SITE</h3>
+        <div id="bug-site-status" class="bug-list">
+            <p>Chargement...</p>
+        </div>
+        
+        <h3>📝 JOURNAL DES ERREURS</h3>
+        <div id="bug-error-log" class="bug-list">
+            <p>Aucune erreur détectée pour le moment.</p>
+        </div>
+        
+        <h3>📄 INFORMATIONS TECHNIQUES</h3>
+        <div id="bug-tech-info" class="bug-list">
+            <p>Chargement...</p>
+        </div>
+        
+        <button class="copy-btn" onclick="copyBugReport()">📋 COPIER LE RAPPORT COMPLET</button>
+        
+        <h3>📝 INSTRUCTIONS</h3>
+        <div class="bug-list">
+            <p>1. Clique sur <strong>"📋 COPIER LE RAPPORT COMPLET"</strong></p>
+            <p>2. Colle le rapport à Qwen (l'IA)</p>
+            <p>3. Décris ton problème en détail</p>
+            <p>4. Qwen va analyser et proposer une correction</p>
+        </div>
+    </div>
+
     <!-- Bouton Retour en haut -->
     <button id="bouton-haut" class="bouton-haut" title="Retour en haut">
         ⬆
