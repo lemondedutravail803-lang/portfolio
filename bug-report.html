@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rapport de Bug - Portfolio Cédric AUGUSTO">
+    <meta name="author" content="Cédric AUGUSTO">
+    <title>🐛 Rapport de Bug — Cédric AUGUSTO</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <button id="theme-toggle" class="theme-toggle" title="Changer le thème" aria-label="Changer le thème">
+        <span class="theme-icon">🎨</span>
+    </button>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        .bug-report-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        
+        .bug-report-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--couleur-fond-sombre);
+            border-radius: 10px;
+            border: 2px solid var(--couleur-emeraude);
+        }
+        
+        .bug-report-header h1 {
+            color: var(--couleur-emeraude);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .bug-report-header p {
+            color: var(--couleur-texte-sombre);
+        }
+        
+        .bug-section {
+            background: var(--couleur-fond-sombre);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--couleur-violet);
+        }
+        
+        .bug-section h2 {
+            color: var(--couleur-emeraude);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .bug-list {
+            background: var(--couleur-fond);
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .bug-item {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-left: 3px solid var(--couleur-violet);
+            padding-left: 1rem;
+            background: var(--couleur-carte);
+            border-radius: 5px;
+        }
+        
+        .bug-item.error {
+            border-left-color: #ef4444;
+        }
+        
+        .bug-item.warning {
+            border-left-color: #f59e0b;
+        }
+        
+        .bug-item.success {
+            border-left-color: var(--couleur-emeraude);
+        }
+        
+        .bug-item strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-error {
+            color: #ef4444;
+        }
+        
+        .status-warning {
+            color: #f59e0b;
+        }
+        
+        .status-ok {
+            color: var(--couleur-emeraude);
+        }
+        
+        .copy-btn {
+            background: var(--couleur-emeraude);
+            color: var(--couleur-fond);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            display: block;
+            width: 100%;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: var(--couleur-violet);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(52, 211, 153, 0.4);
+        }
+        
+        .instructions {
+            background: var(--couleur-carte);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .instructions ol {
+            padding-left: 1.5rem;
+            color: var(--couleur-texte);
+        }
+        
+        .instructions li {
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+        
+        .tech-info {
+            font-size: 0.9rem;
+            color: var(--couleur-texte-sombre);
+        }
+    </style>
+</head>
+<body>
+    <header class="en-tete">
+        <div class="conteneur">
+            <div class="logo">
+                <span class="prenom">Cédric</span>
+                <span class="separateur"> — </span>
+                <span class="nom">AUGUSTO</span>
+                <span class="curseur">_</span>
+            </div>
+            <button class="bouton-menu" id="menu-toggle">☰</button>
+            <nav>
+                <ul class="liste-liens" id="liste-liens">
+                    <li><a href="index.html">🏠 Accueil</a></li>
+                    <li><a href="videos.html">📺 Vidéos</a></li>
+                    <li><a href="honkai-star-rail.html">⭐ HSR</a></li>
+                    <li><a href="wuthering-waves.html">🌊 WW</a></li>
+                    <li><a href="index.html#contact">📧 Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="bug-report-container">
+        <div class="bug-report-header">
+            <h1>🐛 RAPPORT DE BUG</h1>
+            <p>Portfolio Cédric AUGUSTO - Journal des erreurs et anomalies</p>
+            <p class="tech-info">Dernière mise à jour : <span id="last-update">--</span></p>
+        </div>
+
+        <section class="bug-section">
+            <h2>📊 ÉTAT DU SITE</h2>
+            <div id="site-status" class="bug-list">
+                <p>Chargement de l'état du site...</p>
+            </div>
+        </section>
+
+        <section class="bug-section">
+            <h2>📝 JOURNAL DES ERREURS</h2>
+            <div id="error-log" class="bug-list">
+                <p>Aucune erreur détectée pour le moment.</p>
+            </div>
+        </section>
+
+        <section class="bug-section">
+            <h2>📄 INFORMATIONS TECHNIQUES</h2>
+            <div id="tech-info" class="bug-list tech-info">
+                <p>Chargement des informations...</p>
+            </div>
+        </section>
+
+        <button class="copy-btn" onclick="copyBugReport()">📋 COPIER LE RAPPORT COMPLET</button>
+
+        <div class="instructions bug-section">
+            <h2>📝 INSTRUCTIONS</h2>
+            <ol>
+                <li>Clique sur <strong>"📋 COPIER LE RAPPORT COMPLET"</strong></li>
+                <li>Colle le rapport à Qwen (l'IA)</li>
+                <li>Décris ton problème en détail</li>
+                <li>Qwen va analyser et proposer une correction</li>
+                <li>Une fois corrigé, actualise cette page pour voir les mises à jour</li>
+            </ol>
+        </div>
+
+        <div class="instructions bug-section">
+            <h2>🔍 COMMENT ÇA MARCHE ?</h2>
+            <p>Cette page détecte automatiquement :</p>
+            <ul style="padding-left: 1.5rem; color: var(--couleur-texte);">
+                <li>Les erreurs JavaScript (❌ Rouge)</li>
+                <li>Les avertissements (⚠️ Orange)</li>
+                <li>L'état des fonctionnalités (Thèmes, Musique, Animations, Menu)</li>
+                <li>Les informations techniques (Navigateur, URL, etc.)</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Chaque nouvelle fonctionnalité ajoutée sera automatiquement surveillée !</strong></p>
+        </div>
+    </main>
+
+    <footer class="pied-de-page">
+        <div class="conteneur">
+            <p>© 2026 - Cédric AUGUSTO <span class="curseur">_</span></p>
+            <div class="footer-reseaux">
+                <a href="index.html#contact" class="footer-lien"><span>📧</span> Contact</a>
+                <a href="#" class="footer-lien"><span>💼</span> LinkedIn</a>
+                <a href="#" class="footer-lien"><span>🐙</span> GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="bouton-haut" class="bouton-haut" title="Retour en haut">⬆</button>
+    <script src="script.js"></script>
+    <script>
+        // Journal des erreurs pour cette page
+        const pageBugReport = {
+            errors: [],
+            warnings: [],
+            success: [],
+            siteStatus: {
+                themes: 'unknown',
+                music: 'unknown',
+                animations: 'unknown',
+                menu: 'unknown'
+            }
+        };
+
+        // Fonction pour logger une erreur
+        function logPageError(type, message, details = '') {
+            const error = {
+                date: new Date().toLocaleTimeString('fr-FR'),
+                type: type,
+                message: message,
+                details: details
+            };
+            pageBugReport.errors.push(error);
+            console.error('🐛 [BUG REPORT]', error);
+            updateBugPage();
+        }
+
+        // Fonction pour logger un avertissement
+        function logPageWarning(type, message, details = '') {
+            const warning = {
+                date: new Date().toLocaleTimeString('fr-FR'),
+                type: type,
+                message: message,
+                details: details
+            };
+            pageBugReport.warnings.push(warning);
+            console.warn('⚠️ [BUG REPORT]', warning);
+            updateBugPage();
+        }
+
+        // Mettre à jour l'affichage de la page
+        function updateBugPage() {
+            // Mettre à jour la date
+            document.getElementById('last-update').textContent = new Date().toLocaleString('fr-FR');
+
+            // État du site
+            const statusDiv = document.getElementById('site-status');
+            if (statusDiv) {
+                statusDiv.innerHTML = `
+                    <div class="bug-item ${pageBugReport.siteStatus.themes === 'OK' ? 'success' : 'error'}">
+                        <strong class="${pageBugReport.siteStatus.themes === 'OK' ? 'status-ok' : 'status-error'}">🎨 Thèmes :</strong> ${pageBugReport.siteStatus.themes}
+                    </div>
+                    <div class="bug-item ${pageBugReport.siteStatus.music === 'OK' ? 'success' : 'error'}">
+                        <strong class="${pageBugReport.siteStatus.music === 'OK' ? 'status-ok' : 'status-error'}">🎵 Musique :</strong> ${pageBugReport.siteStatus.music}
+                    </div>
+                    <div class="bug-item ${pageBugReport.siteStatus.animations === 'OK' ? 'success' : 'error'}">
+                        <strong class="${pageBugReport.siteStatus.animations === 'OK' ? 'status-ok' : 'status-error'}">✨ Animations :</strong> ${pageBugReport.siteStatus.animations}
+                    </div>
+                    <div class="bug-item ${pageBugReport.siteStatus.menu === 'OK' ? 'success' : 'error'}">
+                        <strong class="${pageBugReport.siteStatus.menu === 'OK' ? 'status-ok' : 'status-error'}">📱 Menu :</strong> ${pageBugReport.siteStatus.menu}
+                    </div>
+                `;
+            }
+
+            // Journal des erreurs
+            const logDiv = document.getElementById('error-log');
+            if (logDiv) {
+                let html = '';
+
+                if (pageBugReport.errors.length === 0 && pageBugReport.warnings.length === 0) {
+                    html = '<p class="status-ok">✅ Aucune erreur détectée pour le moment.</p>';
+                } else {
+                    pageBugReport.errors.forEach(err => {
+                        html += `
+                            <div class="bug-item error">
+                                <strong class="status-error">❌ [${err.date}] ${err.type}</strong>
+                                ${err.message}<br>
+                                <small style="color: var(--couleur-texte-sombre);">${err.details}</small>
+                            </div>
+                        `;
+                    });
+                    pageBugReport.warnings.forEach(warn => {
+                        html += `
+                            <div class="bug-item warning">
+                                <strong class="status-warning">⚠️ [${warn.date}] ${warn.type}</strong>
+                                ${warn.message}<br>
+                                <small style="color: var(--couleur-texte-sombre);">${warn.details}</small>
+                            </div>
+                        `;
+                    });
+                }
+
+                logDiv.innerHTML = html;
+            }
+
+            // Informations techniques
+            const infoDiv = document.getElementById('tech-info');
+            if (infoDiv) {
+                infoDiv.innerHTML = `
+                    <p><strong>Navigateur :</strong> ${navigator.userAgent}</p>
+                    <p><strong>Fenêtre :</strong> ${window.innerWidth}x${window.innerHeight}</p>
+                    <p><strong>URL :</strong> ${window.location.href}</p>
+                    <p><strong>Erreurs totales :</strong> ${pageBugReport.errors.length}</p>
+                    <p><strong>Avertissements :</strong> ${pageBugReport.warnings.length}</p>
+                    <p><strong>Page :</strong> bug-report.html</p>
+                `;
+            }
+        }
+
+        // Fonction pour copier le rapport complet
+        function copyBugReport() {
+            let report = `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
+            report += `═══════════════════════════════════════════════════════\n\n`;
+            report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n`;
+            report += `📄 Page : bug-report.html\n\n`;
+
+            report += `📊 ÉTAT DU SITE\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `🎨 Thèmes : ${pageBugReport.siteStatus.themes}\n`;
+            report += `🎵 Musique : ${pageBugReport.siteStatus.music}\n`;
+            report += `✨ Animations : ${pageBugReport.siteStatus.animations}\n`;
+            report += `📱 Menu : ${pageBugReport.siteStatus.menu}\n\n`;
+
+            report += `📝 JOURNAL DES ERREURS\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+
+            if (pageBugReport.errors.length === 0 && pageBugReport.warnings.length === 0) {
+                report += `✅ Aucune erreur détectée.\n\n`;
+            } else {
+                pageBugReport.errors.forEach(err => {
+                    report += `❌ [${err.date}] ${err.type}\n`;
+                    report += `   ${err.message}\n`;
+                    report += `   Détails : ${err.details}\n\n`;
+                });
+                pageBugReport.warnings.forEach(warn => {
+                    report += `⚠️ [${warn.date}] ${warn.type}\n`;
+                    report += `   ${warn.message}\n`;
+                    report += `   Détails : ${warn.details}\n\n`;
+                });
+            }
+
+            report += `📄 INFORMATIONS TECHNIQUES\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `Navigateur : ${navigator.userAgent}\n`;
+            report += `Fenêtre : ${window.innerWidth}x${window.innerHeight}\n`;
+            report += `URL : ${window.location.href}\n`;
+            report += `Erreurs totales : ${pageBugReport.errors.length}\n`;
+            report += `Avertissements : ${pageBugReport.warnings.length}\n\n`;
+
+            report += `📝 DESCRIPTION DU PROBLÈME\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `[Décris ton problème ici]\n\n`;
+
+            report += `🔍 CE QUE J'AI DÉJÀ ESSAYÉ\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `- [ ] Actualiser la page (Ctrl + F5)\n`;
+            report += `- [ ] Vider le cache du navigateur\n`;
+            report += `- [ ] Changer de navigateur\n\n`;
+
+            report += `═══════════════════════════════════════════════════════\n`;
+            report += `Document complet du portfolio disponible sur demande.\n`;
+
+            navigator.clipboard.writeText(report).then(() => {
+                alert('✅ Rapport copié dans le presse-papiers !\n\nMaintenant :\n1. Colle le rapport à Qwen (l\'IA)\n2. Décris ton problème en détail\n3. Qwen va analyser et corriger');
+            }).catch(err => {
+                console.error('Erreur lors de la copie :', err);
+                alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
+            });
+        }
+
+        // Initialiser la page au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                // Vérifier les thèmes
+                const themeToggle = document.getElementById('theme-toggle');
+                pageBugReport.siteStatus.themes = themeToggle ? '✅ OK' : '❌ Introuvable';
+
+                // Vérifier le menu
+                const menuToggle = document.getElementById('menu-toggle');
+                pageBugReport.siteStatus.menu = menuToggle ? '✅ OK' : '❌ Introuvable';
+
+                // La musique n'est pas sur cette page
+                pageBugReport.siteStatus.music = 'ℹ️ Non disponible sur cette page';
+
+                // Les animations non plus
+                pageBugReport.siteStatus.animations = 'ℹ️ Non disponible sur cette page';
+
+                updateBugPage();
+
+                // Logger le chargement réussi
+                console.log('✅ Page Rapport de Bug chargée avec succès');
+            }, 500);
+        });
+
+        // Filet de sécurité - Attraper les erreurs sur cette page
+        window.addEventListener('error', (event) => {
+            logPageError(
+                'JavaScript',
+                event.message,
+                `${event.filename}:${event.lineno}:${event.colno}`
+            );
+            event.preventDefault();
+            return true;
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            logPageError(
+                'Promesse',
+                'Promesse rejetée non gérée',
+                event.reason ? String(event.reason) : 'Raison inconnue'
+            );
+            event.preventDefault();
+            return true;
+        });
+    </script>
+</body>
+</html>
