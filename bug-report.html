@@ -137,14 +137,32 @@
             vertical-align: middle !important;
             white-space: nowrap !important;
             display: inline-block !important;
-            width: 40px !important;
-            height: 40px !important;
-            min-width: 40px !important;
+            width: 60px !important;
+            height: 60px !important;
+            min-width: 60px !important;
+            filter: brightness(0) saturate(100%) !important;
+        }
+
+        /* Adaptation aux thèmes de couleur */
+        body:not(.theme-bleu):not(.theme-or):not(.theme-argent) .copy-section-btn {
+            filter: brightness(0) saturate(100%) invert(39%) sepia(94%) saturate(495%) hue-rotate(108deg) brightness(95%) contrast(90%) !important;
+        }
+
+        body.theme-bleu .copy-section-btn {
+            filter: brightness(0) saturate(100%) invert(60%) sepia(96%) saturate(392%) hue-rotate(161deg) brightness(93%) contrast(93%) !important;
+        }
+
+        body.theme-or .copy-section-btn {
+            filter: brightness(0) saturate(100%) invert(73%) sepia(61%) saturate(360%) hue-rotate(356deg) brightness(101%) contrast(92%) !important;
+        }
+
+        body.theme-argent .copy-section-btn {
+            filter: brightness(0) saturate(100%) invert(84%) sepia(3%) saturate(148%) hue-rotate(177deg) brightness(99%) contrast(88%) !important;
         }
 
         .copy-section-btn:hover {
-            transform: scale(1.1) !important;
-            box-shadow: 0 3px 10px rgba(52, 211, 153, 0.4) !important;
+            transform: scale(1.15) !important;
+            filter: brightness(1.2) !important;
         }
 
         .bug-section h2 {
