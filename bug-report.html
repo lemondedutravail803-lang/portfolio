@@ -174,14 +174,34 @@
         </div>
 
         <section class="bug-section">
-            <h2>📊 ÉTAT DU SITE</h2>
+            <h2>📋 INSTRUCTIONS IMPORTANTES</h2>
+            <div class="instructions" style="background: var(--couleur-carte); padding: 1.5rem; border-radius: 10px;">
+                <p style="color: var(--couleur-emeraude); font-weight: bold; margin-bottom: 1rem;">
+                    ⚠️ CETTE PAGE CONTIENT DEUX SECTIONS :
+                </p>
+                <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
+                    <li><strong>📊 État du site + Journal des erreurs</strong> (détection automatique)</li>
+                    <li><strong>📄 Structure complète du portfolio</strong> (tout ce qu'on a fait ensemble)</li>
+                </ol>
+                <p style="margin-top: 1rem;"><strong>POUR SIGNALER UN BUG :</strong></p>
+                <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
+                    <li>Clique sur <strong>"📋 COPIER LE RAPPORT COMPLET"</strong></li>
+                    <li>Colle le rapport à Qwen (l'IA)</li>
+                    <li>Décris ton problème en détail</li>
+                    <li>Qwen va analyser et proposer une correction</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="bug-section">
+            <h2>📊 ÉTAT DU SITE (TEMPS RÉEL)</h2>
             <div id="site-status" class="bug-list">
                 <p>Chargement de l'état du site...</p>
             </div>
         </section>
 
         <section class="bug-section">
-            <h2>📝 JOURNAL DES ERREURS</h2>
+            <h2>📝 JOURNAL DES ERREURS (TEMPS RÉEL)</h2>
             <div id="error-log" class="bug-list">
                 <p>Aucune erreur détectée pour le moment.</p>
             </div>
@@ -196,28 +216,121 @@
 
         <button class="copy-btn" onclick="copyBugReport()">📋 COPIER LE RAPPORT COMPLET</button>
 
-        <div class="instructions bug-section">
-            <h2>📝 INSTRUCTIONS</h2>
-            <ol>
-                <li>Clique sur <strong>"📋 COPIER LE RAPPORT COMPLET"</strong></li>
-                <li>Colle le rapport à Qwen (l'IA)</li>
-                <li>Décris ton problème en détail</li>
-                <li>Qwen va analyser et proposer une correction</li>
-                <li>Une fois corrigé, actualise cette page pour voir les mises à jour</li>
-            </ol>
-        </div>
+        <section class="bug-section">
+            <h2>📁 STRUCTURE COMPLÈTE DU PORTFOLIO</h2>
+            <div class="bug-list" style="white-space: pre-wrap; font-family: 'Space Mono', monospace; font-size: 0.85rem; overflow-x: auto;">
+                <strong>📁 c:\Users\keqin\Desktop\portfolio\</strong>
+│
+├── 📄 index.html (Page d'accueil)
+├── 📄 videos.html (Page vidéos Honkai Star Rail)
+├── 📄 honkai-star-rail.html (Page dédiée HSR)
+├── 📄 wuthering-waves.html (Page dédiée Wuthering Waves)
+├── 📄 bug-report.html (Page Rapport de Bug)
+├── 📄 styles.css (Styles CSS - 1204 lignes)
+├── 📄 script.js (JavaScript - 500 lignes)
+├── 📄 push-github.sh (Script de push GitHub)
+├── 📄 .gitignore (Fichiers exclus de Git)
+│
+├── 📁 assets\
+│   ├── 🎵 Sparxie.m4a
+│   ├── 🎵 Sparkle Mélodrame.m4a
+│   ├── 🎵 Bernice Boisson spéciale.m4a
+│   ├── 🎵 Wuthering Waves Cartethyia m4a
+│   ├── 🖼️ HTML5_logo_and_wordmark.svg.png
+│   ├── 🖼️ CSS3_logo_and_wordmark.svg.png
+│   ├── 🖼️ javascript-logo-javascript-icon-transparent-free-png.webp
+│   ├── 🖼️ Qwen IA.jpeg
+│   ├── 🖼️ google docs.png
+│   ├── 🖼️ google sheets.png
+│   ├── 🖼️ Capture d'écran 2026-03-03 141359.png
+│   └── [Autres images et sous-titres]
+│
+└── 📁 espase\
+    ├── 📄 index.html
+    ├── 📄 script.js
+    ├── 📄 style.css
+    └── 📁 assets\
+            </div>
+        </section>
 
-        <div class="instructions bug-section">
-            <h2>🔍 COMMENT ÇA MARCHE ?</h2>
-            <p>Cette page détecte automatiquement :</p>
-            <ul style="padding-left: 1.5rem; color: var(--couleur-texte);">
-                <li>Les erreurs JavaScript (❌ Rouge)</li>
-                <li>Les avertissements (⚠️ Orange)</li>
-                <li>L'état des fonctionnalités (Thèmes, Musique, Animations, Menu)</li>
-                <li>Les informations techniques (Navigateur, URL, etc.)</li>
-            </ul>
-            <p style="margin-top: 1rem;"><strong>Chaque nouvelle fonctionnalité ajoutée sera automatiquement surveillée !</strong></p>
-        </div>
+        <section class="bug-section">
+            <h2>🛠️ FONCTIONNALITÉS IMPLÉMENTÉES</h2>
+            <div class="bug-list">
+                <ul style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
+                    <li><strong>🎨 4 Thèmes</strong> (Normal, Bleu, Or, Argent) - Bouton 🎨 en haut à droite</li>
+                    <li><strong>🎵 Lecteur de musique</strong> - 4 titres (Sparxie, Sparkle, Bernice, Cartethyia)</li>
+                    <li><strong>✨ Animations des lettres</strong> - Hero titre + Titres h2</li>
+                    <li><strong>📱 Menu mobile</strong> - Hamburger (☰) responsive</li>
+                    <li><strong>⬆️ Bouton retour en haut</strong> - Apparaît après 300px de scroll</li>
+                    <li><strong>🔄 Scroll fluide</strong> - Navigation douce entre sections</li>
+                    <li><strong>📺 Vidéos YouTube</strong> - 8 vidéos intégrées (HSR + WW)</li>
+                    <li><strong>🐛 Rapport de Bug</strong> - Détection automatique + page dédiée</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="bug-section">
+            <h2>📂 SECTION PROJETS (INDEX.HTML)</h2>
+            <div class="bug-list">
+                <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
+                    <li>Jeu Voiture (Scratch)</li>
+                    <li>Site Portfolio</li>
+                    <li>Figurine (Cap Sciences)</li>
+                    <li>Montage Vidéo</li>
+                    <li>OpenShot Vidéo</li>
+                    <li><strong>Formation Konexio (7 semaines)</strong> - IA, Jeu, Portfolio, Soft Skills, Montage, Impression 3D</li>
+                    <li>Jeu dans l'Espace (HTML/CSS/JS)</li>
+                    <li>Google Docs</li>
+                    <li>Google Sheets</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="bug-section">
+            <h2>📺 VIDÉOS YOUTUBE INTÉGRÉES</h2>
+            <div class="bug-list">
+                <strong>Honkai Star Rail :</strong>
+                <ul style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
+                    <li>Version 3.7 : r4gljUbCzqA</li>
+                    <li>Nouvelle Vidéo : AudFPWzkW-k</li>
+                    <li>Grande Herta : u1tkz0Sxa7Q</li>
+                </ul>
+                <strong>Wuthering Waves :</strong>
+                <ul style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
+                    <li>Dawn Arrives : 5D9K2rz3Uvk</li>
+                    <li>Nouvelle Vidéo : TnXzZxKmGYk</li>
+                    <li>Vidéo 3 : ZRpHFIPp-0M</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="bug-section">
+            <h2>📝 HISTORIQUE DE NOTRE TRAVAIL</h2>
+            <div class="bug-list">
+                <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
+                    <li>Mise en ligne sur GitHub</li>
+                    <li>Ajout des vidéos YouTube (remplacement fichiers lourds)</li>
+                    <li>Ajout des musiques (.m4a)</li>
+                    <li>Ajout section OpenShot Vidéo</li>
+                    <li>Réorganisation Wuthering Waves (présentation détaillée)</li>
+                    <li>Problème traînée de souris (supprimée)</li>
+                    <li>Correction bouton thème (code en double)</li>
+                    <li>Vérification globale (0 erreur)</li>
+                    <li>Ajout Formation Konexio</li>
+                    <li>Création système Rapport de Bug</li>
+                    <li>Création document prompt complet</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="bug-section">
+            <h2>🔧 LIENS UTILES</h2>
+            <div class="bug-list tech-info">
+                <p><strong>Repository GitHub :</strong> https://github.com/lemondedutravail803-lang/portfolio</p>
+                <p><strong>Portfolio en ligne :</strong> https://lemondedutravail803-lang.github.io/portfolio/</p>
+                <p><strong>Page Rapport de Bug :</strong> https://lemondedutravail803-lang.github.io/portfolio/bug-report.html</p>
+            </div>
+        </section>
     </main>
 
     <footer class="pied-de-page">
@@ -349,14 +462,14 @@
             report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n`;
             report += `📄 Page : bug-report.html\n\n`;
 
-            report += `📊 ÉTAT DU SITE\n`;
+            report += `📊 ÉTAT DU SITE (TEMPS RÉEL)\n`;
             report += `─────────────────────────────────────────────────────\n`;
             report += `🎨 Thèmes : ${pageBugReport.siteStatus.themes}\n`;
             report += `🎵 Musique : ${pageBugReport.siteStatus.music}\n`;
             report += `✨ Animations : ${pageBugReport.siteStatus.animations}\n`;
             report += `📱 Menu : ${pageBugReport.siteStatus.menu}\n\n`;
 
-            report += `📝 JOURNAL DES ERREURS\n`;
+            report += `📝 JOURNAL DES ERREURS (TEMPS RÉEL)\n`;
             report += `─────────────────────────────────────────────────────\n`;
 
             if (pageBugReport.errors.length === 0 && pageBugReport.warnings.length === 0) {
@@ -373,6 +486,70 @@
                     report += `   Détails : ${warn.details}\n\n`;
                 });
             }
+
+            report += `📁 STRUCTURE COMPLÈTE DU PORTFOLIO\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
+            report += `│\n`;
+            report += `├── 📄 index.html (Page d'accueil)\n`;
+            report += `├── 📄 videos.html (Page vidéos HSR)\n`;
+            report += `├── 📄 honkai-star-rail.html (Page HSR)\n`;
+            report += `├── 📄 wuthering-waves.html (Page WW)\n`;
+            report += `├── 📄 bug-report.html (Rapport de Bug)\n`;
+            report += `├── 📄 styles.css (1204 lignes)\n`;
+            report += `├── 📄 script.js (500 lignes)\n`;
+            report += `├── 📄 push-github.sh\n`;
+            report += `├── 📄 .gitignore\n`;
+            report += `│\n`;
+            report += `├── 📁 assets\\ (Musiques, Images, Sous-titres)\n`;
+            report += `│   ├── 🎵 4 musiques .m4a\n`;
+            report += `│   └── 🖼️ Images (HTML, CSS, JS, Google, etc.)\n`;
+            report += `│\n`;
+            report += `└── 📁 espase\\ (Jeu spatial)\n`;
+            report += `    ├── index.html, script.js, style.css\n`;
+            report += `    └── assets/\n\n`;
+
+            report += `🛠️ FONCTIONNALITÉS IMPLÉMENTÉES\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `✅ 4 Thèmes (Normal, Bleu, Or, Argent)\n`;
+            report += `✅ Lecteur de musique (4 titres)\n`;
+            report += `✅ Animations des lettres\n`;
+            report += `✅ Menu mobile responsive\n`;
+            report += `✅ Bouton retour en haut\n`;
+            report += `✅ Scroll fluide\n`;
+            report += `✅ 8 vidéos YouTube intégrées\n`;
+            report += `✅ Système de Rapport de Bug\n\n`;
+
+            report += `📂 PROJETS (10 projets)\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `1. Jeu Voiture (Scratch)\n`;
+            report += `2. Site Portfolio\n`;
+            report += `3. Figurine (Cap Sciences)\n`;
+            report += `4. Montage Vidéo\n`;
+            report += `5. OpenShot Vidéo\n`;
+            report += `6. Formation Konexio (7 semaines)\n`;
+            report += `7. Jeu dans l'Espace (HTML/CSS/JS)\n`;
+            report += `8. Google Docs\n`;
+            report += `9. Google Sheets\n\n`;
+
+            report += `📺 VIDÉOS YOUTUBE\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `HSR : r4gljUbCzqA, AudFPWzkW-k, u1tkz0Sxa7Q\n`;
+            report += `WW : 5D9K2rz3Uvk, TnXzZxKmGYk, ZRpHFIPp-0M\n\n`;
+
+            report += `📝 HISTORIQUE DE NOTRE TRAVAIL\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `1. Mise en ligne GitHub\n`;
+            report += `2. Ajout vidéos YouTube\n`;
+            report += `3. Ajout musiques .m4a\n`;
+            report += `4. Ajout section OpenShot\n`;
+            report += `5. Réorganisation WW\n`;
+            report += `6. Problème traînée souris (supprimée)\n`;
+            report += `7. Correction bouton thème\n`;
+            report += `8. Vérification globale (0 erreur)\n`;
+            report += `9. Ajout Formation Konexio\n`;
+            report += `10. Création système Rapport de Bug\n`;
+            report += `11. Création document prompt complet\n\n`;
 
             report += `📄 INFORMATIONS TECHNIQUES\n`;
             report += `─────────────────────────────────────────────────────\n`;
@@ -392,8 +569,13 @@
             report += `- [ ] Vider le cache du navigateur\n`;
             report += `- [ ] Changer de navigateur\n\n`;
 
+            report += `🔧 LIENS UTILES\n`;
+            report += `─────────────────────────────────────────────────────\n`;
+            report += `GitHub : https://github.com/lemondedutravail803-lang/portfolio\n`;
+            report += `Portfolio : https://lemondedutravail803-lang.github.io/portfolio/\n`;
+            report += `Rapport de Bug : https://lemondedutravail803-lang.github.io/portfolio/bug-report.html\n\n`;
+
             report += `═══════════════════════════════════════════════════════\n`;
-            report += `Document complet du portfolio disponible sur demande.\n`;
 
             navigator.clipboard.writeText(report).then(() => {
                 alert('✅ Rapport copié dans le presse-papiers !\n\nMaintenant :\n1. Colle le rapport à Qwen (l\'IA)\n2. Décris ton problème en détail\n3. Qwen va analyser et corriger');
