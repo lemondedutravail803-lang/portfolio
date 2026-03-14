@@ -287,21 +287,19 @@
         </section>
 
         <section class="bug-section">
-            <h2>📺 VIDÉOS YOUTUBE INTÉGRÉES</h2>
+            <h2>📺 VIDÉOS YOUTUBE INTÉGRÉES (AUTOMATIQUE)</h2>
             <div class="bug-list">
                 <strong>Honkai Star Rail :</strong>
-                <ul style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
-                    <li>Version 3.7 : r4gljUbCzqA</li>
-                    <li>Nouvelle Vidéo : AudFPWzkW-k</li>
-                    <li>Grande Herta : u1tkz0Sxa7Q</li>
+                <ul id="hsr-videos-list" style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
+                    <li>Chargement...</li>
                 </ul>
                 <strong>Wuthering Waves :</strong>
-                <ul style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
-                    <li>Dawn Arrives : 5D9K2rz3Uvk</li>
-                    <li>Nouvelle Vidéo : TnXzZxKmGYk</li>
-                    <li>Vidéo 3 : ZRpHFIPp-0M</li>
-                    <li><strong>Nouvelle Vidéo (AJOUTÉE) : aMAJhkp0hlc</strong></li>
+                <ul id="ww-videos-list" style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
+                    <li>Chargement...</li>
                 </ul>
+                <p style="margin-top: 1rem; color: var(--couleur-emeraude); font-size: 0.85rem;">
+                    ✅ Mis à jour automatiquement à chaque chargement
+                </p>
             </div>
         </section>
 
@@ -630,6 +628,12 @@
             event.preventDefault();
             return true;
         });
+
+        // Initialiser le scanner automatique
+        if (typeof PortfolioScanner !== 'undefined') {
+            PortfolioScanner.init();
+        }
     </script>
+    <script src="auto-scan.js"></script>
 </body>
 </html>
