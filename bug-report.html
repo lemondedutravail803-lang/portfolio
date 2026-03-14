@@ -140,24 +140,27 @@
             width: 60px !important;
             height: 60px !important;
             min-width: 60px !important;
-            filter: brightness(0) saturate(100%) !important;
         }
 
-        /* Adaptation aux thèmes de couleur */
+        /* Adaptation aux thèmes de couleur - Filtres plus légers */
         body:not(.theme-bleu):not(.theme-or):not(.theme-argent) .copy-section-btn {
-            filter: brightness(0) saturate(100%) invert(39%) sepia(94%) saturate(495%) hue-rotate(108deg) brightness(95%) contrast(90%) !important;
+            /* Thème Normal - Vert émeraude */
+            filter: hue-rotate(90deg) saturate(2) !important;
         }
 
         body.theme-bleu .copy-section-btn {
-            filter: brightness(0) saturate(100%) invert(60%) sepia(96%) saturate(392%) hue-rotate(161deg) brightness(93%) contrast(93%) !important;
+            /* Thème Bleu - Bleu cyan */
+            filter: hue-rotate(180deg) saturate(1.5) !important;
         }
 
         body.theme-or .copy-section-btn {
-            filter: brightness(0) saturate(100%) invert(73%) sepia(61%) saturate(360%) hue-rotate(356deg) brightness(101%) contrast(92%) !important;
+            /* Thème Or - Doré */
+            filter: sepia(1) hue-rotate(10deg) saturate(3) !important;
         }
 
         body.theme-argent .copy-section-btn {
-            filter: brightness(0) saturate(100%) invert(84%) sepia(3%) saturate(148%) hue-rotate(177deg) brightness(99%) contrast(88%) !important;
+            /* Thème Argent - Gris */
+            filter: grayscale(1) brightness(1.2) !important;
         }
 
         .copy-section-btn:hover {
