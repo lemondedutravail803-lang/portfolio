@@ -496,3 +496,111 @@ window.addEventListener('unhandledrejection', (event) => {
     event.preventDefault();
     return true;
 });
+
+// =========================================
+// PANNEAU DE RAPPORT DE BUG (TOUCHE D)
+// =========================================
+
+// Fonction pour ouvrir/fermer le panneau
+function toggleBugPanel() {
+    const panel = document.getElementById('bug-report-panel');
+    const overlay = document.getElementById('bug-report-overlay');
+
+    if (panel && overlay) {
+        panel.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+}
+
+// Fonction pour copier le rapport
+function copyBugReport() {
+    let report = `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
+    report += `═══════════════════════════════════════════════════════\n\n`;
+    report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n\n`;
+
+    report += `📁 STRUCTURE DU PORTFOLIO\n`;
+    report += `─────────────────────────────────────────────────────\n`;
+    report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
+    report += `│\n`;
+    report += `├── 📄 index.html\n`;
+    report += `├── 📄 videos.html\n`;
+    report += `├── 📄 honkai-star-rail.html\n`;
+    report += `├── 📄 wuthering-waves.html\n`;
+    report += `├── 📄 bug-report.html\n`;
+    report += `├── 📄 styles.css (1204 lignes)\n`;
+    report += `├── 📄 script.js (500 lignes)\n`;
+    report += `├── 📄 push-github.sh\n`;
+    report += `├── 📄 .gitignore\n`;
+    report += `│\n`;
+    report += `├── 📁 assets\\ (Musiques, Images)\n`;
+    report += `└── 📁 espase\\ (Jeu spatial)\n\n`;
+
+    report += `🛠️ FONCTIONNALITÉS\n`;
+    report += `─────────────────────────────────────────────────────\n`;
+    report += `✅ 4 Thèmes (Normal, Bleu, Or, Argent)\n`;
+    report += `✅ Lecteur de musique (4 titres)\n`;
+    report += `✅ Animations des lettres\n`;
+    report += `✅ Menu mobile\n`;
+    report += `✅ Bouton retour haut\n`;
+    report += `✅ Scroll fluide\n`;
+    report += `✅ 8 vidéos YouTube\n`;
+    report += `✅ Rapport de Bug\n\n`;
+
+    report += `📂 PROJETS (9 projets)\n`;
+    report += `─────────────────────────────────────────────────────\n`;
+    report += `1. Jeu Voiture (Scratch)\n`;
+    report += `2. Site Portfolio\n`;
+    report += `3. Figurine (Cap Sciences)\n`;
+    report += `4. Montage Vidéo\n`;
+    report += `5. OpenShot Vidéo\n`;
+    report += `6. Formation Konexio (7 semaines)\n`;
+    report += `7. Jeu dans l'Espace\n`;
+    report += `8. Google Docs\n`;
+    report += `9. Google Sheets\n\n`;
+
+    report += `📺 VIDÉOS YOUTUBE\n`;
+    report += `─────────────────────────────────────────────────────\n`;
+    report += `HSR : r4gljUbCzqA, AudFPWzkW-k, u1tkz0Sxa7Q\n`;
+    report += `WW : 5D9K2rz3Uvk, TnXzZxKmGYk, ZRpHFIPp-0M\n\n`;
+
+    report += `📝 DESCRIPTION DU PROBLÈME\n`;
+    report += `─────────────────────────────────────────────────────\n`;
+    report += `[Décris ton problème ici]\n\n`;
+
+    report += `🔍 CE QUE J'AI DÉJÀ ESSAYÉ\n`;
+    report += `─────────────────────────────────────────────────────\n`;
+    report += `- [ ] Actualiser la page (Ctrl + F5)\n`;
+    report += `- [ ] Vider le cache\n`;
+    report += `- [ ] Changer de navigateur\n\n`;
+
+    report += `═══════════════════════════════════════════════════════\n`;
+
+    navigator.clipboard.writeText(report).then(() => {
+        alert('✅ Rapport copié !\n\n1. Colle à Qwen\n2. Décris le problème\n3. Qwen va corriger');
+    }).catch(err => {
+        console.error('Erreur copie :', err);
+        alert('❌ Erreur copie. Copie manuelle.');
+    });
+}
+
+// Raccourci clavier (Touche D pour ouvrir/fermer)
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'd' || e.key === 'D') {
+        // Vérifier que l'utilisateur ne tape pas dans un input
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            toggleBugPanel();
+        }
+    }
+
+    // Échap pour fermer
+    if (e.key === 'Escape') {
+        const panel = document.getElementById('bug-report-panel');
+        const overlay = document.getElementById('bug-report-overlay');
+        if (panel && overlay && panel.classList.contains('active')) {
+            toggleBugPanel();
+        }
+    }
+});
+
+// Fermer le panneau en cliquant sur l'overlay
+document.getElementById('bug-report-overlay')?.addEventListener('click', toggleBugPanel);
