@@ -1,7 +1,7 @@
 // =========================================
 // SYSTÈME DE SCAN AUTOMATIQUE DU PORTFOLIO
+// Version 2.0 - Détection d'erreurs améliorée
 // =========================================
-// Ce fichier scanne toutes les pages et génère le rapport automatiquement
 
 const PortfolioScanner = {
     // Données du portfolio
@@ -10,20 +10,9 @@ const PortfolioScanner = {
         videos: [],
         projects: [],
         features: [],
-        history: []
-    },
-
-    // Noms des vidéos (mapping ID → Nom réel)
-    videoNames: {
-        // Honkai Star Rail
-        'r4gljUbCzqA': 'Version 3.7 — « Vers ce demain d\'autrefois »',
-        'AudFPWzkW-k': 'Nouvelle Vidéo HSR',
-        'u1tkz0Sxa7Q': 'Grande Herta',
-        // Wuthering Waves
-        '5D9K2rz3Uvk': 'Dawn Arrives - Story Cinematics',
-        'TnXzZxKmGYk': 'Nouvelle Vidéo WW',
-        'ZRpHFIPp-0M': 'Vidéo 3 - Wuthering Waves',
-        'aMAJhkp0hlc': 'Nouvelle Vidéo (AJOUTÉE)'
+        history: [],
+        errors: [],
+        success: []
     },
 
     // Initialiser le scanner
@@ -46,6 +35,9 @@ const PortfolioScanner = {
         // Scanner wuthering-waves.html
         await this.scanWW();
         
+        // Vérifier les erreurs
+        await this.checkErrors();
+        
         // Mettre à jour l'affichage
         this.updateBugReport();
         
@@ -67,7 +59,7 @@ const PortfolioScanner = {
                     projects.push(name);
                 }
             }
-            this.data.projects = projects.slice(0, 15); // Limiter à 15 projets
+            this.data.projects = projects.slice(0, 15);
             
             // Extraire les fichiers
             this.data.files = [
@@ -94,8 +86,10 @@ const PortfolioScanner = {
                 'Rapport de Bug automatique'
             ];
             
+            this.data.success.push('index.html : Page chargée avec succès');
             console.log('📄 index.html scanné');
         } catch (error) {
+            this.data.errors.push(`❌ index.html : ${error.message}`);
             console.error('❌ Erreur scan index.html:', error);
         }
     },
@@ -119,8 +113,10 @@ const PortfolioScanner = {
                 }
             }
             
+            this.data.success.push('videos.html : Page chargée avec succès');
             console.log('📺 videos.html scanné');
         } catch (error) {
+            this.data.errors.push(`❌ videos.html : ${error.message}`);
             console.error('❌ Erreur scan videos.html:', error);
         }
     },
@@ -144,8 +140,10 @@ const PortfolioScanner = {
                 }
             }
             
+            this.data.success.push('honkai-star-rail.html : Page chargée avec succès');
             console.log('⭐ honkai-star-rail.html scanné');
         } catch (error) {
+            this.data.errors.push(`❌ honkai-star-rail.html : ${error.message}`);
             console.error('❌ Erreur scan hsr.html:', error);
         }
     },
@@ -169,10 +167,40 @@ const PortfolioScanner = {
                 }
             }
             
+            this.data.success.push('wuthering-waves.html : Page chargée avec succès');
             console.log('🌊 wuthering-waves.html scanné');
         } catch (error) {
+            this.data.errors.push(`❌ wuthering-waves.html : ${error.message}`);
             console.error('❌ Erreur scan ww.html:', error);
         }
+    },
+
+    // Vérifier les erreurs
+    async checkErrors() {
+        // Vérifier les images manquantes
+        document.querySelectorAll('img').forEach(img => {
+            if (img.complete && img.naturalHeight === 0) {
+                this.data.errors.push(`❌ Image non chargée : ${img.src}`);
+            }
+        });
+        
+        // Vérifier les éléments importants
+        const elementsImportants = [
+            { id: 'theme-toggle', nom: 'Bouton Thème' },
+            { id: 'menu-toggle', nom: 'Bouton Menu' },
+            { id: 'audio-player', nom: 'Lecteur Musique' },
+            { id: 'bouton-haut', nom: 'Bouton Retour Haut' }
+        ];
+        
+        elementsImportants.forEach(element => {
+            if (!document.getElementById(element.id)) {
+                this.data.errors.push(`❌ ${element.nom} introuvable`);
+            } else {
+                this.data.success.push(`${element.nom} : Fonctionne`);
+            }
+        });
+        
+        console.log('✅ Vérification des erreurs terminée');
     },
 
     // Mettre à jour l'affichage du rapport
@@ -180,14 +208,11 @@ const PortfolioScanner = {
         // Mettre à jour la section vidéos
         this.updateVideosSection();
         
-        // Mettre à jour la section projets
-        this.updateProjectsSection();
+        // Mettre à jour la section erreurs
+        this.updateErrorsSection();
         
-        // Mettre à jour la section fichiers
-        this.updateFilesSection();
-        
-        // Mettre à jour la section fonctionnalités
-        this.updateFeaturesSection();
+        // Mettre à jour la section succès
+        this.updateSuccessSection();
     },
 
     // Mettre à jour la section vidéos
@@ -199,50 +224,36 @@ const PortfolioScanner = {
         const wwList = document.querySelector('#ww-videos-list');
         
         if (hsrList) {
-            hsrList.innerHTML = hsrVideos.map(v => {
-                const videoName = this.videoNames[v.id] || v.id;
-                return `<li>${videoName} <small style="color: var(--couleur-texte-sombre);">(${v.id})</small></li>`;
-            }).join('');
+            hsrList.innerHTML = hsrVideos.map(v => 
+                `<li>${v.id}</li>`
+            ).join('');
         }
         
         if (wwList) {
-            wwList.innerHTML = wwVideos.map((v, i) => {
-                const videoName = this.videoNames[v.id] || v.id;
-                const isNew = i === wwVideos.length - 1 ? ' <strong style="color: var(--couleur-emeraude);">(NOUVELLE)</strong>' : '';
-                return `<li>${videoName}${isNew} <small style="color: var(--couleur-texte-sombre);">(${v.id})</small></li>`;
-            }).join('');
-        }
-    },
-
-    // Mettre à jour la section projets
-    updateProjectsSection() {
-        const projectsList = document.querySelector('#projects-list');
-        
-        if (projectsList) {
-            projectsList.innerHTML = this.data.projects.map((p, i) => 
-                `<li>${p}</li>`
+            wwList.innerHTML = wwVideos.map(v => 
+                `<li>${v.id}</li>`
             ).join('');
         }
     },
 
-    // Mettre à jour la section fichiers
-    updateFilesSection() {
-        const filesList = document.querySelector('#files-list');
+    // Mettre à jour la section erreurs
+    updateErrorsSection() {
+        const errorLog = document.querySelector('#error-log');
         
-        if (filesList) {
-            filesList.innerHTML = this.data.files.map(f => 
-                `<li>📄 ${f}</li>`
+        if (errorLog && this.data.errors.length > 0) {
+            errorLog.innerHTML = this.data.errors.map(err => 
+                `<div class="bug-item error">${err}</div>`
             ).join('');
         }
     },
 
-    // Mettre à jour la section fonctionnalités
-    updateFeaturesSection() {
-        const featuresList = document.querySelector('#features-list');
+    // Mettre à jour la section succès
+    updateSuccessSection() {
+        const successLog = document.querySelector('#success-log');
         
-        if (featuresList) {
-            featuresList.innerHTML = this.data.features.map(f => 
-                `<li>✅ ${f}</li>`
+        if (successLog && this.data.success.length > 0) {
+            successLog.innerHTML = this.data.success.map(suc => 
+                `<div class="bug-item success">${suc}</div>`
             ).join('');
         }
     },
@@ -256,6 +267,30 @@ const PortfolioScanner = {
         report += `═══════════════════════════════════════════════════════\n\n`;
         report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n\n`;
 
+        report += `📊 ÉTAT DU SITE\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        report += `🎨 Thèmes : ${document.getElementById('theme-toggle') ? '✅ OK' : '❌ Introuvable'}\n`;
+        report += `🎵 Musique : ${document.getElementById('audio-player') ? '✅ OK' : '❌ Introuvable'}\n`;
+        report += `📱 Menu : ${document.getElementById('menu-toggle') ? '✅ OK' : '❌ Introuvable'}\n\n`;
+
+        report += `❌ ERREURS DÉTECTÉES (${this.data.errors.length})\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        if (this.data.errors.length === 0) {
+            report += `✅ Aucune erreur détectée !\n\n`;
+        } else {
+            this.data.errors.forEach(err => {
+                report += `${err}\n`;
+            });
+            report += `\n`;
+        }
+
+        report += `✅ SUCCÈS (${this.data.success.length})\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        this.data.success.forEach(suc => {
+            report += `${suc}\n`;
+        });
+        report += `\n`;
+
         report += `📁 STRUCTURE DU PORTFOLIO\n`;
         report += `─────────────────────────────────────────────────────\n`;
         report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
@@ -267,33 +302,10 @@ const PortfolioScanner = {
         report += `├── 📁 assets\\ (Musiques, Images)\n`;
         report += `└── 📁 espase\\ (Jeu spatial)\n\n`;
 
-        report += `🛠️ FONCTIONNALITÉS (${this.data.features.length})\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        this.data.features.forEach(f => {
-            report += `✅ ${f}\n`;
-        });
-        report += `\n`;
-
-        report += `📂 PROJETS (${this.data.projects.length})\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        this.data.projects.forEach((p, i) => {
-            report += `${i + 1}. ${p}\n`;
-        });
-        report += `\n`;
-
         report += `📺 VIDÉOS YOUTUBE (${this.data.videos.length})\n`;
         report += `─────────────────────────────────────────────────────\n`;
-        report += `Honkai Star Rail (${hsrVideos.length}) :\n`;
-        hsrVideos.forEach(v => {
-            const name = this.videoNames[v.id] || v.id;
-            report += `  • ${name} (${v.id})\n`;
-        });
-        report += `Wuthering Waves (${wwVideos.length}) :\n`;
-        wwVideos.forEach(v => {
-            const name = this.videoNames[v.id] || v.id;
-            report += `  • ${name} (${v.id})\n`;
-        });
-        report += `\n`;
+        report += `HSR (${hsrVideos.length}) : ${hsrVideos.map(v => v.id).join(', ')}\n`;
+        report += `WW (${wwVideos.length}) : ${wwVideos.map(v => v.id).join(', ')}\n\n`;
 
         report += `📝 DESCRIPTION DU PROBLÈME\n`;
         report += `─────────────────────────────────────────────────────\n`;
@@ -302,7 +314,7 @@ const PortfolioScanner = {
         report += `🔍 CE QUE J'AI DÉJÀ ESSAYÉ\n`;
         report += `─────────────────────────────────────────────────────\n`;
         report += `- [ ] Actualiser la page (Ctrl + F5)\n`;
-        report += `- [ ] Vider le cache\n`;
+        report += `- [ ] Vider le cache du navigateur\n`;
         report += `- [ ] Changer de navigateur\n\n`;
 
         report += `🔧 LIENS UTILES\n`;
