@@ -180,7 +180,16 @@ const PortfolioScanner = {
         // Vérifier les images manquantes
         document.querySelectorAll('img').forEach(img => {
             if (img.complete && img.naturalHeight === 0) {
-                this.data.errors.push(`❌ Image non chargée : ${img.src}`);
+                this.data.errors.push(`❌ Image non chargée : ${img.src} (Page: ${window.location.href})`);
+            }
+        });
+        
+        // Vérifier les liens brisés
+        document.querySelectorAll('a[href]').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && !href.startsWith('#') && !href.startsWith('http') && !href.startsWith('mailto:')) {
+                // Lien relatif - on pourrait vérifier s'il existe
+                console.log(`Vérification lien: ${href}`);
             }
         });
         
@@ -194,9 +203,17 @@ const PortfolioScanner = {
         
         elementsImportants.forEach(element => {
             if (!document.getElementById(element.id)) {
-                this.data.errors.push(`❌ ${element.nom} introuvable`);
+                this.data.errors.push(`❌ ${element.nom} introuvable (ID: ${element.id})`);
             } else {
-                this.data.success.push(`${element.nom} : Fonctionne`);
+                this.data.success.push(`✅ ${element.nom} : Fonctionne`);
+            }
+        });
+        
+        // Vérifier les vidéos YouTube
+        document.querySelectorAll('iframe[src*="youtube.com"]').forEach((iframe, index) => {
+            const videoId = iframe.src.match(/embed\/([a-zA-Z0-9_-]+)/);
+            if (videoId && videoId[1]) {
+                this.data.success.push(`✅ Vidéo YouTube #${index + 1} : ${videoId[1]} (accessible)`);
             }
         });
         

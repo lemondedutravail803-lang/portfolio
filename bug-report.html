@@ -144,6 +144,66 @@
             transform: translateY(-1px) !important;
         }
 
+        /* Bouton SCAN */
+        .scan-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 1rem auto;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .scan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .scan-btn:active {
+            transform: translateY(0);
+        }
+
+        .scan-btn.scanning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .scan-result {
+            text-align: center;
+            padding: 1rem;
+            margin: 1rem auto;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .scan-result.success {
+            display: block;
+            background: rgba(52, 211, 153, 0.2);
+            border: 2px solid var(--couleur-emeraude);
+            color: var(--couleur-emeraude);
+        }
+
+        .scan-result.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+            color: #ef4444;
+        }
+
         .bug-section h2 {
             display: flex;
             align-items: center;
@@ -201,6 +261,12 @@
             <h1>🐛 RAPPORT DE BUG</h1>
             <p>Portfolio Cédric AUGUSTO - Journal des erreurs et anomalies</p>
             <p class="tech-info">Dernière mise à jour : <span id="last-update">--</span></p>
+            
+            <!-- BOUTON SCAN -->
+            <button id="scan-btn" class="scan-btn" onclick="runFullScan()">
+                🔍 LANCER LE SCAN COMPLET
+            </button>
+            <div id="scan-result" class="scan-result"></div>
         </div>
 
         <section class="bug-section">
@@ -688,6 +754,70 @@
                 console.error('Erreur lors de la copie :', err);
                 alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
             });
+        }
+
+        // Fonction pour lancer le scan complet
+        function runFullScan() {
+            const scanBtn = document.getElementById('scan-btn');
+            const scanResult = document.getElementById('scan-result');
+            const lastUpdate = document.getElementById('last-update');
+
+            // Mettre à jour l'heure
+            lastUpdate.textContent = new Date().toLocaleString('fr-FR');
+
+            // Animation du bouton
+            scanBtn.classList.add('scanning');
+            scanBtn.textContent = '🔍 SCAN EN COURS...';
+
+            // Lancer le scan
+            if (typeof PortfolioScanner !== 'undefined') {
+                // Réinitialiser les données
+                PortfolioScanner.data.errors = [];
+                PortfolioScanner.data.success = [];
+
+                // Lancer le scan
+                PortfolioScanner.scanAllPages().then(() => {
+                    // Scan terminé
+                    scanBtn.classList.remove('scanning');
+                    scanBtn.textContent = '✅ SCAN TERMINÉ';
+
+                    // Afficher le résultat
+                    const errorCount = PortfolioScanner.data.errors.length;
+                    const successCount = PortfolioScanner.data.success.length;
+
+                    if (errorCount === 0) {
+                        // ✅ Tout va bien
+                        scanResult.className = 'scan-result success';
+                        scanResult.innerHTML = `
+                            ✅ AUCUNE ERREUR DÉTECTÉE !<br>
+                            <small>${successCount} succès détectés - Tout fonctionne parfaitement</small>
+                        `;
+                    } else {
+                        // ❌ Il y a des erreurs
+                        scanResult.className = 'scan-result error';
+                        scanResult.innerHTML = `
+                            ❌ ${errorCount} ERREUR(S) DÉTECTÉE(S) !<br>
+                            <small>${successCount} succès - ${errorCount} erreurs à corriger</small>
+                        `;
+                    }
+
+                    // Mettre à jour l'affichage
+                    PortfolioScanner.updateBugReport();
+
+                    // Scroll vers le résultat
+                    scanResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            } else {
+                // PortfolioScanner non chargé
+                scanBtn.classList.remove('scanning');
+                scanBtn.textContent = '❌ ERREUR';
+                scanResult.className = 'scan-result error';
+                scanResult.innerHTML = `
+                    ❌ PortfolioScanner non chargé<br>
+                    <small>Actualise la page (Ctrl + F5)</small>
+                `;
+                scanResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
 
         // Initialiser le scanner automatique
