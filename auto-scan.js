@@ -13,6 +13,19 @@ const PortfolioScanner = {
         history: []
     },
 
+    // Noms des vidéos (mapping ID → Nom réel)
+    videoNames: {
+        // Honkai Star Rail
+        'r4gljUbCzqA': 'Version 3.7 — « Vers ce demain d\'autrefois »',
+        'AudFPWzkW-k': 'Nouvelle Vidéo HSR',
+        'u1tkz0Sxa7Q': 'Grande Herta',
+        // Wuthering Waves
+        '5D9K2rz3Uvk': 'Dawn Arrives - Story Cinematics',
+        'TnXzZxKmGYk': 'Nouvelle Vidéo WW',
+        'ZRpHFIPp-0M': 'Vidéo 3 - Wuthering Waves',
+        'aMAJhkp0hlc': 'Nouvelle Vidéo (AJOUTÉE)'
+    },
+
     // Initialiser le scanner
     init() {
         console.log('🔍 Portfolio Scanner initialisé');
@@ -186,15 +199,18 @@ const PortfolioScanner = {
         const wwList = document.querySelector('#ww-videos-list');
         
         if (hsrList) {
-            hsrList.innerHTML = hsrVideos.map(v => 
-                `<li>${v.id}</li>`
-            ).join('');
+            hsrList.innerHTML = hsrVideos.map(v => {
+                const videoName = this.videoNames[v.id] || v.id;
+                return `<li>${videoName} <small style="color: var(--couleur-texte-sombre);">(${v.id})</small></li>`;
+            }).join('');
         }
         
         if (wwList) {
-            wwList.innerHTML = wwVideos.map(v => 
-                `<li>${v.id}${wwVideos.indexOf(v) === wwVideos.length - 1 ? ' (NOUVELLE)' : ''}</li>`
-            ).join('');
+            wwList.innerHTML = wwVideos.map((v, i) => {
+                const videoName = this.videoNames[v.id] || v.id;
+                const isNew = i === wwVideos.length - 1 ? ' <strong style="color: var(--couleur-emeraude);">(NOUVELLE)</strong>' : '';
+                return `<li>${videoName}${isNew} <small style="color: var(--couleur-texte-sombre);">(${v.id})</small></li>`;
+            }).join('');
         }
     },
 
@@ -233,6 +249,9 @@ const PortfolioScanner = {
 
     // Générer le rapport complet à copier
     generateFullReport() {
+        const hsrVideos = this.data.videos.filter(v => v.game === 'Honkai Star Rail');
+        const wwVideos = this.data.videos.filter(v => v.game === 'Wuthering Waves');
+        
         let report = `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
         report += `═══════════════════════════════════════════════════════\n\n`;
         report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n\n`;
@@ -264,10 +283,17 @@ const PortfolioScanner = {
 
         report += `📺 VIDÉOS YOUTUBE (${this.data.videos.length})\n`;
         report += `─────────────────────────────────────────────────────\n`;
-        const hsrVideos = this.data.videos.filter(v => v.game === 'Honkai Star Rail');
-        const wwVideos = this.data.videos.filter(v => v.game === 'Wuthering Waves');
-        report += `HSR (${hsrVideos.length}) : ${hsrVideos.map(v => v.id).join(', ')}\n`;
-        report += `WW (${wwVideos.length}) : ${wwVideos.map(v => v.id).join(', ')}\n\n`;
+        report += `Honkai Star Rail (${hsrVideos.length}) :\n`;
+        hsrVideos.forEach(v => {
+            const name = this.videoNames[v.id] || v.id;
+            report += `  • ${name} (${v.id})\n`;
+        });
+        report += `Wuthering Waves (${wwVideos.length}) :\n`;
+        wwVideos.forEach(v => {
+            const name = this.videoNames[v.id] || v.id;
+            report += `  • ${name} (${v.id})\n`;
+        });
+        report += `\n`;
 
         report += `📝 DESCRIPTION DU PROBLÈME\n`;
         report += `─────────────────────────────────────────────────────\n`;
@@ -286,7 +312,7 @@ const PortfolioScanner = {
         report += `Rapport de Bug : https://lemondedutravail803-lang.github.io/portfolio/bug-report.html\n\n`;
 
         report += `═══════════════════════════════════════════════════════\n`;
-        report += `Généré automatiquement par Portfolio Scanner\n`;
+        report += `⚡ GÉNÉRÉ AUTOMATIQUEMENT PAR PORTFOLIO SCANNER\n`;
 
         return report;
     }
