@@ -122,10 +122,10 @@
         }
 
         .copy-section-btn {
-            background: url('assets/Copier le texte.png') no-repeat center center !important;
-            background-size: 100% !important;
-            color: transparent !important;
+            background: var(--couleur-emeraude) !important;
+            color: var(--couleur-fond) !important;
             border: none !important;
+            padding: 0.5rem 1rem !important;
             border-radius: 5px !important;
             cursor: pointer !important;
             font-family: 'Space Mono', monospace !important;
@@ -136,37 +136,12 @@
             vertical-align: middle !important;
             white-space: nowrap !important;
             display: inline-block !important;
-            width: 80px !important;
-            height: 80px !important;
-            min-width: 80px !important;
-            /* Filtres pour supprimer le blanc et améliorer la visibilité */
-            filter: contrast(3) brightness(0.6) saturate(4) hue-rotate(90deg) !important;
-        }
-
-        /* Adaptation aux thèmes de couleur */
-        body:not(.theme-bleu):not(.theme-or):not(.theme-argent) .copy-section-btn {
-            /* Thème Normal - Vert émeraude */
-            filter: contrast(3) brightness(0.6) saturate(4) hue-rotate(90deg) !important;
-        }
-
-        body.theme-bleu .copy-section-btn {
-            /* Thème Bleu - Bleu cyan */
-            filter: contrast(3) brightness(0.6) saturate(4) hue-rotate(180deg) !important;
-        }
-
-        body.theme-or .copy-section-btn {
-            /* Thème Or - Doré */
-            filter: contrast(3) brightness(0.6) saturate(4) sepia(1) hue-rotate(10deg) !important;
-        }
-
-        body.theme-argent .copy-section-btn {
-            /* Thème Argent - Gris */
-            filter: contrast(3) brightness(0.6) saturate(0) !important;
         }
 
         .copy-section-btn:hover {
-            transform: scale(1.25) !important;
-            filter: brightness(1.2) contrast(4) !important;
+            background: var(--couleur-violet) !important;
+            color: var(--couleur-texte) !important;
+            transform: translateY(-1px) !important;
         }
 
         .bug-section h2 {
@@ -249,21 +224,21 @@
         </section>
 
         <section class="bug-section">
-            <h2>📊 ÉTAT DU SITE (TEMPS RÉEL) <button class="copy-section-btn" onclick="copySection('site-status')" title="Copier cette section"></button></h2>
+            <h2>📊 ÉTAT DU SITE (TEMPS RÉEL) <button class="copy-section-btn" onclick="copySection('site-status')" title="Copier cette section">📋 COPIER</button></h2>
             <div id="site-status" class="bug-list">
                 <p>Chargement de l'état du site...</p>
             </div>
         </section>
 
         <section class="bug-section">
-            <h2>📝 JOURNAL DES ERREURS (TEMPS RÉEL) <button class="copy-section-btn" onclick="copySection('error-log')" title="Copier cette section"></button></h2>
+            <h2>📝 JOURNAL DES ERREURS (TEMPS RÉEL) <button class="copy-section-btn" onclick="copySection('error-log')" title="Copier cette section">📋 COPIER</button></h2>
             <div id="error-log" class="bug-list">
                 <p>Aucune erreur détectée pour le moment.</p>
             </div>
         </section>
 
         <section class="bug-section">
-            <h2>📄 INFORMATIONS TECHNIQUES <button class="copy-section-btn" onclick="copySection('tech-info')" title="Copier cette section"></button></h2>
+            <h2>📄 INFORMATIONS TECHNIQUES <button class="copy-section-btn" onclick="copySection('tech-info')" title="Copier cette section">📋 COPIER</button></h2>
             <div id="tech-info" class="bug-list tech-info">
                 <p>Chargement des informations...</p>
             </div>
@@ -272,7 +247,7 @@
         <button class="copy-btn" onclick="copyBugReport()">📋 COPIER LE RAPPORT COMPLET</button>
 
         <section class="bug-section">
-            <h2>📁 STRUCTURE COMPLÈTE DU PORTFOLIO <button class="copy-section-btn" onclick="copySection('structure-content')" title="Copier cette section"></button></h2>
+            <h2>📁 STRUCTURE COMPLÈTE DU PORTFOLIO <button class="copy-section-btn" onclick="copySection('structure-content')" title="Copier cette section">📋 COPIER</button></h2>
             <div id="structure-content" class="bug-list" style="white-space: pre-wrap; font-family: 'Space Mono', monospace; font-size: 0.85rem; overflow-x: auto;">
                 <strong>📁 c:\Users\keqin\Desktop\portfolio\</strong>
 │
@@ -309,7 +284,7 @@
         </section>
 
         <section class="bug-section">
-            <h2>🛠️ FONCTIONNALITÉS IMPLÉMENTÉES <button class="copy-section-btn" onclick="copySection('features-content')" title="Copier cette section"></button></h2>
+            <h2>🛠️ FONCTIONNALITÉS IMPLÉMENTÉES <button class="copy-section-btn" onclick="copySection('features-content')" title="Copier cette section">📋 COPIER</button></h2>
             <div id="features-content" class="bug-list">
                 <ul style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li><strong>🎨 4 Thèmes</strong> (Normal, Bleu, Or, Argent) - Bouton 🎨 en haut à droite</li>
@@ -325,7 +300,7 @@
         </section>
 
         <section class="bug-section">
-            <h2>📂 SECTION PROJETS <button class="copy-section-btn" onclick="copySection('projects-content')" title="Copier cette section"></button></h2>
+            <h2>📂 SECTION PROJETS <button class="copy-section-btn" onclick="copySection('projects-content')" title="Copier cette section">📋 COPIER</button></h2>
             <div id="projects-content" class="bug-list">
                 <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li>Jeu Voiture (Scratch)</li>
@@ -342,7 +317,7 @@
         </section>
 
         <section class="bug-section">
-            <h2>📺 VIDÉOS YOUTUBE INTÉGRÉES (AUTOMATIQUE) <button class="copy-section-btn" onclick="copySection('videos-content')" title="Copier cette section"></button></h2>
+            <h2>📺 VIDÉOS YOUTUBE INTÉGRÉES (AUTOMATIQUE) <button class="copy-section-btn" onclick="copySection('videos-content')" title="Copier cette section">📋 COPIER</button></h2>
             <div id="videos-content" class="bug-list">
                 <strong>Honkai Star Rail :</strong>
                 <ul id="hsr-videos-list" style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
@@ -359,7 +334,7 @@
         </section>
 
         <section class="bug-section">
-            <h2>📝 HISTORIQUE DE NOTRE TRAVAIL <button class="copy-section-btn" onclick="copySection('history-content')" title="Copier cette section"></button></h2>
+            <h2>📝 HISTORIQUE DE NOTRE TRAVAIL <button class="copy-section-btn" onclick="copySection('history-content')" title="Copier cette section">📋 COPIER</button></h2>
             <div id="history-content" class="bug-list">
                 <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li>Mise en ligne sur GitHub</li>
