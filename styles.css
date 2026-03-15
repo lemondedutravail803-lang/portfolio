@@ -1308,10 +1308,10 @@ video::cue {
 }
 
 .ia-section-item:hover {
-    background: var(--couleur-emeraude);
-    color: var(--couleur-fond);
+    background: var(--couleur-violet);
+    color: var(--couleur-texte);
     transform: translateX(5px);
-    border-left-color: var(--couleur-fond);
+    border-left-color: var(--couleur-emeraude);
 }
 
 .ia-section-item:active {
@@ -1320,7 +1320,7 @@ video::cue {
 
 .ia-section-item.active {
     border-left-color: var(--couleur-emeraude);
-    background: rgba(52, 211, 153, 0.2);
+    background: rgba(168, 85, 247, 0.2);
 }
 
 .ia-section-item.finished {
