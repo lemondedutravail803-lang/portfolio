@@ -261,43 +261,57 @@ window.addEventListener('unhandledrejection', (event) => {
 // ASSISTANTE IA FLOTTANTE
 // =========================================
 
-// Contenu de chaque page
+// Contenu de chaque page (CONTENU COMPLET ET DÉTAILLÉ)
 const iaContent = {
     index: {
-        title: "Page d'Accueil",
+        title: "Page d'Accueil - Portfolio Cédric AUGUSTO",
         sections: [
-            { id: 'header', name: 'Header', text: "En haut, le logo Cédric AUGUSTO avec le menu de navigation." },
-            { id: 'hero', name: 'Hero', text: "Présentation de Cédric comme Développeur Web en formation." },
-            { id: 'about', name: 'À Propos', text: "Description de sa curiosité technique et son esprit d'apprentissage." },
-            { id: 'competences', name: 'Compétences', text: "HTML, CSS et JavaScript sont présentés." },
-            { id: 'soft-skills', name: 'Soft Skills', text: "Curiosité, Ponctualité, Communication, Organisation." },
-            { id: 'projets', name: 'Projets', text: "Neuf projets sont présentés." },
-            { id: 'ia', name: 'IA & LLM', text: "Intégration de l'intelligence artificielle." },
-            { id: 'contact', name: 'Contact', text: "Formulaire pour envoyer un message." }
+            { id: 'header', name: 'Header', text: "En haut de la page, vous trouvez le logo avec mon nom Cédric AUGUSTO. Le curseur clignote après le nom. Le menu de navigation est juste en dessous avec un bouton hamburger pour mobile. Le menu contient les liens : À propos, Compétences, Soft Skills, Projets, IA et LLM, Vidéos, Wuthering Waves, et Contact. Un bouton pour changer de thème est positionné en haut à droite." },
+            { id: 'hero', name: 'Hero Section', text: "La section Hero est la première section visible. Elle affiche mon nom en grand avec une animation de lettres. Le sous-titre indique Développeur Web en formation. La description indique que je recherche un stage ou une alternance à partir de deux mille vingt-six. Deux boutons sont présents : Voir projets et Me contacter." },
+            { id: 'about', name: 'À Propos', text: "La section À Propos décrit mon parcours. Je suis développeur web en formation, activement à la recherche d'un stage ou d'une alternance. Animé par une forte curiosité technique, je mets mon esprit d'apprentissage au service de la création d'interfaces propres, fonctionnelles et adaptées aux besoins utilisateurs. Les coordonnées sont affichées avec la ville et l'email." },
+            { id: 'competences', name: 'Compétences Techniques', text: "La section Compétences Techniques présente trois logos : HTML cinq pour le markup web, CSS trois pour le style et la mise en page, et JavaScript pour l'interactivité. Chaque logo est affiché dans une carte avec un effet de ligne lumineuse." },
+            { id: 'soft-skills', name: 'Soft Skills', text: "La section Soft Skills présente quatre qualités principales : Curiosité pour l'apprentissage continu, Ponctualité pour le respect des délais, Communication pour le travail en équipe, et Organisation et Autonomie pour la gestion de projet." },
+            { id: 'projets', name: 'Projets', text: "La section Projets présente neuf projets réalisés. Le premier est un Jeu de Voiture créé avec Scratch. Le deuxième est le Site Portfolio en HTML et CSS. Le troisième est une Figurine créée lors d'un atelier Cap Sciences. Le quatrième est un Montage Vidéo. Le cinquième est OpenShot Vidéo. Le sixième est la Formation Konexio de sept semaines. Le septième est un Jeu dans l'Espace en HTML, CSS et JavaScript. Le huitième est Google Docs. Le neuvième est Google Sheets." },
+            { id: 'ia', name: 'IA & LLM', text: "La section IA et LLM présente l'intégration de l'intelligence artificielle dans mes projets. Une image montre Qwen IA. Les tags indiquent Dev LLM, Prompt, et IA." },
+            { id: 'contact', name: 'Contact', text: "La section Contact affiche un titre Contact et Opportunités. Le texte indique que je suis disponible pour un stage ou une alternance. Les coordonnées incluent l'email, LinkedIn et GitHub. Un formulaire de contact est présent avec les champs Nom, Email et Message. Un bouton Envoyer ma candidature permet d'envoyer le message." }
         ]
     },
     videos: {
-        title: "Page Vidéos",
+        title: "Page Vidéos - Honkai Star Rail",
         sections: [
-            { id: 'videos', name: 'Vidéos', text: "Présentation des vidéos de Honkai Star Rail." }
+            { id: 'videos', name: 'Présentation', text: "La page Vidéos présente ma passion pour les jeux vidéo, en particulier Honkai Star Rail. La section principale décrit le jeu comme un jeu gratuit de type Gacha et R P G au tour par tour, développé par Ho Yoverse, disponible sur PC, Mobile et PlayStation." },
+            { id: 'videos', name: 'Histoire du Jeu', text: "L'histoire se déroule dans un voyage spatial épique. Vous explorez différents mondes, planètes et stations spatiales dans un univers de science-fiction mêlant fantasy et technologie avancée. Vous incarnez un personnage amnésique qui doit récupérer sa mémoire tout en voyageant à travers l'univers." },
+            { id: 'videos', name: 'Gameplay', text: "Vous accomplissez des quêtes scénarisées, combattez des monstres et affrontez des personnages emblématiques. Collectionnez vos personnages préférés grâce au système gacha, équipez-les d'armes puissantes et constituez l'équipe parfaite pour vaincre les ennemis les plus redoutables." },
+            { id: 'videos', name: 'Vidéos Présentées', text: "Trois vidéos sont présentées sur cette page. La première est la bande-annonce de la Version trois point sept. La deuxième est une nouvelle vidéo de présentation. La troisième présente le personnage Grande Herta." },
+            { id: 'videos', name: 'Déroulement d'une Session', text: "La section Déroulement d'une Session de Jeu explique les quatre étapes. Première étape : Connexion et Quotidiens avec les récompenses de connexion, missions quotidiennes et entraînements. Deuxième étape : Quêtes d'Histoire pour progresser dans le scénario principal. Troisième étape : Combats et Exploration des donjons. Quatrième étape : Collection et Amélioration avec le gacha pour nouveaux personnages." }
         ]
     },
     wuthering: {
-        title: "Wuthering Waves",
+        title: "Wuthering Waves - Présentation du Jeu",
         sections: [
-            { id: 'videos', name: 'Vidéos', text: "Présentation du jeu Wuthering Waves." }
+            { id: 'videos', name: 'Histoire et Scénario', text: "Dans Wuthering Waves, vous incarnez un personnage masculin ou féminin qui se réveille dans un monde qu'il a connu auparavant, mais dont il a perdu la mémoire. Votre but principal est de retrouver vos souvenirs tout en explorant cet univers mystérieux. Au fil de l'aventure, vous découvrez l'histoire de nombreux personnages, chacun avec leur propre personnalité et leur passé." },
+            { id: 'videos', name: 'Monde Ouvert', text: "Wuthering Waves est un jeu en monde ouvert où vous pouvez contrôler jusqu'à trois personnages simultanément. Vous explorez librement un vaste univers, battez des monstres et sauvez le monde. Vous découvrez la mémoire du personnage à travers les quêtes d'histoire." },
+            { id: 'videos', name: 'Système de Combat', text: "Le système de combat est magnifique et spectaculaire. Les dégâts sont visibles avec des chiffres qui s'affichent sur les ennemis. Les animations sont somptueuses et chaque attaque est un véritable spectacle. Les combats sont rapides et efficaces pour détruire les monstres le plus vite possible." },
+            { id: 'videos', name: 'Objectifs et Collection', text: "Les objectifs incluent les quêtes d'histoire, la collection de personnages via le système d'invocation gacha, la collection d'armes, les artefacts et équipements, et l'optimisation des statistiques des personnages pour avoir le plus de statistiques et détruire les monstres efficacement." },
+            { id: 'videos', name: 'Vidéos Présentées', text: "Trois vidéos sont présentées sur cette page. La première est Dawn Arrives, les cinématiques d'histoire. La deuxième est une nouvelle vidéo de présentation. La troisième présente l'univers de Wuthering Waves." }
         ]
     },
     hsr: {
-        title: "Honkai Star Rail",
+        title: "Honkai Star Rail - Présentation",
         sections: [
-            { id: 'videos', name: 'Vidéos', text: "Présentation du jeu Honkai Star Rail." }
+            { id: 'videos', name: 'Présentation du Jeu', text: "Cette page présente le jeu Honkai Star Rail. La section principale présente la bande-annonce de la Version trois point sept intitulée Vers ce demain d'autrefois. La page présente également une nouvelle vidéo de Honkai Star Rail." },
+            { id: 'videos', name: 'Déroulement de Session', text: "La section Déroulement d'une Session de Jeu explique les quatre étapes. Première étape : Connexion et Quotidiens avec les récompenses de connexion. Deuxième étape : Quêtes d'Histoire pour découvrir de nouvelles zones. Troisième étape : Combats et Exploration pour affronter des ennemis. Quatrième étape : Collection et Amélioration avec le système gacha. Le jeu est un R P G au tour par tour développé par Ho Yoverse." }
         ]
     },
     bugreport: {
-        title: "Rapport de Bug",
+        title: "Rapport de Bug - Fonctionnalité",
         sections: [
-            { id: null, name: 'Rapport', text: "Vérification des erreurs du portfolio." }
+            { id: null, name: 'Présentation', text: "La page Rapport de Bug permet de vérifier les erreurs du portfolio. Cette page est une fonctionnalité unique qui analyse automatiquement toutes les pages du portfolio." },
+            { id: null, name: 'État du Site', text: "La section État du Site affiche l'état des fonctionnalités. Les thèmes, la musique, les animations et le menu sont vérifiés. Les éléments sont affichés avec des icônes vertes pour OK ou rouges pour introuvable." },
+            { id: null, name: 'Journal des Erreurs', text: "La section Journal des Erreurs affiche les erreurs détectées en temps réel. Les erreurs sont affichées en rouge avec une croix. Les avertissements sont affichés en orange. Si aucune erreur n'est détectée, un message vert s'affiche." },
+            { id: null, name: 'Succès', text: "La section Succès affiche les éléments qui fonctionnent correctement. Les succès sont affichés en vert avec un check. Tous les éléments vérifiés et fonctionnels sont listés dans cette section." },
+            { id: null, name: 'Scan Complet', text: "Le bouton Lancer le Scan Complet analyse toutes les pages automatiquement. Le scan détecte les images non chargées, vérifie les éléments importants comme les boutons, et vérifie les vidéos YouTube accessibles. Les erreurs sont listées avec leur localisation." },
+            { id: null, name: 'Copier le Rapport', text: "Le bouton Copier le Rapport permet de copier tout le rapport dans le presse-papiers. Vous pouvez copier le rapport et l'envoyer à Cédric pour correction. Le rapport inclut l'état du site, les erreurs, les succès, la structure du portfolio, et les vidéos YouTube détectées." }
         ]
     }
 };
@@ -500,9 +514,9 @@ function startAutoScroll(totalSections) {
     updateSectionsDisplay();
     scrollToSection();
     
-    // Calculer la durée par section basée sur la vitesse de parole
-    // À 0.75 de vitesse, environ 6-7 secondes par section
-    const sectionDuration = 7000; // 7 secondes par section (PLUS LENT)
+    // Calculer la durée par section basée sur la longueur du texte
+    // À 0.75 de vitesse, environ 10-12 secondes par section pour texte long
+    const sectionDuration = 12000; // 12 secondes par section (PLUS LENT pour contenu détaillé)
     
     scrollInterval = setInterval(() => {
         currentSectionIndex++;
