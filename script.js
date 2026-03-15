@@ -582,7 +582,7 @@ function playIA() {
         
         iaUtterance = new SpeechSynthesisUtterance(text);
         iaUtterance.lang = 'fr-FR';
-        iaUtterance.rate = 0.5; // ENCORE PLUS LENT (0.65 était trop rapide)
+        iaUtterance.rate = 0.75; // Un peu plus rapide (0.5 était trop lent)
         iaUtterance.pitch = 1.0;
         iaUtterance.volume = 1.0;
 

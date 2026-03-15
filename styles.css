@@ -1308,8 +1308,8 @@ video::cue {
 }
 
 .ia-section-item:hover {
-    background: rgba(52, 211, 153, 0.5);
-    color: var(--couleur-texte);
+    background: rgba(52, 211, 153, 0.8);
+    color: var(--couleur-fond);
     transform: translateX(5px);
     border-left-color: rgba(168, 85, 247, 0.8);
 }
@@ -1320,8 +1320,8 @@ video::cue {
 
 .ia-section-item.active {
     border-left-color: rgba(168, 85, 247, 0.8);
-    background: rgba(52, 211, 153, 0.6);
-    color: var(--couleur-texte);
+    background: rgba(52, 211, 153, 0.9);
+    color: var(--couleur-fond);
 }
 
 .ia-section-item.finished {
