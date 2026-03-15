@@ -1390,7 +1390,7 @@ video::cue {
     }
 }
 
-header.en-tete.ia-highlight-section {
+header#header.ia-highlight-section {
     animation: iaSectionHighlight 2s ease;
     border: 3px solid var(--couleur-emeraude);
     border-radius: 0 0 10px 10px;
