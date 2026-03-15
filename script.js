@@ -393,29 +393,15 @@ function loadCurrentPageContent() {
             <div style="font-size: 0.8rem; color: var(--couleur-texte-sombre); margin-bottom: 0.5rem; font-style: italic;">
                 💡 Clique sur une section pour y aller directement
             </div>
-        ` + content.sections.map((section, index) => {
-            let statusIcon = '⬜'; // Pas encore lu
-            let statusClass = '';
-            
-            if (index < currentSectionIndex) {
-                statusIcon = '✅'; // Déjà lu
-                statusClass = 'finished';
-            } else if (index === currentSectionIndex) {
-                statusIcon = '🟢'; // En cours
-                statusClass = 'active';
-            }
-            
-            return `
-                <div class="ia-section-item ${statusClass}"
-                     data-index="${index}"
-                     data-section-id="${section.id || ''}"
-                     onclick="goToSection(${index})">
-                    <span class="ia-section-status">${statusIcon}</span>
-                    <strong>${section.name}</strong>
-                    <p>${section.text}</p>
-                </div>
-            `;
-        }).join('');
+        ` + content.sections.map((section, index) => `
+            <div class="ia-section-item ${index === currentSectionIndex ? 'active' : ''}"
+                 data-index="${index}"
+                 data-section-id="${section.id || ''}"
+                 onclick="goToSection(${index})">
+                <strong>${section.name}</strong>
+                <p>${section.text}</p>
+            </div>
+        `).join('');
     }
 }
 

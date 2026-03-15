@@ -1296,15 +1296,6 @@ video::cue {
     border-left: 3px solid var(--couleur-violet);
     cursor: pointer;
     transition: all 0.3s ease;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-}
-
-.ia-section-status {
-    font-size: 1.2rem;
-    min-width: 1.5rem;
-    text-align: center;
 }
 
 .ia-section-item:hover {
@@ -1320,12 +1311,8 @@ video::cue {
 
 .ia-section-item.active {
     border-left-color: var(--couleur-emeraude);
-    background: rgba(52, 211, 153, 0.2);
-}
-
-.ia-section-item.finished {
-    border-left-color: var(--couleur-emeraude);
-    opacity: 0.7;
+    background: var(--couleur-emeraude);
+    color: var(--couleur-fond);
 }
 
 .ia-section-item strong {
