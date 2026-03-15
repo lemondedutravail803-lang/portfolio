@@ -323,6 +323,11 @@ let iaPlaying = false;
 let iaWidgetOpen = false;
 let currentSectionIndex = 0;
 
+// 📊 Variables pour les statistiques
+let iaStartTime = 0;
+let iaElapsedTime = 0;
+let iaTimerInterval = null;
+
 // Créer le widget IA
 function createIAWidget() {
     // Bouton flottant
@@ -344,6 +349,18 @@ function createIAWidget() {
         </div>
         <div class="ia-panel-content">
             <div id="ia-page-title" class="ia-page-title"></div>
+            
+            <div id="ia-statistics" class="ia-statistics">
+                <div class="ia-stat-row">
+                    <span>⏱️ Temps écoulé : <span id="ia-time-elapsed">0:00</span></span>
+                    <span>⏱️ Temps restant : <span id="ia-time-remaining">--:--</span></span>
+                </div>
+                <div class="ia-stat-row">
+                    <span>📖 Sections lues : <span id="ia-sections-read">0/0</span></span>
+                    <span>📊 Progression : <span id="ia-progress-percent">0%</span></span>
+                </div>
+            </div>
+            
             <div id="ia-progress-bar-container" class="ia-progress-bar-container">
                 <div id="ia-progress-bar" class="ia-progress-bar"></div>
             </div>
@@ -473,6 +490,50 @@ function updateProgressBarDisplay() {
     }
 }
 
+// 📊 METTRE À JOUR LES STATISTIQUES
+function updateStatistics() {
+    const timeElapsedEl = document.getElementById('ia-time-elapsed');
+    const timeRemainingEl = document.getElementById('ia-time-remaining');
+    const sectionsReadEl = document.getElementById('ia-sections-read');
+    const progressPercentEl = document.getElementById('ia-progress-percent');
+    
+    if (timeElapsedEl && timeRemainingEl && sectionsReadEl && progressPercentEl) {
+        // Calculate elapsed time
+        iaElapsedTime = Math.floor((Date.now() - iaStartTime) / 1000);
+        
+        // Get current page content
+        const path = window.location.pathname;
+        let pageKey = 'index';
+
+        if (path.includes('videos.html')) pageKey = 'videos';
+        else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
+        else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
+        else if (path.includes('bug-report.html')) pageKey = 'bugreport';
+
+        const content = iaContent[pageKey];
+        const totalSections = content.sections.length;
+        const progress = totalSections > 0 ? Math.round(((currentSectionIndex + 1) / totalSections) * 100) : 0;
+        
+        // Estimate remaining time based on progress
+        let timeRemaining = 0;
+        if (progress > 0 && progress < 100) {
+            timeRemaining = Math.floor((iaElapsedTime / progress) * (100 - progress));
+        }
+        
+        // Format time as MM:SS
+        const formatTime = (seconds) => {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        };
+        
+        timeElapsedEl.textContent = formatTime(iaElapsedTime);
+        timeRemainingEl.textContent = progress === 100 ? 'Terminé' : formatTime(timeRemaining);
+        sectionsReadEl.textContent = `${currentSectionIndex + 1}/${totalSections}`;
+        progressPercentEl.textContent = `${progress}%`;
+    }
+}
+
 // Mettre à jour l'affichage des sections
 function updateSectionsDisplay() {
     const items = document.querySelectorAll('.ia-section-item');
@@ -541,21 +602,31 @@ function scrollToSection() {
 // Lancer l'IA
 function playIA() {
     console.log('▶️ playIA called');
-    
+
     // Stop any current playback first
     if (iaSynth.speaking) {
         iaSynth.cancel();
     }
     
+    // Reset statistics timer
+    if (iaTimerInterval) {
+        clearInterval(iaTimerInterval);
+    }
+    iaStartTime = Date.now();
+    iaElapsedTime = 0;
+
     // Reset to beginning
     currentSectionIndex = 0;
     iaPlaying = true;
-    
+
     // Update button states
     document.getElementById('ia-play-btn').disabled = true;
     document.getElementById('ia-pause-btn').disabled = false;
     document.getElementById('ia-stop-btn').disabled = false;
     
+    // 📊 START STATISTICS TIMER
+    iaTimerInterval = setInterval(updateStatistics, 1000);
+
     // Get current page content
     const path = window.location.pathname;
     let pageKey = 'index';
@@ -655,6 +726,12 @@ function playIA() {
             currentSectionIndex = content.sections.length - 1;
             updateSectionsDisplay();
             
+            // 📊 STOP STATISTICS TIMER
+            if (iaTimerInterval) {
+                clearInterval(iaTimerInterval);
+                iaTimerInterval = null;
+            }
+            
             // 🎯 METTRE LA BARRE À 100%
             if (progressBar) {
                 progressBar.style.width = '100%';
@@ -662,6 +739,9 @@ function playIA() {
             if (progressText) {
                 progressText.textContent = `Section ${content.sections.length}/${content.sections.length} - 100%`;
             }
+            
+            // 📊 UPDATE FINAL STATISTICS
+            updateStatistics();
             
             iaPlaying = false;
             document.getElementById('ia-play-btn').disabled = false;
