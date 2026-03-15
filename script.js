@@ -494,20 +494,42 @@ function playIA() {
             console.warn('⚠️ Aucune voix française trouvée, utilisation de la voix par défaut');
         }
 
-        // PLUS LENT et PLUS CALME
-        iaUtterance.pitch = 1.1; // Un peu plus féminin
-        iaUtterance.rate = 0.75; // PLUS LENT (calme et clair)
+        // ENCORE PLUS LENT et PLUS CALME
+        iaUtterance.pitch = 1.0; // Voix normale
+        iaUtterance.rate = 0.6; // ENCORE PLUS LENT (0.75 était trop rapide)
         iaUtterance.volume = 1;
 
+        // 🎯 SYNCHRONISATION TEMPS RÉEL AVEC LE SURLIGNAGE
+        let charIndex = 0;
+        iaUtterance.onboundary = (event) => {
+            if (event.name === 'sentence' || event.name === 'word') {
+                // Trouver quelle section correspond à cette position
+                let totalChars = 0;
+                for (let i = 0; i < content.sections.length; i++) {
+                    totalChars += content.sections[i].text.length;
+                    if (charIndex < totalChars) {
+                        currentSectionIndex = i;
+                        updateSectionsDisplay(); // Surligne dans le panneau
+                        scrollToSection(); // Surligne et scroll sur la page
+                        break;
+                    }
+                }
+            }
+        };
+
         iaUtterance.onend = () => {
+            currentSectionIndex = content.sections.length - 1;
+            updateSectionsDisplay();
             stopIA();
         };
 
+        // 🎯 COMMENCER TOUJOURS DU HAUT
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        currentSectionIndex = 0;
+        updateSectionsDisplay();
+
         iaSynth.speak(iaUtterance);
         iaPlaying = true;
-
-        // Lancer le scroll progressif SYNCHRONISÉ
-        startAutoScroll(content.sections.length);
     }
 
     document.getElementById('ia-play-btn').disabled = true;
@@ -515,42 +537,12 @@ function playIA() {
     document.getElementById('ia-stop-btn').disabled = false;
 }
 
-// Scroll automatique progressif SYNCHRONISÉ
-let scrollInterval = null;
-
-function startAutoScroll(totalSections) {
-    currentSectionIndex = 0;
-    updateSectionsDisplay();
-    scrollToSection();
-    
-    // 12 secondes par section pour contenu détaillé
-    const sectionDuration = 12000;
-    
-    scrollInterval = setInterval(() => {
-        currentSectionIndex++;
-        updateSectionsDisplay();
-        scrollToSection();
-        
-        if (currentSectionIndex >= totalSections) {
-            stopAutoScroll();
-        }
-    }, sectionDuration);
-}
-
-function stopAutoScroll() {
-    if (scrollInterval) {
-        clearInterval(scrollInterval);
-        scrollInterval = null;
-    }
-}
-
 // Pause
 function pauseIA() {
     if (iaSynth.speaking) {
         iaSynth.pause();
         iaPlaying = false;
-        stopAutoScroll();
-        
+
         document.getElementById('ia-play-btn').disabled = false;
         document.getElementById('ia-pause-btn').disabled = true;
     }
@@ -561,15 +553,14 @@ function stopIA() {
     iaSynth.cancel();
     iaPlaying = false;
     currentSectionIndex = 0;
-    stopAutoScroll();
-    
+
     // Retirer highlight
     document.querySelectorAll('.section, .hero, header.en-tete').forEach(el => {
         el.classList.remove('ia-highlight');
     });
-    
+
     updateSectionsDisplay();
-    
+
     document.getElementById('ia-play-btn').disabled = false;
     document.getElementById('ia-pause-btn').disabled = true;
     document.getElementById('ia-stop-btn').disabled = true;
