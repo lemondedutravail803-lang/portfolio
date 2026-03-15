@@ -1256,6 +1256,24 @@ video::cue {
     font-weight: bold;
     color: var(--couleur-fond);
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.ia-avatar-anim {
+    font-size: 1.5rem;
+    animation: iaBounce 0.5s infinite alternate;
+}
+
+@keyframes iaBounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-5px); }
+}
+
+.ia-avatar-anim.speaking {
+    animation: iaBounce 0.3s infinite alternate;
 }
 
 .ia-panel-close {

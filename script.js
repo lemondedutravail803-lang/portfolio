@@ -506,54 +506,119 @@ const iaTexts = {
     index: [
         "Bonjour, je suis Agathe, l'assistante IA de Cédric AUGUSTO.",
         "Bienvenue sur son portfolio de développeur Web.",
-        "En haut, vous voyez le nom de Cédric avec une animation de lettres.",
-        "Plus bas, la section À propos présente Cédric.",
-        "Ensuite, les Compétences Techniques montrent HTML, CSS et JavaScript.",
-        "Les Soft Skills présentent ses qualités : Curiosité, Ponctualité, Communication.",
+        "Je vais vous guider à travers cette page d'accueil.",
+        "En haut de la page, vous voyez le logo avec le nom Cédric AUGUSTO.",
+        "Le menu de navigation vous permet d'accéder aux différentes sections.",
+        "La section Hero présente Cédric comme Développeur Web en formation.",
+        "Il recherche un stage ou une alternance à partir de deux mille vingt-six.",
+        "La section À Propos décrit sa curiosité technique et son esprit d'apprentissage.",
+        "La section Compétences Techniques montre HTML cinq, CSS trois et JavaScript.",
+        "La section Soft Skills présente ses qualités : Curiosité, Ponctualité, Communication, Organisation et Autonomie.",
         "La section Projets présente neuf projets réalisés par Cédric.",
-        "Vous pouvez aussi découvrir la section IA et LLM.",
-        "Et enfin, la section Contact pour envoyer un message à Cédric.",
+        "Le premier projet est un Jeu de Voiture créé avec Scratch.",
+        "Le deuxième projet est le Site Portfolio en HTML et CSS.",
+        "Le troisième projet est une Figurine créée chez Cap Sciences.",
+        "Le quatrième projet est un Montage Vidéo avec effets et transitions.",
+        "Le cinquième projet est OpenShot Vidéo pour le montage professionnel.",
+        "Le sixième projet est la Formation Konexio de sept semaines.",
+        "Le septième projet est un Jeu dans l'Espace en HTML, CSS et JavaScript.",
+        "Le huitième projet est Google Docs pour la création de documents.",
+        "Le neuvième projet est Google Sheets pour les tableaux de bord.",
+        "La section IA et LLM présente l'intégration de l'intelligence artificielle.",
+        "La section Contact permet d'envoyer un message à Cédric.",
+        "Un lecteur de musique est disponible en bas de page avec quatre titres.",
         "Merci de votre visite !"
     ],
     videos: [
         "Bonjour, je suis Agathe.",
         "Bienvenue sur la page Vidéos de Cédric AUGUSTO.",
         "Cette page présente sa passion pour les jeux vidéo.",
-        "Vous pouvez voir plusieurs vidéos de Honkai Star Rail.",
-        "La Version trois point sept présente le trailer du jeu.",
-        "Les vidéos montrent le déroulement d'une session de jeu.",
-        "Vous découvrirez les quêtes, les combats et l'exploration.",
+        "La section principale présente Honkai Star Rail Version trois point sept.",
+        "Honkai Star Rail est un jeu gratuit de type Gacha et R P G au tour par tour.",
+        "Le développeur est Ho Yoverse.",
+        "Les plateformes sont PC, Mobile et PlayStation.",
+        "L'histoire se déroule dans un voyage spatial épique.",
+        "Vous explorez différents mondes, planètes et stations spatiales.",
+        "L'univers mêle science-fiction, fantasy et technologie avancée.",
+        "Vous incarnez un personnage amnésique qui doit récupérer sa mémoire.",
+        "Vous accomplissez des quêtes scénarisées et combattez des monstres.",
+        "Vous collectionnez vos personnages préférés grâce au système gacha.",
+        "La page présente trois vidéos de Honkai Star Rail.",
+        "La première vidéo est la bande-annonce de la Version trois point sept.",
+        "La deuxième vidéo est une nouvelle vidéo de présentation.",
+        "La troisième vidéo présente le personnage Grande Herta.",
+        "La section Déroulement d'une Session de Jeu explique les quatre étapes.",
+        "Première étape : Connexion et Quotidiens avec les récompenses et missions.",
+        "Deuxième étape : Quêtes d'Histoire pour progresser dans le scénario.",
+        "Troisième étape : Combats et Exploration des donjons.",
+        "Quatrième étape : Collection et Amélioration des personnages et armes.",
         "Merci de votre visite !"
     ],
     wuthering: [
         "Bonjour, je suis Agathe.",
         "Bienvenue sur la page Wuthering Waves.",
         "Cette page présente le jeu Wuthering Waves en détail.",
-        "Vous découvrirez l'histoire du jeu et son scénario.",
-        "Le monde ouvert permet d'explorer librement.",
-        "Le système de combat est magnifique et spectaculaire.",
-        "Les objectifs incluent la collection de personnages et d'armes.",
-        "Plusieurs vidéos présentent le jeu.",
+        "La section Présentation du Jeu décrit l'histoire et le scénario.",
+        "Vous incarnez un personnage masculin ou féminin qui a perdu la mémoire.",
+        "Votre but est de retrouver vos souvenirs en explorant l'univers.",
+        "Vous découvrez l'histoire de nombreux personnages avec leur personnalité.",
+        "L'histoire principale évolue au fil des mises à jour régulières.",
+        "La section Monde Ouvert et Exploration décrit les fonctionnalités.",
+        "Vous contrôlez jusqu'à trois personnages simultanément.",
+        "Vous explorez librement un vaste univers.",
+        "Vous battez des monstres et sauvez le monde.",
+        "Vous découvrez la mémoire du personnage à travers les quêtes d'histoire.",
+        "La section Système de Combat décrit les combats magnifiques.",
+        "Les dégâts sont visibles avec des chiffres sur les ennemis.",
+        "Les animations sont somptueuses et chaque attaque est un spectacle.",
+        "Les combats sont rapides et efficaces.",
+        "Vous personnalisez vos personnages collectionnés.",
+        "La section Objectifs et Collection liste les buts du jeu.",
+        "Les objectifs incluent les quêtes d'histoire et la collection de personnages.",
+        "Le système d'invocation permet d'obtenir de nouveaux personnages.",
+        "Vous collectionnez les armes et les artefacts.",
+        "Vous optimisez les statistiques de vos personnages.",
+        "La page présente trois vidéos de Wuthering Waves.",
+        "La première vidéo est Dawn Arrives, les cinématiques d'histoire.",
+        "La deuxième vidéo est une nouvelle vidéo de présentation.",
+        "La troisième vidéo présente l'univers de Wuthering Waves.",
         "Merci de votre visite !"
     ],
     hsr: [
         "Bonjour, je suis Agathe.",
         "Bienvenue sur la page Honkai Star Rail.",
         "Cette page présente le jeu Honkai Star Rail.",
-        "Vous découvrirez la Version trois point sept du jeu.",
-        "Des vidéos présentent le gameplay et l'histoire.",
-        "Le jeu est un R P G au tour par tour.",
+        "La section principale présente la bande-annonce de la Version trois point sept.",
+        "Le titre est Vers ce demain d'autrefois.",
+        "La page présente également une nouvelle vidéo de Honkai Star Rail.",
+        "La section Déroulement d'une Session de Jeu explique les quatre étapes.",
+        "Première étape : Connexion et Quotidiens avec les récompenses de connexion.",
+        "Deuxième étape : Quêtes d'Histoire pour découvrir de nouvelles zones.",
+        "Troisième étape : Combats et Exploration pour affronter des ennemis.",
+        "Quatrième étape : Collection et Amélioration avec le système gacha.",
+        "Le jeu est un R P G au tour par tour développé par Ho Yoverse.",
         "Merci de votre visite !"
     ],
     bugreport: [
         "Bonjour, je suis Agathe.",
         "Bienvenue sur la page Rapport de Bug.",
         "Cette page permet de vérifier les erreurs du portfolio.",
-        "Cliquez sur le bouton Lancer le Scan Complet.",
-        "Le scan analyse toutes les pages automatiquement.",
-        "Les erreurs sont affichées en rouge.",
-        "Les succès sont affichés en vert.",
+        "La section État du Site affiche l'état des fonctionnalités.",
+        "Les thèmes, la musique, les animations et le menu sont vérifiés.",
+        "La section Journal des Erreurs affiche les erreurs détectées.",
+        "Les erreurs sont affichées en rouge avec une croix.",
+        "La section Succès affiche les éléments qui fonctionnent.",
+        "Les succès sont affichés en vert avec un check.",
+        "Le bouton Lancer le Scan Complet analyse toutes les pages.",
+        "Le scan détecte les images non chargées.",
+        "Le scan vérifie les éléments importants comme les boutons.",
+        "Le scan vérifie les vidéos YouTube accessibles.",
+        "Les erreurs sont listées avec leur localisation.",
+        "Le bouton Copier le Rapport permet de copier tout le rapport.",
         "Vous pouvez copier le rapport et l'envoyer à Cédric.",
+        "Le rapport inclut l'état du site, les erreurs et les succès.",
+        "Le rapport inclut la structure du portfolio.",
+        "Le rapport inclut les vidéos YouTube détectées.",
         "Merci de votre visite !"
     ]
 };
@@ -589,7 +654,8 @@ function createIAWidget() {
     panel.id = 'ia-float-panel';
     panel.innerHTML = `
         <div class="ia-panel-header">
-            🤖 ASSISTANTE IA - Agathe
+            <span class="ia-avatar-anim" id="ia-avatar">🤖</span>
+            <span>ASSISTANTE IA - Agathe</span>
             <button class="ia-panel-close" onclick="toggleIAWidget()">✕</button>
         </div>
         <div class="ia-panel-content">
@@ -648,6 +714,15 @@ function playIA() {
         iaUtterance.rate = 0.85; // Plus lent = plus calme (1.0 = normal, 0.5 = très lent)
         iaUtterance.volume = document.getElementById('ia-volume').value / 100;
         
+        // Animation de l'avatar quand l'IA parle
+        const avatar = document.getElementById('ia-avatar');
+        
+        iaUtterance.onstart = () => {
+            if (avatar) {
+                avatar.classList.add('speaking');
+            }
+        };
+        
         iaUtterance.onboundary = (event) => {
             if (event.name === 'sentence') {
                 currentPhrase++;
@@ -657,6 +732,9 @@ function playIA() {
         };
         
         iaUtterance.onend = () => {
+            if (avatar) {
+                avatar.classList.remove('speaking');
+            }
             stopIA();
         };
         
@@ -675,6 +753,12 @@ function pauseIA() {
         iaSynth.pause();
         iaPlaying = false;
         
+        // Arrêter l'animation de l'avatar
+        const avatar = document.getElementById('ia-avatar');
+        if (avatar) {
+            avatar.classList.remove('speaking');
+        }
+        
         document.getElementById('ia-play-btn').disabled = false;
         document.getElementById('ia-pause-btn').disabled = true;
     }
@@ -685,6 +769,12 @@ function stopIA() {
     iaSynth.cancel();
     iaPlaying = false;
     currentPhrase = 0;
+    
+    // Arrêter l'animation de l'avatar
+    const avatar = document.getElementById('ia-avatar');
+    if (avatar) {
+        avatar.classList.remove('speaking');
+    }
     
     document.getElementById('ia-play-btn').disabled = false;
     document.getElementById('ia-pause-btn').disabled = true;
