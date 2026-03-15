@@ -571,7 +571,15 @@ function playIA() {
     
     // 🎯 SCROLL TO TOP FIRST
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
+
+    // 🎯 RESET LA BARRE DE PROGRESSION À 0%
+    const progressText = document.getElementById('ia-progress-text');
+    const progressBar = document.getElementById('ia-progress-bar');
+    if (progressText && progressBar) {
+        progressText.textContent = 'Section 0/0 - 0%';
+        progressBar.style.width = '0%';
+    }
+
     // Update display to show first section
     updateSectionsDisplay();
     
@@ -615,6 +623,17 @@ function playIA() {
 
             console.log('🎯 onboundary triggered, charIndex:', event.charIndex);
 
+            // 🎯 METTRE À JOUR LA BARRE DE PROGRESSION EN TEMPS RÉEL
+            const totalChars = text.length;
+            const currentProgress = totalChars > 0 ? Math.round((event.charIndex / totalChars) * 100) : 0;
+            
+            if (progressBar) {
+                progressBar.style.width = `${currentProgress}%`;
+            }
+            if (progressText) {
+                progressText.textContent = `Progression : ${currentProgress}%`;
+            }
+
             // Calculate which section we're in based on character position
             let charCount = 0;
             for (let i = 0; i < content.sections.length; i++) {
@@ -624,7 +643,6 @@ function playIA() {
                         currentSectionIndex = i;
                         console.log('📍 Section:', i, content.sections[i].name);
                         updateSectionsDisplay(); // Highlight in panel
-                        updateProgressBarDisplay(); // 🎯 METTRE À JOUR LA BARRE DE PROGRESSION
                         scrollToSection(); // Highlight and scroll page
                     }
                     break;
@@ -636,6 +654,14 @@ function playIA() {
             console.log('✅ IA finished');
             currentSectionIndex = content.sections.length - 1;
             updateSectionsDisplay();
+            
+            // 🎯 METTRE LA BARRE À 100%
+            if (progressBar) {
+                progressBar.style.width = '100%';
+            }
+            if (progressText) {
+                progressText.textContent = `Section ${content.sections.length}/${content.sections.length} - 100%`;
+            }
             
             iaPlaying = false;
             document.getElementById('ia-play-btn').disabled = false;
