@@ -461,46 +461,55 @@ function playIA() {
     } else {
         const path = window.location.pathname;
         let pageKey = 'index';
-        
+
         if (path.includes('videos.html')) pageKey = 'videos';
         else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
         else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
         else if (path.includes('bug-report.html')) pageKey = 'bugreport';
-        
+
         const content = iaContent[pageKey];
         const text = content.sections.map(s => s.text).join(' ');
-        
+
         iaUtterance = new SpeechSynthesisUtterance(text);
-        
-        // Voix féminine
+
+        // ⚠️ FORCER LA LANGUE FRANÇAISE
+        iaUtterance.lang = 'fr-FR';
+
+        // Voix française féminine
         const voices = iaSynth.getVoices();
-        const femaleVoice = voices.find(voice => 
-            voice.name.includes('Female') || 
+        const frenchVoice = voices.find(voice =>
+            voice.lang === 'fr-FR' ||
+            voice.lang.includes('fr') ||
+            voice.name.includes('French') ||
             voice.name.includes('Google français') ||
             voice.name.includes('Amélie') ||
-            voice.name.includes('Alice')
+            voice.name.includes('Alice') ||
+            voice.name.includes('Female')
         );
-        
-        if (femaleVoice) {
-            iaUtterance.voice = femaleVoice;
+
+        if (frenchVoice) {
+            iaUtterance.voice = frenchVoice;
+            console.log('✅ Voix française trouvée :', frenchVoice.name);
+        } else {
+            console.warn('⚠️ Aucune voix française trouvée, utilisation de la voix par défaut');
         }
-        
+
         // PLUS LENT et PLUS CALME
         iaUtterance.pitch = 1.1; // Un peu plus féminin
         iaUtterance.rate = 0.75; // PLUS LENT (calme et clair)
         iaUtterance.volume = 1;
-        
+
         iaUtterance.onend = () => {
             stopIA();
         };
-        
+
         iaSynth.speak(iaUtterance);
         iaPlaying = true;
-        
+
         // Lancer le scroll progressif SYNCHRONISÉ
         startAutoScroll(content.sections.length);
     }
-    
+
     document.getElementById('ia-play-btn').disabled = true;
     document.getElementById('ia-pause-btn').disabled = false;
     document.getElementById('ia-stop-btn').disabled = false;
