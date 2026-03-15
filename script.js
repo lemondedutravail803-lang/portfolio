@@ -644,8 +644,8 @@ function playIA() {
             iaUtterance.voice = femaleVoice;
         }
         
-        iaUtterance.pitch = 1.1; // Plus aigu = plus féminin
-        iaUtterance.rate = 0.9; // Un peu plus lent
+        iaUtterance.pitch = 1.3; // Plus aigu = plus féminin (1.0 = normal, 2.0 = très aigu)
+        iaUtterance.rate = 0.85; // Plus lent = plus calme (1.0 = normal, 0.5 = très lent)
         iaUtterance.volume = document.getElementById('ia-volume').value / 100;
         
         iaUtterance.onboundary = (event) => {
