@@ -1322,6 +1322,26 @@ video::cue {
     margin: 0;
 }
 
+/* Sous-titres en temps réel */
+.ia-subtitles {
+    background: var(--couleur-fond-sombre);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    min-height: 60px;
+    max-height: 120px;
+    overflow-y: auto;
+    border-left: 3px solid var(--couleur-emeraude);
+}
+
+.ia-subtitles p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--couleur-texte);
+    font-style: italic;
+}
+
 .ia-panel-controls {
     display: flex;
     justify-content: center;
