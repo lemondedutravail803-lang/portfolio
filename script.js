@@ -455,106 +455,135 @@ function scrollToSection() {
 
 // Lancer l'IA
 function playIA() {
+    console.log('▶️ playIA called');
+    
+    // Stop any current playback first
     if (iaSynth.speaking) {
-        iaSynth.resume();
-        iaPlaying = true;
-    } else {
-        const path = window.location.pathname;
-        let pageKey = 'index';
+        iaSynth.cancel();
+    }
+    
+    // Reset to beginning
+    currentSectionIndex = 0;
+    iaPlaying = true;
+    
+    // Update button states
+    document.getElementById('ia-play-btn').disabled = true;
+    document.getElementById('ia-pause-btn').disabled = false;
+    document.getElementById('ia-stop-btn').disabled = false;
+    
+    // Get current page content
+    const path = window.location.pathname;
+    let pageKey = 'index';
 
-        if (path.includes('videos.html')) pageKey = 'videos';
-        else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
-        else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
-        else if (path.includes('bug-report.html')) pageKey = 'bugreport';
+    if (path.includes('videos.html')) pageKey = 'videos';
+    else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
+    else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
+    else if (path.includes('bug-report.html')) pageKey = 'bugreport';
 
-        const content = iaContent[pageKey];
+    const content = iaContent[pageKey];
+    
+    console.log('📄 Page:', pageKey, 'Sections:', content.sections.length);
+    
+    // 🎯 SCROLL TO TOP FIRST
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Update display to show first section
+    updateSectionsDisplay();
+    
+    // Small delay to ensure scroll completes
+    setTimeout(() => {
+        // Build text with markers for each section
         const text = content.sections.map(s => s.text).join(' ');
-
+        
         iaUtterance = new SpeechSynthesisUtterance(text);
-
-        // ⚠️ FORCER LA LANGUE FRANÇAISE
         iaUtterance.lang = 'fr-FR';
+        iaUtterance.rate = 0.65; // Slow and clear
+        iaUtterance.pitch = 1.0;
+        iaUtterance.volume = 1.0;
 
-        // Voix française féminine
+        // Get French voice
         const voices = iaSynth.getVoices();
         const frenchVoice = voices.find(voice =>
             voice.lang === 'fr-FR' ||
             voice.lang.includes('fr') ||
             voice.name.includes('French') ||
             voice.name.includes('Google français') ||
-            voice.name.includes('Amélie') ||
-            voice.name.includes('Alice') ||
-            voice.name.includes('Female')
+            voice.name.includes('Amélie')
         );
 
         if (frenchVoice) {
             iaUtterance.voice = frenchVoice;
-            console.log('✅ Voix française trouvée :', frenchVoice.name);
-        } else {
-            console.warn('⚠️ Aucune voix française trouvée, utilisation de la voix par défaut');
+            console.log('✅ French voice:', frenchVoice.name);
         }
 
-        // ENCORE PLUS LENT et PLUS CALME
-        iaUtterance.pitch = 1.0; // Voix normale
-        iaUtterance.rate = 0.6; // ENCORE PLUS LENT (0.75 était trop rapide)
-        iaUtterance.volume = 1;
-
-        // 🎯 SYNCHRONISATION TEMPS RÉEL AVEC LE SURLIGNAGE
-        let charIndex = 0;
+        // 🎯 REAL-TIME SYNCHRONIZATION
+        let lastUpdateTime = 0;
+        const updateThreshold = 500; // Minimum ms between updates
+        
         iaUtterance.onboundary = (event) => {
-            if (event.name === 'sentence' || event.name === 'word') {
-                // Trouver quelle section correspond à cette position
-                let totalChars = 0;
-                for (let i = 0; i < content.sections.length; i++) {
-                    totalChars += content.sections[i].text.length;
-                    if (charIndex < totalChars) {
+            const now = Date.now();
+            if (now - lastUpdateTime < updateThreshold) return;
+            lastUpdateTime = now;
+            
+            // Calculate which section we're in based on character position
+            let charCount = 0;
+            for (let i = 0; i < content.sections.length; i++) {
+                charCount += content.sections[i].text.length;
+                if (event.charIndex < charCount) {
+                    if (currentSectionIndex !== i) {
                         currentSectionIndex = i;
-                        updateSectionsDisplay(); // Surligne dans le panneau
-                        scrollToSection(); // Surligne et scroll sur la page
-                        break;
+                        console.log('📍 Section:', i, content.sections[i].name);
+                        updateSectionsDisplay(); // Highlight in panel
+                        scrollToSection(); // Highlight and scroll page
                     }
+                    break;
                 }
             }
         };
 
         iaUtterance.onend = () => {
+            console.log('✅ IA finished');
             currentSectionIndex = content.sections.length - 1;
             updateSectionsDisplay();
-            stopIA();
+            iaPlaying = false;
+            document.getElementById('ia-play-btn').disabled = false;
+            document.getElementById('ia-pause-btn').disabled = true;
+            document.getElementById('ia-stop-btn').disabled = true;
         };
 
-        // 🎯 COMMENCER TOUJOURS DU HAUT
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        currentSectionIndex = 0;
-        updateSectionsDisplay();
+        iaUtterance.onerror = (event) => {
+            console.error('❌ IA error:', event);
+            iaPlaying = false;
+            document.getElementById('ia-play-btn').disabled = false;
+        };
 
+        console.log('🔊 Starting speech...');
         iaSynth.speak(iaUtterance);
-        iaPlaying = true;
-    }
-
-    document.getElementById('ia-play-btn').disabled = true;
-    document.getElementById('ia-pause-btn').disabled = false;
-    document.getElementById('ia-stop-btn').disabled = false;
+    }, 300);
 }
 
 // Pause
 function pauseIA() {
+    console.log('⏸️ pauseIA called');
+    
     if (iaSynth.speaking) {
         iaSynth.pause();
         iaPlaying = false;
-
         document.getElementById('ia-play-btn').disabled = false;
         document.getElementById('ia-pause-btn').disabled = true;
+        console.log('⏸️ IA paused');
     }
 }
 
 // Stop
 function stopIA() {
+    console.log('⏹️ stopIA called');
+    
     iaSynth.cancel();
     iaPlaying = false;
     currentSectionIndex = 0;
 
-    // Retirer highlight
+    // Remove highlights
     document.querySelectorAll('.section, .hero, header.en-tete').forEach(el => {
         el.classList.remove('ia-highlight');
     });
@@ -564,6 +593,8 @@ function stopIA() {
     document.getElementById('ia-play-btn').disabled = false;
     document.getElementById('ia-pause-btn').disabled = true;
     document.getElementById('ia-stop-btn').disabled = true;
+    
+    console.log('⏹️ IA stopped');
 }
 
 // Initialiser l'IA au chargement
