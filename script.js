@@ -496,3 +496,210 @@ window.addEventListener('unhandledrejection', (event) => {
     event.preventDefault();
     return true;
 });
+
+// =========================================
+// ASSISTANTE IA FLOTTANTE (AGATHE)
+// =========================================
+
+// Texte complet de l'IA (découpé en phrases)
+const iaText = [
+    "Bonjour, je suis l'assistante IA de Cédric AUGUSTO.",
+    "Je suis là pour répondre à tous vos besoins concernant son portfolio et toute l'histoire qui en déroule.",
+    "Que souhaitez-vous découvrir aujourd'hui ?",
+    "Ce portfolio a été créé avec passion.",
+    "Il présente les projets de Cédric en développement web.",
+    "Vous pouvez naviguer grâce au menu.",
+    "Et utiliser le rapport de bug pour vérifier les erreurs.",
+    "Merci de votre visite !"
+];
+
+// Variables IA
+let iaAudio = null;
+let iaPanelOpen = false;
+let currentPhrase = 0;
+let iaInterval = null;
+
+// Créer le bouton flottant IA
+function createIAWidget() {
+    // Bouton flottant
+    const btn = document.createElement('button');
+    btn.className = 'ia-widget-btn';
+    btn.innerHTML = '🤖';
+    btn.onclick = toggleIAPanel;
+    btn.title = 'Assistante IA';
+    document.body.appendChild(btn);
+
+    // Panneau IA
+    const panel = document.createElement('div');
+    panel.className = 'ia-widget-panel';
+    panel.id = 'ia-widget-panel';
+    panel.innerHTML = `
+        <div class="ia-widget-header">
+            🤖 ASSISTANTE IA - Agathe
+            <button class="ia-close-btn" onclick="toggleIAPanel()">✕</button>
+        </div>
+        <div class="ia-widget-content">
+            <div class="ia-widget-text" id="ia-text-display"></div>
+        </div>
+        <div class="ia-widget-controls">
+            <button onclick="playIA()">▶️</button>
+            <button onclick="pauseIA()">⏸️</button>
+            <button onclick="stopIA()">⏹️</button>
+            <input type="range" id="ia-volume" min="0" max="100" value="80" onchange="setIAVolume(this.value)" style="width: 80px;">
+        </div>
+    `;
+    document.body.appendChild(panel);
+
+    console.log('✅ Widget IA créé');
+}
+
+// Ouvrir/Fermer le panneau
+function toggleIAPanel() {
+    const panel = document.getElementById('ia-widget-panel');
+    if (panel) {
+        panel.classList.toggle('active');
+        iaPanelOpen = panel.classList.contains('active');
+        
+        if (iaPanelOpen && !iaAudio) {
+            initIAAudio();
+        }
+    }
+}
+
+// Initialiser l'audio IA
+function initIAAudio() {
+    if (!iaAudio) {
+        iaAudio = document.getElementById('ia-audio-global');
+        if (!iaAudio) {
+            // Créer l'élément audio
+            iaAudio = document.createElement('audio');
+            iaAudio.id = 'ia-audio-global';
+            iaAudio.preload = 'auto';
+            
+            const source1 = document.createElement('source');
+            source1.src = 'assets/IA introduction.m4a';
+            source1.type = 'audio/mp4';
+            
+            const source2 = document.createElement('source');
+            source2.src = 'assets/IA introduction.mp3';
+            source2.type = 'audio/mpeg';
+            
+            iaAudio.appendChild(source1);
+            iaAudio.appendChild(source2);
+            document.body.appendChild(iaAudio);
+            
+            // Événements
+            iaAudio.addEventListener('timeupdate', updateIAHighlight);
+            iaAudio.addEventListener('ended', stopIA);
+        }
+    }
+}
+
+// Lancer l'IA
+function playIA() {
+    if (!iaAudio) initIAAudio();
+    
+    if (iaAudio) {
+        iaAudio.play();
+        currentPhrase = 0;
+        updateIAText();
+        
+        // Démarrer le surlignage progressif
+        startIAHighlight();
+    }
+}
+
+// Pause
+function pauseIA() {
+    if (iaAudio) {
+        iaAudio.pause();
+        stopIAHighlight();
+    }
+}
+
+// Stop
+function stopIA() {
+    if (iaAudio) {
+        iaAudio.pause();
+        iaAudio.currentTime = 0;
+        currentPhrase = 0;
+        stopIAHighlight();
+        updateIAText();
+    }
+}
+
+// Volume
+function setIAVolume(value) {
+    if (iaAudio) {
+        iaAudio.volume = value / 100;
+    }
+}
+
+// Mettre à jour le texte affiché
+function updateIAText() {
+    const display = document.getElementById('ia-text-display');
+    if (display) {
+        display.innerHTML = iaText.map((phrase, index) => {
+            if (index < currentPhrase) {
+                return `<span class="highlight">${phrase}</span><br>`;
+            } else if (index === currentPhrase) {
+                return `<span class="highlight">${phrase}</span><br>`;
+            } else {
+                return `<span class="coming">${phrase}</span><br>`;
+            }
+        }).join('');
+        
+        // Scroll automatique progressif
+        scrollToCurrentPhrase();
+    }
+}
+
+// Démarrer le surlignage progressif
+function startIAHighlight() {
+    const duration = iaAudio.duration || 20; // Durée estimée
+    const phraseDuration = duration / iaText.length;
+    
+    iaInterval = setInterval(() => {
+        currentPhrase++;
+        if (currentPhrase >= iaText.length) {
+            stopIAHighlight();
+        }
+        updateIAText();
+    }, phraseDuration * 1000);
+}
+
+// Arrêter le surlignage
+function stopIAHighlight() {
+    if (iaInterval) {
+        clearInterval(iaInterval);
+        iaInterval = null;
+    }
+}
+
+// Mettre à jour le surlignage selon le temps audio
+function updateIAHighlight() {
+    if (!iaAudio || !iaPanelOpen) return;
+    
+    const progress = iaAudio.currentTime / iaAudio.duration;
+    currentPhrase = Math.floor(progress * iaText.length);
+    updateIAText();
+}
+
+// Scroll automatique progressif vers la phrase actuelle
+function scrollToCurrentPhrase() {
+    const content = document.querySelector('.ia-widget-content');
+    if (content) {
+        const scrollHeight = content.scrollHeight;
+        const scrollTop = (currentPhrase / iaText.length) * scrollHeight;
+        content.scrollTo({
+            top: scrollTop,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// Créer le widget IA au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    createIAWidget();
+    console.log('✅ Assistante IA Agathe initialisée');
+});
