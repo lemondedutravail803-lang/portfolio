@@ -601,6 +601,9 @@ function playIA() {
             console.log('✅ French voice:', frenchVoice.name);
         }
 
+        // 🎯 INITIALISER LA BARRE DE PROGRESSION
+        updateProgressBar(content.sections.length);
+
         // 🎯 REAL-TIME SYNCHRONIZATION
         let lastUpdateTime = 0;
         const updateThreshold = 200; // Minimum ms between updates (PLUS RAPIDE)
@@ -621,6 +624,7 @@ function playIA() {
                         currentSectionIndex = i;
                         console.log('📍 Section:', i, content.sections[i].name);
                         updateSectionsDisplay(); // Highlight in panel
+                        updateProgressBarDisplay(); // 🎯 METTRE À JOUR LA BARRE DE PROGRESSION
                         scrollToSection(); // Highlight and scroll page
                     }
                     break;
