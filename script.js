@@ -256,3 +256,313 @@ window.addEventListener('unhandledrejection', (event) => {
     event.preventDefault();
     return true;
 });
+
+// =========================================
+// ASSISTANTE IA FLOTTANTE
+// =========================================
+
+// Contenu de chaque page
+const iaContent = {
+    index: {
+        title: "Page d'Accueil",
+        sections: [
+            { id: 'header', name: 'Header', text: "En haut, le logo Cédric AUGUSTO avec le menu de navigation." },
+            { id: 'hero', name: 'Hero', text: "Présentation de Cédric comme Développeur Web en formation." },
+            { id: 'about', name: 'À Propos', text: "Description de sa curiosité technique et son esprit d'apprentissage." },
+            { id: 'competences', name: 'Compétences', text: "HTML, CSS et JavaScript sont présentés." },
+            { id: 'soft-skills', name: 'Soft Skills', text: "Curiosité, Ponctualité, Communication, Organisation." },
+            { id: 'projets', name: 'Projets', text: "Neuf projets sont présentés." },
+            { id: 'ia', name: 'IA & LLM', text: "Intégration de l'intelligence artificielle." },
+            { id: 'contact', name: 'Contact', text: "Formulaire pour envoyer un message." }
+        ]
+    },
+    videos: {
+        title: "Page Vidéos",
+        sections: [
+            { id: 'videos', name: 'Vidéos', text: "Présentation des vidéos de Honkai Star Rail." }
+        ]
+    },
+    wuthering: {
+        title: "Wuthering Waves",
+        sections: [
+            { id: 'videos', name: 'Vidéos', text: "Présentation du jeu Wuthering Waves." }
+        ]
+    },
+    hsr: {
+        title: "Honkai Star Rail",
+        sections: [
+            { id: 'videos', name: 'Vidéos', text: "Présentation du jeu Honkai Star Rail." }
+        ]
+    },
+    bugreport: {
+        title: "Rapport de Bug",
+        sections: [
+            { id: null, name: 'Rapport', text: "Vérification des erreurs du portfolio." }
+        ]
+    }
+};
+
+// Variables IA
+let iaSynth = window.speechSynthesis;
+let iaUtterance = null;
+let iaPlaying = false;
+let iaWidgetOpen = false;
+let currentSectionIndex = 0;
+
+// Créer le widget IA
+function createIAWidget() {
+    // Bouton flottant
+    const btn = document.createElement('button');
+    btn.className = 'ia-float-btn';
+    btn.innerHTML = '🤖';
+    btn.onclick = toggleIAWidget;
+    btn.title = 'Assistante IA';
+    document.body.appendChild(btn);
+
+    // Panneau IA
+    const panel = document.createElement('div');
+    panel.className = 'ia-float-panel';
+    panel.id = 'ia-float-panel';
+    panel.innerHTML = `
+        <div class="ia-panel-header">
+            <span>🤖 Assistante IA</span>
+            <button class="ia-panel-close" onclick="toggleIAWidget()">✕</button>
+        </div>
+        <div class="ia-panel-content">
+            <div id="ia-page-title" class="ia-page-title"></div>
+            <div id="ia-sections-list" class="ia-sections-list"></div>
+        </div>
+        <div class="ia-panel-controls">
+            <button onclick="playIA()" id="ia-play-btn">▶️</button>
+            <button onclick="pauseIA()" id="ia-pause-btn" disabled>⏸️</button>
+            <button onclick="stopIA()" id="ia-stop-btn" disabled>⏹️</button>
+        </div>
+    `;
+    document.body.appendChild(panel);
+
+    console.log('✅ Widget IA créé');
+}
+
+// Ouvrir/Fermer le widget
+function toggleIAWidget() {
+    const panel = document.getElementById('ia-float-panel');
+    if (panel) {
+        panel.classList.toggle('active');
+        iaWidgetOpen = panel.classList.contains('active');
+        
+        if (iaWidgetOpen) {
+            loadCurrentPageContent();
+        }
+    }
+}
+
+// Charger le contenu de la page actuelle
+function loadCurrentPageContent() {
+    const path = window.location.pathname;
+    let pageKey = 'index';
+    
+    if (path.includes('videos.html')) pageKey = 'videos';
+    else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
+    else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
+    else if (path.includes('bug-report.html')) pageKey = 'bugreport';
+    
+    const content = iaContent[pageKey];
+    const titleEl = document.getElementById('ia-page-title');
+    const sectionsEl = document.getElementById('ia-sections-list');
+    
+    if (titleEl) {
+        titleEl.textContent = content.title;
+    }
+    
+    if (sectionsEl) {
+        sectionsEl.innerHTML = content.sections.map((section, index) => `
+            <div class="ia-section-item ${index === currentSectionIndex ? 'active' : ''}" 
+                 data-index="${index}" 
+                 data-section-id="${section.id || ''}"
+                 onclick="goToSection(${index})">
+                <strong>${section.name}</strong>
+                <p>${section.text}</p>
+            </div>
+        `).join('');
+    }
+}
+
+// Aller à une section
+function goToSection(index) {
+    currentSectionIndex = index;
+    updateSectionsDisplay();
+    scrollToSection();
+}
+
+// Mettre à jour l'affichage des sections
+function updateSectionsDisplay() {
+    const items = document.querySelectorAll('.ia-section-item');
+    items.forEach((item, index) => {
+        if (index === currentSectionIndex) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+}
+
+// Scroll vers la section
+function scrollToSection() {
+    const path = window.location.pathname;
+    let pageKey = 'index';
+    
+    if (path.includes('videos.html')) pageKey = 'videos';
+    else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
+    else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
+    else if (path.includes('bug-report.html')) pageKey = 'bugreport';
+    
+    const content = iaContent[pageKey];
+    const section = content.sections[currentSectionIndex];
+    
+    if (section && section.id) {
+        const element = document.getElementById(section.id);
+        if (element) {
+            // Retirer highlight de toutes les sections
+            document.querySelectorAll('.section, .hero, header.en-tete').forEach(el => {
+                el.classList.remove('ia-highlight');
+            });
+            
+            // Ajouter highlight
+            element.classList.add('ia-highlight');
+            
+            // Scroll
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+}
+
+// Lancer l'IA
+function playIA() {
+    if (iaSynth.speaking) {
+        iaSynth.resume();
+        iaPlaying = true;
+    } else {
+        const path = window.location.pathname;
+        let pageKey = 'index';
+        
+        if (path.includes('videos.html')) pageKey = 'videos';
+        else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
+        else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
+        else if (path.includes('bug-report.html')) pageKey = 'bugreport';
+        
+        const content = iaContent[pageKey];
+        const text = content.sections.map(s => s.text).join(' ');
+        
+        iaUtterance = new SpeechSynthesisUtterance(text);
+        
+        // Voix féminine
+        const voices = iaSynth.getVoices();
+        const femaleVoice = voices.find(voice => 
+            voice.name.includes('Female') || 
+            voice.name.includes('Google français') ||
+            voice.name.includes('Amélie') ||
+            voice.name.includes('Alice')
+        );
+        
+        if (femaleVoice) {
+            iaUtterance.voice = femaleVoice;
+        }
+        
+        iaUtterance.pitch = 1.2;
+        iaUtterance.rate = 0.9;
+        iaUtterance.volume = 1;
+        
+        iaUtterance.onend = () => {
+            stopIA();
+        };
+        
+        iaSynth.speak(iaUtterance);
+        iaPlaying = true;
+        
+        // Lancer le scroll progressif
+        startAutoScroll();
+    }
+    
+    document.getElementById('ia-play-btn').disabled = true;
+    document.getElementById('ia-pause-btn').disabled = false;
+    document.getElementById('ia-stop-btn').disabled = false;
+}
+
+// Scroll automatique progressif
+let scrollInterval = null;
+
+function startAutoScroll() {
+    const path = window.location.pathname;
+    let pageKey = 'index';
+    
+    if (path.includes('videos.html')) pageKey = 'videos';
+    else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
+    else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
+    else if (path.includes('bug-report.html')) pageKey = 'bugreport';
+    
+    const content = iaContent[pageKey];
+    const totalSections = content.sections.length;
+    const duration = 40000; // 40 secondes
+    const sectionDuration = duration / totalSections;
+    
+    currentSectionIndex = 0;
+    updateSectionsDisplay();
+    scrollToSection();
+    
+    scrollInterval = setInterval(() => {
+        currentSectionIndex++;
+        updateSectionsDisplay();
+        scrollToSection();
+        
+        if (currentSectionIndex >= totalSections) {
+            stopAutoScroll();
+        }
+    }, sectionDuration);
+}
+
+function stopAutoScroll() {
+    if (scrollInterval) {
+        clearInterval(scrollInterval);
+        scrollInterval = null;
+    }
+}
+
+// Pause
+function pauseIA() {
+    if (iaSynth.speaking) {
+        iaSynth.pause();
+        iaPlaying = false;
+        stopAutoScroll();
+        
+        document.getElementById('ia-play-btn').disabled = false;
+        document.getElementById('ia-pause-btn').disabled = true;
+    }
+}
+
+// Stop
+function stopIA() {
+    iaSynth.cancel();
+    iaPlaying = false;
+    currentSectionIndex = 0;
+    stopAutoScroll();
+    
+    // Retirer highlight
+    document.querySelectorAll('.section, .hero, header.en-tete').forEach(el => {
+        el.classList.remove('ia-highlight');
+    });
+    
+    updateSectionsDisplay();
+    
+    document.getElementById('ia-play-btn').disabled = false;
+    document.getElementById('ia-pause-btn').disabled = true;
+    document.getElementById('ia-stop-btn').disabled = true;
+}
+
+// Initialiser l'IA au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    createIAWidget();
+    console.log('✅ Assistante IA initialisée');
+});
