@@ -1368,3 +1368,38 @@ video::cue {
         bottom: 90px;
     }
 }
+
+/* =========================================
+   SURLIGNAGE DES SECTIONS (IA)
+========================================= */
+.section.ia-highlight-section {
+    animation: iaSectionHighlight 2s ease;
+    border: 3px solid var(--couleur-emeraude);
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.5);
+}
+
+@keyframes iaSectionHighlight {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 30px rgba(52, 211, 153, 0.5);
+    }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: 0 0 50px rgba(52, 211, 153, 0.8);
+    }
+}
+
+header.en-tete.ia-highlight-section {
+    animation: iaSectionHighlight 2s ease;
+    border: 3px solid var(--couleur-emeraude);
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.5);
+}
+
+.hero.ia-highlight-section {
+    animation: iaSectionHighlight 2s ease;
+    border: 3px solid var(--couleur-emeraude);
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.5);
+}
