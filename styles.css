@@ -1308,10 +1308,10 @@ video::cue {
 }
 
 .ia-section-item:hover {
-    background: rgba(168, 85, 247, 0.3);
-    color: var(--couleur-texte);
+    background: var(--couleur-emeraude);
+    color: var(--couleur-fond);
     transform: translateX(5px);
-    border-left-color: var(--couleur-violet);
+    border-left-color: var(--couleur-fond);
 }
 
 .ia-section-item:active {
@@ -1319,13 +1319,14 @@ video::cue {
 }
 
 .ia-section-item.active {
-    border-left-color: var(--couleur-violet);
-    background: rgba(168, 85, 247, 0.4);
+    border-left-color: var(--couleur-emeraude);
+    background: var(--couleur-emeraude);
+    color: var(--couleur-fond);
 }
 
 .ia-section-item.finished {
-    border-left-color: var(--couleur-violet);
-    opacity: 0.8;
+    border-left-color: var(--couleur-emeraude);
+    opacity: 0.7;
 }
 
 .ia-section-item strong {
