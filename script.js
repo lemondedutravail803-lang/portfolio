@@ -518,7 +518,7 @@ function playIA() {
         
         iaUtterance = new SpeechSynthesisUtterance(text);
         iaUtterance.lang = 'fr-FR';
-        iaUtterance.rate = 0.65; // Slow and clear
+        iaUtterance.rate = 0.5; // ENCORE PLUS LENT (0.65 était trop rapide)
         iaUtterance.pitch = 1.0;
         iaUtterance.volume = 1.0;
 
@@ -541,6 +541,15 @@ function playIA() {
         let lastUpdateTime = 0;
         const updateThreshold = 200; // Minimum ms between updates (PLUS RAPIDE)
 
+        // 📝 CRÉER LA ZONE DE SOUS-TITRES SUR LA PAGE
+        let subtitleOverlay = document.getElementById('ia-subtitle-overlay');
+        if (!subtitleOverlay) {
+            subtitleOverlay = document.createElement('div');
+            subtitleOverlay.id = 'ia-subtitle-overlay';
+            subtitleOverlay.className = 'ia-subtitle-overlay';
+            document.body.appendChild(subtitleOverlay);
+        }
+
         iaUtterance.onboundary = (event) => {
             const now = Date.now();
             if (now - lastUpdateTime < updateThreshold) return;
@@ -549,14 +558,14 @@ function playIA() {
             console.log('🎯 onboundary triggered, charIndex:', event.charIndex);
 
             // 📝 METTRE À JOUR LES SOUS-TITRES EN TEMPS RÉEL
-            const subtitlesEl = document.getElementById('ia-subtitles');
-            if (subtitlesEl && event.charIndex >= 0) {
+            if (subtitleOverlay && event.charIndex >= 0) {
                 // Prendre le texte autour de la position actuelle
-                const contextLength = 100;
+                const contextLength = 80;
                 const start = Math.max(0, event.charIndex - 20);
                 const end = Math.min(text.length, event.charIndex + contextLength);
                 const currentText = text.substring(start, end);
-                subtitlesEl.innerHTML = `<p>« ${currentText}${end < text.length ? '...' : ''} »</p>`;
+                subtitleOverlay.innerHTML = `<p>« ${currentText}${end < text.length ? '...' : ''} »</p>`;
+                subtitleOverlay.classList.add('visible');
             }
 
             // Calculate which section we're in based on character position
@@ -580,10 +589,15 @@ function playIA() {
             currentSectionIndex = content.sections.length - 1;
             updateSectionsDisplay();
             
-            // Nettoyer les sous-titres
+            // Nettoyer les sous-titres (panneau et page)
             const subtitlesEl = document.getElementById('ia-subtitles');
             if (subtitlesEl) {
                 subtitlesEl.innerHTML = '<p style="color: var(--couleur-emeraude);">✅ Lecture terminée</p>';
+            }
+            
+            // Nettoyer les sous-titres sur la page
+            if (subtitleOverlay) {
+                subtitleOverlay.classList.remove('visible');
             }
             
             iaPlaying = false;

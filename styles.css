@@ -1342,6 +1342,36 @@ video::cue {
     font-style: italic;
 }
 
+/* Sous-titres overlay sur la page */
+.ia-subtitle-overlay {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    border: 2px solid var(--couleur-emeraude);
+    z-index: 10000;
+    max-width: 80%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.ia-subtitle-overlay.visible {
+    opacity: 1;
+}
+
+.ia-subtitle-overlay p {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ffffff;
+    font-style: italic;
+    text-align: center;
+}
+
 .ia-panel-controls {
     display: flex;
     justify-content: center;
