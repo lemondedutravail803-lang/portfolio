@@ -501,125 +501,93 @@ window.addEventListener('unhandledrejection', (event) => {
 // ASSISTANTE IA FLOTTANTE (WEB SPEECH API)
 // =========================================
 
-// Textes pour chaque page avec IDs des sections
+// Textes pour chaque page (VERSION SIMPLE - STRINGS)
 const iaTexts = {
     index: [
-        { text: "Bonjour, je suis Agathe, l'assistante IA de Cédric AUGUSTO.", section: null },
-        { text: "Bienvenue sur son portfolio de développeur Web.", section: null },
-        { text: "Je vais vous guider à travers cette page d'accueil.", section: null },
-        { text: "En haut de la page, vous voyez le logo avec le nom Cédric AUGUSTO.", section: 'header' },
-        { text: "Le menu de navigation vous permet d'accéder aux différentes sections.", section: 'header' },
-        { text: "La section Hero présente Cédric comme Développeur Web en formation.", section: 'hero' },
-        { text: "Il recherche un stage ou une alternance à partir de deux mille vingt-six.", section: 'hero' },
-        { text: "La section À Propos décrit sa curiosité technique et son esprit d'apprentissage.", section: 'about' },
-        { text: "La section Compétences Techniques montre HTML cinq, CSS trois et JavaScript.", section: 'competences' },
-        { text: "La section Soft Skills présente ses qualités : Curiosité, Ponctualité, Communication, Organisation et Autonomie.", section: 'soft-skills' },
-        { text: "La section Projets présente neuf projets réalisés par Cédric.", section: 'projets' },
-        { text: "Le premier projet est un Jeu de Voiture créé avec Scratch.", section: 'projets' },
-        { text: "Le deuxième projet est le Site Portfolio en HTML et CSS.", section: 'projets' },
-        { text: "Le troisième projet est une Figurine créée chez Cap Sciences.", section: 'projets' },
-        { text: "Le quatrième projet est un Montage Vidéo avec effets et transitions.", section: 'projets' },
-        { text: "Le cinquième projet est OpenShot Vidéo pour le montage professionnel.", section: 'projets' },
-        { text: "Le sixième projet est la Formation Konexio de sept semaines.", section: 'projets' },
-        { text: "Le septième projet est un Jeu dans l'Espace en HTML, CSS et JavaScript.", section: 'projets' },
-        { text: "Le huitième projet est Google Docs pour la création de documents.", section: 'projets' },
-        { text: "Le neuvième projet est Google Sheets pour les tableaux de bord.", section: 'projets' },
-        { text: "La section IA et LLM présente l'intégration de l'intelligence artificielle.", section: 'ia' },
-        { text: "La section Contact permet d'envoyer un message à Cédric.", section: 'contact' },
-        { text: "Un lecteur de musique est disponible en bas de page avec quatre titres.", section: null },
-        { text: "Merci de votre visite !", section: null }
+        "Bonjour, je suis Agathe, l'assistante IA de Cédric AUGUSTO.",
+        "Bienvenue sur son portfolio de développeur Web.",
+        "Je vais vous guider à travers cette page d'accueil.",
+        "En haut, vous voyez le logo Cédric AUGUSTO.",
+        "Le menu permet d'accéder aux sections.",
+        "La section Hero présente Cédric comme Développeur Web.",
+        "Il recherche un stage ou alternance en deux mille vingt-six.",
+        "La section À Propos décrit sa curiosité technique.",
+        "La section Compétences montre HTML, CSS et JavaScript.",
+        "La section Soft Skills présente ses qualités.",
+        "La section Projets présente neuf projets.",
+        "Le premier projet est un Jeu de Voiture avec Scratch.",
+        "Le deuxième projet est le Site Portfolio.",
+        "Le troisième projet est une Figurine Cap Sciences.",
+        "Le quatrième projet est un Montage Vidéo.",
+        "Le cinquième projet est OpenShot Vidéo.",
+        "Le sixième projet est la Formation Konexio.",
+        "Le septième projet est un Jeu dans l'Espace.",
+        "Le huitième projet est Google Docs.",
+        "Le neuvième projet est Google Sheets.",
+        "La section IA et LLM présente l'intelligence artificielle.",
+        "La section Contact permet d'envoyer un message.",
+        "Un lecteur de musique est disponible en bas.",
+        "Merci de votre visite !"
     ],
     videos: [
-        { text: "Bonjour, je suis Agathe.", section: null },
-        { text: "Bienvenue sur la page Vidéos de Cédric AUGUSTO.", section: null },
-        { text: "Cette page présente sa passion pour les jeux vidéo.", section: 'videos' },
-        { text: "La section principale présente Honkai Star Rail Version trois point sept.", section: 'videos' },
-        { text: "Honkai Star Rail est un jeu gratuit de type Gacha et R P G au tour par tour.", section: 'videos' },
-        { text: "Le développeur est Ho Yoverse.", section: 'videos' },
-        { text: "Les plateformes sont PC, Mobile et PlayStation.", section: 'videos' },
-        { text: "L'histoire se déroule dans un voyage spatial épique.", section: 'videos' },
-        { text: "Vous explorez différents mondes, planètes et stations spatiales.", section: 'videos' },
-        { text: "L'univers mêle science-fiction, fantasy et technologie avancée.", section: 'videos' },
-        { text: "Vous incarnez un personnage amnésique qui doit récupérer sa mémoire.", section: 'videos' },
-        { text: "Vous accomplissez des quêtes scénarisées et combattez des monstres.", section: 'videos' },
-        { text: "Vous collectionnez vos personnages préférés grâce au système gacha.", section: 'videos' },
-        { text: "La page présente trois vidéos de Honkai Star Rail.", section: 'videos' },
-        { text: "La première vidéo est la bande-annonce de la Version trois point sept.", section: 'videos' },
-        { text: "La deuxième vidéo est une nouvelle vidéo de présentation.", section: 'videos' },
-        { text: "La troisième vidéo présente le personnage Grande Herta.", section: 'videos' },
-        { text: "La section Déroulement d'une Session de Jeu explique les quatre étapes.", section: null },
-        { text: "Première étape : Connexion et Quotidiens avec les récompenses et missions.", section: null },
-        { text: "Deuxième étape : Quêtes d'Histoire pour progresser dans le scénario.", section: null },
-        { text: "Troisième étape : Combats et Exploration des donjons.", section: null },
-        { text: "Quatrième étape : Collection et Amélioration des personnages et armes.", section: null },
-        { text: "Merci de votre visite !", section: null }
+        "Bonjour, je suis Agathe.",
+        "Bienvenue sur la page Vidéos.",
+        "Cette page présente la passion de Cédric pour les jeux vidéo.",
+        "La section présente Honkai Star Rail.",
+        "C'est un jeu gratuit de type Gacha et R P G.",
+        "Le développeur est Ho Yoverse.",
+        "L'histoire se déroule dans un voyage spatial.",
+        "Vous explorez différents mondes et planètes.",
+        "Vous incarnez un personnage amnésique.",
+        "Vous accomplissez des quêtes et combattez des monstres.",
+        "Vous collectionnez des personnages avec le système gacha.",
+        "La page présente trois vidéos.",
+        "La première vidéo est la Version trois point sept.",
+        "La deuxième vidéo est une nouvelle vidéo.",
+        "La troisième vidéo présente Grande Herta.",
+        "Merci de votre visite !"
     ],
     wuthering: [
-        { text: "Bonjour, je suis Agathe.", section: null },
-        { text: "Bienvenue sur la page Wuthering Waves.", section: null },
-        { text: "Cette page présente le jeu Wuthering Waves en détail.", section: 'videos' },
-        { text: "La section Présentation du Jeu décrit l'histoire et le scénario.", section: 'videos' },
-        { text: "Vous incarnez un personnage masculin ou féminin qui a perdu la mémoire.", section: 'videos' },
-        { text: "Votre but est de retrouver vos souvenirs en explorant l'univers.", section: 'videos' },
-        { text: "Vous découvrez l'histoire de nombreux personnages avec leur personnalité.", section: 'videos' },
-        { text: "L'histoire principale évolue au fil des mises à jour régulières.", section: 'videos' },
-        { text: "La section Monde Ouvert et Exploration décrit les fonctionnalités.", section: 'videos' },
-        { text: "Vous contrôlez jusqu'à trois personnages simultanément.", section: 'videos' },
-        { text: "Vous explorez librement un vaste univers.", section: 'videos' },
-        { text: "Vous battez des monstres et sauvez le monde.", section: 'videos' },
-        { text: "Vous découvrez la mémoire du personnage à travers les quêtes d'histoire.", section: 'videos' },
-        { text: "La section Système de Combat décrit les combats magnifiques.", section: 'videos' },
-        { text: "Les dégâts sont visibles avec des chiffres sur les ennemis.", section: 'videos' },
-        { text: "Les animations sont somptueuses et chaque attaque est un spectacle.", section: 'videos' },
-        { text: "Les combats sont rapides et efficaces.", section: 'videos' },
-        { text: "Vous personnalisez vos personnages collectionnés.", section: 'videos' },
-        { text: "La section Objectifs et Collection liste les buts du jeu.", section: 'videos' },
-        { text: "Les objectifs incluent les quêtes d'histoire et la collection de personnages.", section: 'videos' },
-        { text: "Le système d'invocation permet d'obtenir de nouveaux personnages.", section: 'videos' },
-        { text: "Vous collectionnez les armes et les artefacts.", section: 'videos' },
-        { text: "Vous optimisez les statistiques de vos personnages.", section: 'videos' },
-        { text: "La page présente trois vidéos de Wuthering Waves.", section: 'videos' },
-        { text: "La première vidéo est Dawn Arrives, les cinématiques d'histoire.", section: 'videos' },
-        { text: "La deuxième vidéo est une nouvelle vidéo de présentation.", section: 'videos' },
-        { text: "La troisième vidéo présente l'univers de Wuthering Waves.", section: 'videos' },
-        { text: "Merci de votre visite !", section: null }
+        "Bonjour, je suis Agathe.",
+        "Bienvenue sur la page Wuthering Waves.",
+        "Cette page présente le jeu en détail.",
+        "Vous incarnez un personnage qui a perdu la mémoire.",
+        "Votre but est de retrouver vos souvenirs.",
+        "Vous découvrez l'histoire de nombreux personnages.",
+        "Le monde ouvert permet d'explorer librement.",
+        "Vous contrôlez jusqu'à trois personnages.",
+        "Vous battez des monstres et sauvez le monde.",
+        "Le système de combat est magnifique.",
+        "Les dégâts sont visibles sur les ennemis.",
+        "Les animations sont somptueuses.",
+        "Vous collectionnez des personnages et des armes.",
+        "La page présente trois vidéos.",
+        "La première vidéo est Dawn Arrives.",
+        "La deuxième vidéo est une nouvelle vidéo.",
+        "La troisième vidéo présente l'univers.",
+        "Merci de votre visite !"
     ],
     hsr: [
-        { text: "Bonjour, je suis Agathe.", section: null },
-        { text: "Bienvenue sur la page Honkai Star Rail.", section: null },
-        { text: "Cette page présente le jeu Honkai Star Rail.", section: 'videos' },
-        { text: "La section principale présente la bande-annonce de la Version trois point sept.", section: 'videos' },
-        { text: "Le titre est Vers ce demain d'autrefois.", section: 'videos' },
-        { text: "La page présente également une nouvelle vidéo de Honkai Star Rail.", section: 'videos' },
-        { text: "La section Déroulement d'une Session de Jeu explique les quatre étapes.", section: null },
-        { text: "Première étape : Connexion et Quotidiens avec les récompenses de connexion.", section: null },
-        { text: "Deuxième étape : Quêtes d'Histoire pour découvrir de nouvelles zones.", section: null },
-        { text: "Troisième étape : Combats et Exploration pour affronter des ennemis.", section: null },
-        { text: "Quatrième étape : Collection et Amélioration avec le système gacha.", section: null },
-        { text: "Le jeu est un R P G au tour par tour développé par Ho Yoverse.", section: null },
-        { text: "Merci de votre visite !", section: null }
+        "Bonjour, je suis Agathe.",
+        "Bienvenue sur la page Honkai Star Rail.",
+        "Cette page présente le jeu.",
+        "La section présente la Version trois point sept.",
+        "La page présente une nouvelle vidéo.",
+        "Le jeu est un R P G au tour par tour.",
+        "Merci de votre visite !"
     ],
     bugreport: [
-        { text: "Bonjour, je suis Agathe.", section: null },
-        { text: "Bienvenue sur la page Rapport de Bug.", section: null },
-        { text: "Cette page permet de vérifier les erreurs du portfolio.", section: null },
-        { text: "La section État du Site affiche l'état des fonctionnalités.", section: null },
-        { text: "Les thèmes, la musique, les animations et le menu sont vérifiés.", section: null },
-        { text: "La section Journal des Erreurs affiche les erreurs détectées.", section: null },
-        { text: "Les erreurs sont affichées en rouge avec une croix.", section: null },
-        { text: "La section Succès affiche les éléments qui fonctionnent.", section: null },
-        { text: "Les succès sont affichés en vert avec un check.", section: null },
-        { text: "Le bouton Lancer le Scan Complet analyse toutes les pages.", section: null },
-        { text: "Le scan détecte les images non chargées.", section: null },
-        { text: "Le scan vérifie les éléments importants comme les boutons.", section: null },
-        { text: "Le scan vérifie les vidéos YouTube accessibles.", section: null },
-        { text: "Les erreurs sont listées avec leur localisation.", section: null },
-        { text: "Le bouton Copier le Rapport permet de copier tout le rapport.", section: null },
-        { text: "Vous pouvez copier le rapport et l'envoyer à Cédric.", section: null },
-        { text: "Le rapport inclut l'état du site, les erreurs et les succès.", section: null },
-        { text: "Le rapport inclut la structure du portfolio.", section: null },
-        { text: "Le rapport inclut les vidéos YouTube détectées.", section: null },
-        { text: "Merci de votre visite !", section: null }
+        "Bonjour, je suis Agathe.",
+        "Bienvenue sur la page Rapport de Bug.",
+        "Cette page permet de vérifier les erreurs.",
+        "La section État du Site affiche l'état des fonctionnalités.",
+        "La section Journal des Erreurs affiche les erreurs.",
+        "La section Succès affiche les éléments qui fonctionnent.",
+        "Le bouton Lancer le Scan analyse toutes les pages.",
+        "Le scan détecte les images non chargées.",
+        "Le scan vérifie les éléments importants.",
+        "Le bouton Copier permet de copier le rapport.",
+        "Merci de votre visite !"
     ]
 };
 
@@ -693,20 +661,44 @@ function playIA() {
         iaPlaying = true;
     } else {
         const texts = iaTexts[currentPage] || iaTexts.index;
-        
-        // Extraire le texte des objets et joindre
-        const text = texts.map(item => typeof item === 'object' ? item.text : item).join(' ');
+        const text = texts.join(' ');
         
         iaUtterance = new SpeechSynthesisUtterance(text);
         
-        // Attendre que les voix soient chargées
-        if (iaSynth.getVoices().length === 0) {
-            iaSynth.onvoiceschanged = () => {
-                setupVoiceAndSpeak();
-            };
-        } else {
-            setupVoiceAndSpeak();
+        // Voix féminine
+        const voices = iaSynth.getVoices();
+        const femaleVoice = voices.find(voice => 
+            voice.name.includes('Female') || 
+            voice.name.includes('Google français') ||
+            voice.name.includes('Amélie') ||
+            voice.name.includes('Alice')
+        );
+        
+        if (femaleVoice) {
+            iaUtterance.voice = femaleVoice;
         }
+        
+        iaUtterance.pitch = 1.2;
+        iaUtterance.rate = 0.9;
+        iaUtterance.volume = 1;
+        
+        // Animation avatar
+        const avatar = document.getElementById('ia-avatar');
+        
+        iaUtterance.onstart = () => {
+            if (avatar) avatar.classList.add('speaking');
+        };
+        
+        iaUtterance.onend = () => {
+            if (avatar) avatar.classList.remove('speaking');
+            stopIA();
+        };
+        
+        iaSynth.speak(iaUtterance);
+        iaPlaying = true;
+        
+        // Lancer le surlignage progressif
+        startHighlighting();
     }
     
     document.getElementById('ia-play-btn').disabled = true;
@@ -714,56 +706,32 @@ function playIA() {
     document.getElementById('ia-stop-btn').disabled = false;
 }
 
-// Configurer la voix et lancer
-function setupVoiceAndSpeak() {
+// Surlignage progressif
+let highlightInterval = null;
+
+function startHighlighting() {
     const texts = iaTexts[currentPage] || iaTexts.index;
-    const text = texts.map(item => typeof item === 'object' ? item.text : item).join(' ');
+    const duration = 60000; // 1 minute estimée
+    const phraseDuration = duration / texts.length;
     
-    iaUtterance = new SpeechSynthesisUtterance(text);
+    currentPhrase = 0;
+    updateIAText();
     
-    // Voix féminine
-    const voices = iaSynth.getVoices();
-    const femaleVoice = voices.find(voice => 
-        voice.name.includes('Female') || 
-        voice.name.includes('Google français') ||
-        voice.name.includes('Amélie') ||
-        voice.name.includes('Alice')
-    );
-    
-    if (femaleVoice) {
-        iaUtterance.voice = femaleVoice;
+    highlightInterval = setInterval(() => {
+        currentPhrase++;
+        updateIAText();
+        
+        if (currentPhrase >= texts.length) {
+            stopHighlighting();
+        }
+    }, phraseDuration);
+}
+
+function stopHighlighting() {
+    if (highlightInterval) {
+        clearInterval(highlightInterval);
+        highlightInterval = null;
     }
-    
-    iaUtterance.pitch = 1.3;
-    iaUtterance.rate = 0.85;
-    iaUtterance.volume = document.getElementById('ia-volume').value / 100;
-    
-    // Animation de l'avatar
-    const avatar = document.getElementById('ia-avatar');
-    
-    iaUtterance.onstart = () => {
-        if (avatar) {
-            avatar.classList.add('speaking');
-        }
-    };
-    
-    iaUtterance.onboundary = (event) => {
-        if (event.name === 'sentence' || event.name === 'word') {
-            currentPhrase++;
-            updateIAText();
-            scrollToCurrentPhrase();
-        }
-    };
-    
-    iaUtterance.onend = () => {
-        if (avatar) {
-            avatar.classList.remove('speaking');
-        }
-        stopIA();
-    };
-    
-    iaSynth.speak(iaUtterance);
-    iaPlaying = true;
 }
 
 // Pause
@@ -771,12 +739,10 @@ function pauseIA() {
     if (iaSynth.speaking) {
         iaSynth.pause();
         iaPlaying = false;
+        stopHighlighting();
         
-        // Arrêter l'animation de l'avatar
         const avatar = document.getElementById('ia-avatar');
-        if (avatar) {
-            avatar.classList.remove('speaking');
-        }
+        if (avatar) avatar.classList.remove('speaking');
         
         document.getElementById('ia-play-btn').disabled = false;
         document.getElementById('ia-pause-btn').disabled = true;
@@ -788,12 +754,10 @@ function stopIA() {
     iaSynth.cancel();
     iaPlaying = false;
     currentPhrase = 0;
+    stopHighlighting();
     
-    // Arrêter l'animation de l'avatar
     const avatar = document.getElementById('ia-avatar');
-    if (avatar) {
-        avatar.classList.remove('speaking');
-    }
+    if (avatar) avatar.classList.remove('speaking');
     
     document.getElementById('ia-play-btn').disabled = false;
     document.getElementById('ia-pause-btn').disabled = true;
