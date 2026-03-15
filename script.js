@@ -471,8 +471,9 @@ function playIA() {
             iaUtterance.voice = femaleVoice;
         }
         
-        iaUtterance.pitch = 1.2;
-        iaUtterance.rate = 0.9;
+        // PLUS LENT et PLUS CALME
+        iaUtterance.pitch = 1.1; // Un peu plus féminin
+        iaUtterance.rate = 0.75; // PLUS LENT (0.9 était trop rapide)
         iaUtterance.volume = 1;
         
         iaUtterance.onend = () => {
@@ -482,8 +483,8 @@ function playIA() {
         iaSynth.speak(iaUtterance);
         iaPlaying = true;
         
-        // Lancer le scroll progressif
-        startAutoScroll();
+        // Lancer le scroll progressif SYNCHRONISÉ
+        startAutoScroll(content.sections.length);
     }
     
     document.getElementById('ia-play-btn').disabled = true;
@@ -491,26 +492,17 @@ function playIA() {
     document.getElementById('ia-stop-btn').disabled = false;
 }
 
-// Scroll automatique progressif
+// Scroll automatique progressif SYNCHRONISÉ
 let scrollInterval = null;
 
-function startAutoScroll() {
-    const path = window.location.pathname;
-    let pageKey = 'index';
-    
-    if (path.includes('videos.html')) pageKey = 'videos';
-    else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
-    else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
-    else if (path.includes('bug-report.html')) pageKey = 'bugreport';
-    
-    const content = iaContent[pageKey];
-    const totalSections = content.sections.length;
-    const duration = 40000; // 40 secondes
-    const sectionDuration = duration / totalSections;
-    
+function startAutoScroll(totalSections) {
     currentSectionIndex = 0;
     updateSectionsDisplay();
     scrollToSection();
+    
+    // Calculer la durée par section basée sur la vitesse de parole
+    // À 0.75 de vitesse, environ 6-7 secondes par section
+    const sectionDuration = 7000; // 7 secondes par section (PLUS LENT)
     
     scrollInterval = setInterval(() => {
         currentSectionIndex++;
