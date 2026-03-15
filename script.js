@@ -344,6 +344,10 @@ function createIAWidget() {
         </div>
         <div class="ia-panel-content">
             <div id="ia-page-title" class="ia-page-title"></div>
+            <div id="ia-progress-bar-container" class="ia-progress-bar-container">
+                <div id="ia-progress-bar" class="ia-progress-bar"></div>
+            </div>
+            <div id="ia-progress-text" class="ia-progress-text">Section 0/0 - 0%</div>
             <div id="ia-sections-list" class="ia-sections-list"></div>
         </div>
         <div class="ia-panel-controls">
@@ -388,6 +392,9 @@ function loadCurrentPageContent() {
         titleEl.textContent = content.title;
     }
     
+    // 🎯 METTRE À JOUR LA BARRE DE PROGRESSION
+    updateProgressBar(content.sections.length);
+
     if (sectionsEl) {
         sectionsEl.innerHTML = `
             <div style="font-size: 0.8rem; color: var(--couleur-texte-sombre); margin-bottom: 0.5rem; font-style: italic;">
@@ -422,11 +429,12 @@ function loadCurrentPageContent() {
 // Aller à une section
 function goToSection(index) {
     console.log('🖱️ goToSection called, index:', index);
-    
+
     currentSectionIndex = index;
     updateSectionsDisplay();
+    updateProgressBarDisplay(); // 🎯 METTRE À JOUR LA BARRE DE PROGRESSION
     scrollToSection();
-    
+
     // 🎯 PAUSER L'IA QUAND ON CLIQUE MANUELLEMENT
     if (iaPlaying) {
         iaSynth.pause();
@@ -434,6 +442,34 @@ function goToSection(index) {
         document.getElementById('ia-play-btn').disabled = false;
         document.getElementById('ia-pause-btn').disabled = true;
         console.log('⏸️ IA paused (manual navigation)');
+    }
+}
+
+// 🎯 METTRE À JOUR LA BARRE DE PROGRESSION
+function updateProgressBar(totalSections) {
+    updateProgressBarDisplay();
+}
+
+function updateProgressBarDisplay() {
+    const progressText = document.getElementById('ia-progress-text');
+    const progressBar = document.getElementById('ia-progress-bar');
+    
+    if (progressText && progressBar) {
+        // Get current page content
+        const path = window.location.pathname;
+        let pageKey = 'index';
+
+        if (path.includes('videos.html')) pageKey = 'videos';
+        else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
+        else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
+        else if (path.includes('bug-report.html')) pageKey = 'bugreport';
+
+        const content = iaContent[pageKey];
+        const totalSections = content.sections.length;
+        const progress = totalSections > 0 ? Math.round(((currentSectionIndex + 1) / totalSections) * 100) : 0;
+
+        progressText.textContent = `Section ${currentSectionIndex + 1}/${totalSections} - ${progress}%`;
+        progressBar.style.width = `${progress}%`;
     }
 }
 
