@@ -422,33 +422,53 @@ function updateSectionsDisplay() {
 
 // Scroll vers la section
 function scrollToSection() {
+    console.log('📜 scrollToSection called, index:', currentSectionIndex);
+    
     const path = window.location.pathname;
     let pageKey = 'index';
-    
+
     if (path.includes('videos.html')) pageKey = 'videos';
     else if (path.includes('wuthering-waves.html')) pageKey = 'wuthering';
     else if (path.includes('honkai-star-rail.html')) pageKey = 'hsr';
     else if (path.includes('bug-report.html')) pageKey = 'bugreport';
-    
+
     const content = iaContent[pageKey];
     const section = content.sections[currentSectionIndex];
-    
+
+    console.log('📄 PageKey:', pageKey, 'Section:', section);
+
+    // Retirer highlight de toutes les sections
+    document.querySelectorAll('.section, .hero, header.en-tete').forEach(el => {
+        el.classList.remove('ia-highlight');
+    });
+
     if (section && section.id) {
         const element = document.getElementById(section.id);
         if (element) {
-            // Retirer highlight de toutes les sections
-            document.querySelectorAll('.section, .hero, header.en-tete').forEach(el => {
-                el.classList.remove('ia-highlight');
-            });
-            
+            console.log('✅ Found element by ID:', section.id);
             // Ajouter highlight
             element.classList.add('ia-highlight');
-            
+
             // Scroll
             element.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
+        } else {
+            console.warn('⚠️ Element not found:', section.id);
+        }
+    } else {
+        // 🎯 PAS D'ID - SCROLL PROGRESSIF BASÉ SUR L'INDEX
+        console.log('📍 No ID, using progressive scroll');
+        const sections = document.querySelectorAll('.section, .hero');
+        if (sections.length > currentSectionIndex) {
+            const element = sections[currentSectionIndex];
+            element.classList.add('ia-highlight');
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            console.log('✅ Scrolled to section index:', currentSectionIndex);
         }
     }
 }
@@ -518,13 +538,15 @@ function playIA() {
 
         // 🎯 REAL-TIME SYNCHRONIZATION
         let lastUpdateTime = 0;
-        const updateThreshold = 500; // Minimum ms between updates
-        
+        const updateThreshold = 200; // Minimum ms between updates (PLUS RAPIDE)
+
         iaUtterance.onboundary = (event) => {
             const now = Date.now();
             if (now - lastUpdateTime < updateThreshold) return;
             lastUpdateTime = now;
-            
+
+            console.log('🎯 onboundary triggered, charIndex:', event.charIndex);
+
             // Calculate which section we're in based on character position
             let charCount = 0;
             for (let i = 0; i < content.sections.length; i++) {
