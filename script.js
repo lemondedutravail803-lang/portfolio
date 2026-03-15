@@ -693,58 +693,77 @@ function playIA() {
         iaPlaying = true;
     } else {
         const texts = iaTexts[currentPage] || iaTexts.index;
-        const text = texts.join(' ');
+        
+        // Extraire le texte des objets et joindre
+        const text = texts.map(item => typeof item === 'object' ? item.text : item).join(' ');
         
         iaUtterance = new SpeechSynthesisUtterance(text);
         
-        // Voix féminine
-        const voices = iaSynth.getVoices();
-        const femaleVoice = voices.find(voice => 
-            voice.name.includes('Female') || 
-            voice.name.includes('Google français') ||
-            voice.name.includes('Amélie') ||
-            voice.name.includes('Alice')
-        );
-        
-        if (femaleVoice) {
-            iaUtterance.voice = femaleVoice;
+        // Attendre que les voix soient chargées
+        if (iaSynth.getVoices().length === 0) {
+            iaSynth.onvoiceschanged = () => {
+                setupVoiceAndSpeak();
+            };
+        } else {
+            setupVoiceAndSpeak();
         }
-        
-        iaUtterance.pitch = 1.3; // Plus aigu = plus féminin (1.0 = normal, 2.0 = très aigu)
-        iaUtterance.rate = 0.85; // Plus lent = plus calme (1.0 = normal, 0.5 = très lent)
-        iaUtterance.volume = document.getElementById('ia-volume').value / 100;
-        
-        // Animation de l'avatar quand l'IA parle
-        const avatar = document.getElementById('ia-avatar');
-        
-        iaUtterance.onstart = () => {
-            if (avatar) {
-                avatar.classList.add('speaking');
-            }
-        };
-        
-        iaUtterance.onboundary = (event) => {
-            if (event.name === 'sentence') {
-                currentPhrase++;
-                updateIAText();
-                scrollToCurrentPhrase();
-            }
-        };
-        
-        iaUtterance.onend = () => {
-            if (avatar) {
-                avatar.classList.remove('speaking');
-            }
-            stopIA();
-        };
-        
-        iaSynth.speak(iaUtterance);
-        iaPlaying = true;
     }
     
     document.getElementById('ia-play-btn').disabled = true;
     document.getElementById('ia-pause-btn').disabled = false;
     document.getElementById('ia-stop-btn').disabled = false;
+}
+
+// Configurer la voix et lancer
+function setupVoiceAndSpeak() {
+    const texts = iaTexts[currentPage] || iaTexts.index;
+    const text = texts.map(item => typeof item === 'object' ? item.text : item).join(' ');
+    
+    iaUtterance = new SpeechSynthesisUtterance(text);
+    
+    // Voix féminine
+    const voices = iaSynth.getVoices();
+    const femaleVoice = voices.find(voice => 
+        voice.name.includes('Female') || 
+        voice.name.includes('Google français') ||
+        voice.name.includes('Amélie') ||
+        voice.name.includes('Alice')
+    );
+    
+    if (femaleVoice) {
+        iaUtterance.voice = femaleVoice;
+    }
+    
+    iaUtterance.pitch = 1.3;
+    iaUtterance.rate = 0.85;
+    iaUtterance.volume = document.getElementById('ia-volume').value / 100;
+    
+    // Animation de l'avatar
+    const avatar = document.getElementById('ia-avatar');
+    
+    iaUtterance.onstart = () => {
+        if (avatar) {
+            avatar.classList.add('speaking');
+        }
+    };
+    
+    iaUtterance.onboundary = (event) => {
+        if (event.name === 'sentence' || event.name === 'word') {
+            currentPhrase++;
+            updateIAText();
+            scrollToCurrentPhrase();
+        }
+    };
+    
+    iaUtterance.onend = () => {
+        if (avatar) {
+            avatar.classList.remove('speaking');
+        }
+        stopIA();
+    };
+    
+    iaSynth.speak(iaUtterance);
+    iaPlaying = true;
 }
 
 // Pause
@@ -822,29 +841,6 @@ function scrollToCurrentPhrase() {
             top: scrollTop,
             behavior: 'smooth'
         });
-    }
-    
-    // Scroll vers la section de la page si définie
-    const texts = iaTexts[currentPage] || iaTexts.index;
-    const currentItem = texts[currentPhrase];
-    
-    if (currentItem && typeof currentItem === 'object' && currentItem.section) {
-        const section = document.getElementById(currentItem.section);
-        if (section) {
-            // Retirer la classe highlight de toutes les sections
-            document.querySelectorAll('.section').forEach(sec => {
-                sec.classList.remove('ia-highlight-section');
-            });
-            
-            // Ajouter la classe highlight à la section actuelle
-            section.classList.add('ia-highlight-section');
-            
-            // Scroll vers la section
-            section.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
     }
 }
 
