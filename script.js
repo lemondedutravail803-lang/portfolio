@@ -496,3 +496,262 @@ window.addEventListener('unhandledrejection', (event) => {
     event.preventDefault();
     return true;
 });
+
+// =========================================
+// ASSISTANTE IA FLOTTANTE (WEB SPEECH API)
+// =========================================
+
+// Textes pour chaque page
+const iaTexts = {
+    index: [
+        "Bonjour, je suis Agathe, l'assistante IA de Cédric AUGUSTO.",
+        "Bienvenue sur son portfolio de développeur Web.",
+        "En haut, vous voyez le nom de Cédric avec une animation de lettres.",
+        "Plus bas, la section À propos présente Cédric.",
+        "Ensuite, les Compétences Techniques montrent HTML, CSS et JavaScript.",
+        "Les Soft Skills présentent ses qualités : Curiosité, Ponctualité, Communication.",
+        "La section Projets présente neuf projets réalisés par Cédric.",
+        "Vous pouvez aussi découvrir la section IA et LLM.",
+        "Et enfin, la section Contact pour envoyer un message à Cédric.",
+        "Merci de votre visite !"
+    ],
+    videos: [
+        "Bonjour, je suis Agathe.",
+        "Bienvenue sur la page Vidéos de Cédric AUGUSTO.",
+        "Cette page présente sa passion pour les jeux vidéo.",
+        "Vous pouvez voir plusieurs vidéos de Honkai Star Rail.",
+        "La Version trois point sept présente le trailer du jeu.",
+        "Les vidéos montrent le déroulement d'une session de jeu.",
+        "Vous découvrirez les quêtes, les combats et l'exploration.",
+        "Merci de votre visite !"
+    ],
+    wuthering: [
+        "Bonjour, je suis Agathe.",
+        "Bienvenue sur la page Wuthering Waves.",
+        "Cette page présente le jeu Wuthering Waves en détail.",
+        "Vous découvrirez l'histoire du jeu et son scénario.",
+        "Le monde ouvert permet d'explorer librement.",
+        "Le système de combat est magnifique et spectaculaire.",
+        "Les objectifs incluent la collection de personnages et d'armes.",
+        "Plusieurs vidéos présentent le jeu.",
+        "Merci de votre visite !"
+    ],
+    hsr: [
+        "Bonjour, je suis Agathe.",
+        "Bienvenue sur la page Honkai Star Rail.",
+        "Cette page présente le jeu Honkai Star Rail.",
+        "Vous découvrirez la Version trois point sept du jeu.",
+        "Des vidéos présentent le gameplay et l'histoire.",
+        "Le jeu est un R P G au tour par tour.",
+        "Merci de votre visite !"
+    ],
+    bugreport: [
+        "Bonjour, je suis Agathe.",
+        "Bienvenue sur la page Rapport de Bug.",
+        "Cette page permet de vérifier les erreurs du portfolio.",
+        "Cliquez sur le bouton Lancer le Scan Complet.",
+        "Le scan analyse toutes les pages automatiquement.",
+        "Les erreurs sont affichées en rouge.",
+        "Les succès sont affichés en vert.",
+        "Vous pouvez copier le rapport et l'envoyer à Cédric.",
+        "Merci de votre visite !"
+    ]
+};
+
+// Variables IA
+let iaSynth = window.speechSynthesis;
+let iaUtterance = null;
+let iaPlaying = false;
+let currentPage = 'index';
+let currentPhrase = 0;
+let iaWidgetOpen = false;
+
+// Initialiser l'IA pour la page actuelle
+function initPageIA(pageName) {
+    currentPage = pageName;
+    currentPhrase = 0;
+    console.log(`✅ IA initialisée pour la page : ${pageName}`);
+}
+
+// Créer le widget flottant IA
+function createIAWidget() {
+    // Bouton flottant
+    const btn = document.createElement('button');
+    btn.className = 'ia-float-btn';
+    btn.innerHTML = '🤖';
+    btn.onclick = toggleIAWidget;
+    btn.title = 'Assistante IA';
+    document.body.appendChild(btn);
+
+    // Panneau IA
+    const panel = document.createElement('div');
+    panel.className = 'ia-float-panel';
+    panel.id = 'ia-float-panel';
+    panel.innerHTML = `
+        <div class="ia-panel-header">
+            🤖 ASSISTANTE IA - Agathe
+            <button class="ia-panel-close" onclick="toggleIAWidget()">✕</button>
+        </div>
+        <div class="ia-panel-content">
+            <div class="ia-text-display" id="ia-text-display"></div>
+        </div>
+        <div class="ia-panel-controls">
+            <button onclick="playIA()" id="ia-play-btn">▶️</button>
+            <button onclick="pauseIA()" id="ia-pause-btn" disabled>⏸️</button>
+            <button onclick="stopIA()" id="ia-stop-btn" disabled>⏹️</button>
+            <input type="range" id="ia-volume" min="0" max="100" value="80" onchange="setIAVolume(this.value)">
+        </div>
+    `;
+    document.body.appendChild(panel);
+
+    console.log('✅ Widget IA créé');
+}
+
+// Ouvrir/Fermer le widget
+function toggleIAWidget() {
+    const panel = document.getElementById('ia-float-panel');
+    if (panel) {
+        panel.classList.toggle('active');
+        iaWidgetOpen = panel.classList.contains('active');
+        
+        if (iaWidgetOpen) {
+            updateIAText();
+        }
+    }
+}
+
+// Lancer l'IA
+function playIA() {
+    if (iaSynth.speaking) {
+        iaSynth.resume();
+        iaPlaying = true;
+    } else {
+        const texts = iaTexts[currentPage] || iaTexts.index;
+        const text = texts.join(' ');
+        
+        iaUtterance = new SpeechSynthesisUtterance(text);
+        
+        // Voix féminine
+        const voices = iaSynth.getVoices();
+        const femaleVoice = voices.find(voice => 
+            voice.name.includes('Female') || 
+            voice.name.includes('Google français') ||
+            voice.name.includes('Amélie') ||
+            voice.name.includes('Alice')
+        );
+        
+        if (femaleVoice) {
+            iaUtterance.voice = femaleVoice;
+        }
+        
+        iaUtterance.pitch = 1.1; // Plus aigu = plus féminin
+        iaUtterance.rate = 0.9; // Un peu plus lent
+        iaUtterance.volume = document.getElementById('ia-volume').value / 100;
+        
+        iaUtterance.onboundary = (event) => {
+            if (event.name === 'sentence') {
+                currentPhrase++;
+                updateIAText();
+                scrollToCurrentPhrase();
+            }
+        };
+        
+        iaUtterance.onend = () => {
+            stopIA();
+        };
+        
+        iaSynth.speak(iaUtterance);
+        iaPlaying = true;
+    }
+    
+    document.getElementById('ia-play-btn').disabled = true;
+    document.getElementById('ia-pause-btn').disabled = false;
+    document.getElementById('ia-stop-btn').disabled = false;
+}
+
+// Pause
+function pauseIA() {
+    if (iaSynth.speaking) {
+        iaSynth.pause();
+        iaPlaying = false;
+        
+        document.getElementById('ia-play-btn').disabled = false;
+        document.getElementById('ia-pause-btn').disabled = true;
+    }
+}
+
+// Stop
+function stopIA() {
+    iaSynth.cancel();
+    iaPlaying = false;
+    currentPhrase = 0;
+    
+    document.getElementById('ia-play-btn').disabled = false;
+    document.getElementById('ia-pause-btn').disabled = true;
+    document.getElementById('ia-stop-btn').disabled = true;
+    
+    updateIAText();
+}
+
+// Volume
+function setIAVolume(value) {
+    if (iaUtterance) {
+        iaUtterance.volume = value / 100;
+    }
+}
+
+// Mettre à jour le texte affiché
+function updateIAText() {
+    const display = document.getElementById('ia-text-display');
+    if (display) {
+        const texts = iaTexts[currentPage] || iaTexts.index;
+        display.innerHTML = texts.map((phrase, index) => {
+            if (index < currentPhrase) {
+                return `<span class="ia-highlighted">${phrase}</span><br>`;
+            } else if (index === currentPhrase) {
+                return `<span class="ia-current">${phrase}</span><br>`;
+            } else {
+                return `<span class="ia-coming">${phrase}</span><br>`;
+            }
+        }).join('');
+    }
+}
+
+// Scroll vers la phrase actuelle
+function scrollToCurrentPhrase() {
+    const content = document.querySelector('.ia-panel-content');
+    if (content) {
+        const texts = iaTexts[currentPage] || iaTexts.index;
+        const progress = currentPhrase / texts.length;
+        const scrollHeight = content.scrollHeight - content.clientHeight;
+        const scrollTop = progress * scrollHeight;
+        
+        content.scrollTo({
+            top: scrollTop,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// Initialiser l'IA au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    // Déterminer la page actuelle
+    const path = window.location.pathname;
+    let pageName = 'index';
+    
+    if (path.includes('videos.html')) {
+        pageName = 'videos';
+    } else if (path.includes('wuthering-waves.html')) {
+        pageName = 'wuthering';
+    } else if (path.includes('honkai-star-rail.html')) {
+        pageName = 'hsr';
+    } else if (path.includes('bug-report.html')) {
+        pageName = 'bugreport';
+    }
+    
+    initPageIA(pageName);
+    createIAWidget();
+    updateIAText();
+    
+    console.log('✅ Assistante IA Agathe initialisée');
+});

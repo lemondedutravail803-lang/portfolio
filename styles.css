@@ -1201,3 +1201,152 @@ video::cue {
 #bug-report-overlay.active {
     display: block;
 }
+
+/* =========================================
+   ASSISTANTE IA FLOTTANTE (WEB SPEECH)
+========================================= */
+.ia-float-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--couleur-emeraude), var(--couleur-violet));
+    border: none;
+    cursor: pointer;
+    z-index: 9998;
+    box-shadow: 0 4px 20px rgba(52, 211, 153, 0.4);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.ia-float-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px rgba(52, 211, 153, 0.6);
+}
+
+.ia-float-panel {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 400px;
+    max-height: 500px;
+    background: var(--couleur-fond);
+    border: 2px solid var(--couleur-emeraude);
+    border-radius: 15px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ia-float-panel.active {
+    display: flex;
+}
+
+.ia-panel-header {
+    background: linear-gradient(135deg, var(--couleur-emeraude), var(--couleur-violet));
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+    color: var(--couleur-fond);
+    position: relative;
+}
+
+.ia-panel-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: var(--couleur-fond);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.ia-panel-content {
+    padding: 1rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.ia-panel-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--couleur-fond-sombre);
+}
+
+.ia-panel-controls button {
+    background: var(--couleur-emeraude);
+    color: var(--couleur-fond);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.ia-panel-controls button:hover:not(:disabled) {
+    background: var(--couleur-violet);
+}
+
+.ia-panel-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ia-panel-controls input[type="range"] {
+    width: 100px;
+    cursor: pointer;
+}
+
+.ia-text-display {
+    background: var(--couleur-carte);
+    padding: 1rem;
+    border-radius: 10px;
+    line-height: 2;
+    font-size: 0.95rem;
+}
+
+.ia-text-display .ia-highlighted {
+    background: var(--couleur-emeraude);
+    color: var(--couleur-fond);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.ia-text-display .ia-current {
+    background: var(--couleur-violet);
+    color: var(--couleur-texte);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-weight: bold;
+    animation: pulse 1s infinite;
+}
+
+.ia-text-display .ia-coming {
+    opacity: 0.4;
+}
+
+@media (max-width: 768px) {
+    .ia-float-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .ia-float-panel {
+        width: 90%;
+        right: 5%;
+        bottom: 90px;
+    }
+}
