@@ -1302,6 +1302,11 @@ video::cue {
     background: var(--couleur-emeraude);
     color: var(--couleur-fond);
     transform: translateX(5px);
+    border-left-color: var(--couleur-fond);
+}
+
+.ia-section-item:active {
+    transform: scale(0.98);
 }
 
 .ia-section-item.active {

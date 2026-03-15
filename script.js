@@ -390,9 +390,13 @@ function loadCurrentPageContent() {
     }
     
     if (sectionsEl) {
-        sectionsEl.innerHTML = content.sections.map((section, index) => `
-            <div class="ia-section-item ${index === currentSectionIndex ? 'active' : ''}" 
-                 data-index="${index}" 
+        sectionsEl.innerHTML = `
+            <div style="font-size: 0.8rem; color: var(--couleur-texte-sombre); margin-bottom: 0.5rem; font-style: italic;">
+                💡 Clique sur une section pour y aller directement
+            </div>
+        ` + content.sections.map((section, index) => `
+            <div class="ia-section-item ${index === currentSectionIndex ? 'active' : ''}"
+                 data-index="${index}"
                  data-section-id="${section.id || ''}"
                  onclick="goToSection(${index})">
                 <strong>${section.name}</strong>
@@ -404,9 +408,20 @@ function loadCurrentPageContent() {
 
 // Aller à une section
 function goToSection(index) {
+    console.log('🖱️ goToSection called, index:', index);
+    
     currentSectionIndex = index;
     updateSectionsDisplay();
     scrollToSection();
+    
+    // 🎯 PAUSER L'IA QUAND ON CLIQUE MANUELLEMENT
+    if (iaPlaying) {
+        iaSynth.pause();
+        iaPlaying = false;
+        document.getElementById('ia-play-btn').disabled = false;
+        document.getElementById('ia-pause-btn').disabled = true;
+        console.log('⏸️ IA paused (manual navigation)');
+    }
 }
 
 // Mettre à jour l'affichage des sections
