@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Assistante IA - Portfolio Cédric AUGUSTO">
+    <meta name="author" content="Cédric AUGUSTO">
+    <title>🤖 Assistante IA — Cédric AUGUSTO</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <button id="theme-toggle" class="theme-toggle" title="Changer le thème" aria-label="Changer le thème">
+        <span class="theme-icon">🎨</span>
+    </button>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        .ia-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .ia-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--couleur-fond-sombre);
+            border-radius: 10px;
+            border: 2px solid var(--couleur-emeraude);
+        }
+
+        .ia-header h1 {
+            color: var(--couleur-emeraude);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ia-avatar {
+            width: 120px;
+            height: 120px;
+            margin: 2rem auto;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--couleur-emeraude), var(--couleur-violet));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border: 4px solid var(--couleur-emeraude);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .ia-transcription {
+            background: var(--couleur-fond);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--couleur-emeraude);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--couleur-texte);
+        }
+
+        .ia-transcription::before {
+            content: "💬 ";
+            font-size: 1.5rem;
+        }
+
+        .ia-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--couleur-fond-sombre);
+            border-radius: 10px;
+        }
+
+        .ia-controls button {
+            background: var(--couleur-emeraude);
+            color: var(--couleur-fond);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .ia-controls button:hover {
+            background: var(--couleur-violet);
+            transform: translateY(-2px);
+        }
+
+        .ia-controls input[type="range"] {
+            width: 150px;
+            cursor: pointer;
+        }
+
+        .ia-actions {
+            margin-top: 3rem;
+        }
+
+        .ia-actions h2 {
+            text-align: center;
+            color: var(--couleur-emeraude);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .ia-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .ia-action-btn {
+            background: var(--couleur-carte);
+            border: 2px solid var(--couleur-bordure);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--couleur-texte);
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .ia-action-btn:hover {
+            background: var(--couleur-emeraude);
+            color: var(--couleur-fond);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(52, 211, 153, 0.4);
+        }
+
+        .ia-status {
+            text-align: center;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .ia-status.playing {
+            display: block;
+            background: rgba(52, 211, 153, 0.2);
+            border: 2px solid var(--couleur-emeraude);
+            color: var(--couleur-emeraude);
+        }
+
+        .ia-status.paused {
+            display: block;
+            background: rgba(245, 158, 11, 0.2);
+            border: 2px solid #f59e0b;
+            color: #f59e0b;
+        }
+
+        @media (max-width: 768px) {
+            .ia-controls {
+                flex-wrap: wrap;
+            }
+            
+            .ia-actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="en-tete">
+        <div class="conteneur">
+            <div class="logo">
+                <span class="prenom">Cédric</span>
+                <span class="separateur"> — </span>
+                <span class="nom">AUGUSTO</span>
+                <span class="curseur">_</span>
+            </div>
+            <button class="bouton-menu" id="menu-toggle">☰</button>
+            <nav>
+                <ul class="liste-liens" id="liste-liens">
+                    <li><a href="index.html">🏠 Accueil</a></li>
+                    <li><a href="videos.html">📺 Vidéos</a></li>
+                    <li><a href="honkai-star-rail.html">⭐ HSR</a></li>
+                    <li><a href="wuthering-waves.html">🌊 WW</a></li>
+                    <li><a href="index.html#contact">📧 Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="ia-container">
+        <div class="ia-header">
+            <h1>🤖 ASSISTANTE IA - Cédric AUGUSTO</h1>
+            <p>Bienvenue sur mon assistante virtuelle</p>
+        </div>
+
+        <!-- Avatar Agathe -->
+        <div class="ia-avatar">
+            👩
+        </div>
+
+        <!-- Transcription du texte -->
+        <div class="ia-transcription" id="ia-text">
+            "Bonjour, je suis l'assistante IA de Cédric AUGUSTO. Je suis là pour répondre à tous vos besoins concernant son portfolio et toute l'histoire qui en déroule. Que souhaitez-vous découvrir aujourd'hui ?"
+        </div>
+
+        <!-- Statut de lecture -->
+        <div class="ia-status" id="ia-status">
+            🔊 Lecture en cours...
+        </div>
+
+        <!-- Contrôles audio -->
+        <div class="ia-controls">
+            <button onclick="playAudio()" id="play-btn">▶️ Play</button>
+            <button onclick="pauseAudio()" id="pause-btn" disabled>⏸️ Pause</button>
+            <button onclick="stopAudio()" id="stop-btn" disabled>⏹️ Stop</button>
+            <label for="volume">🔊 Volume :</label>
+            <input type="range" id="volume" min="0" max="100" value="80" onchange="setVolume(this.value)">
+        </div>
+
+        <!-- Lecteur audio caché -->
+        <audio id="ia-audio" preload="auto">
+            <source src="assets/IA introduction.m4a" type="audio/mp4">
+            <source src="assets/IA introduction.mp3" type="audio/mpeg">
+            Votre navigateur ne supporte pas la lecture audio.
+        </audio>
+
+        <!-- Boutons d'action -->
+        <div class="ia-actions">
+            <h2>💬 QUE PUIS-JE FAIRE POUR VOUS ?</h2>
+            <div class="ia-actions-grid">
+                <button class="ia-action-btn" onclick="showStory()">
+                    📖 Raconter l'histoire du portfolio
+                </button>
+                <button class="ia-action-btn" onclick="showProjects()">
+                    📂 Présenter les projets
+                </button>
+                <button class="ia-action-btn" onclick="showSkills()">
+                    🎯 Montrer les compétences
+                </button>
+                <button class="ia-action-btn" onclick="showContact()">
+                    📞 Comment contacter Cédric
+                </button>
+                <button class="ia-action-btn" onclick="showBugReport()">
+                    🐛 Expliquer le rapport de bug
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="pied-de-page">
+        <div class="conteneur">
+            <p>© 2026 - Cédric AUGUSTO <span class="curseur">_</span></p>
+            <div class="footer-reseaux">
+                <a href="index.html#contact" class="footer-lien"><span>📧</span> Contact</a>
+                <a href="#" class="footer-lien"><span>💼</span> LinkedIn</a>
+                <a href="#" class="footer-lien"><span>🐙</span> GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="bouton-haut" class="bouton-haut" title="Retour en haut">⬆</button>
+    <script src="script.js"></script>
+    <script>
+        // Variables audio
+        const audio = document.getElementById('ia-audio');
+        const playBtn = document.getElementById('play-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const statusDiv = document.getElementById('ia-status');
+        const iaText = document.getElementById('ia-text');
+
+        // Textes pour chaque action
+        const texts = {
+            intro: "Bonjour, je suis l'assistante IA de Cédric AUGUSTO. Je suis là pour répondre à tous vos besoins concernant son portfolio et toute l'histoire qui en déroule. Que souhaitez-vous découvrir aujourd'hui ?",
+            
+            story: "Tout a commencé quand Cédric a décidé de créer son portfolio. Étape 1 : Mise en ligne sur GitHub. Étape 2 : Ajout des vidéos YouTube pour présenter Honkai Star Rail et Wuthering Waves. Étape 3 : Ajout du lecteur de musique avec 4 titres. Étape 4 : Création des animations de lettres. Étape 5 : Ajout du système de rapport de bug avec scan automatique. Et aujourd'hui, le portfolio est complet avec une assistante IA : moi, Agathe !",
+            
+            projects: "Cédric a réalisé 9 projets principaux : 1. Jeu Voiture avec Scratch. 2. Site Portfolio en HTML et CSS. 3. Figurine 3D chez Cap Sciences. 4. Montage Vidéo avec OpenShot. 5. OpenShot Vidéo. 6. Formation Konexio de 7 semaines. 7. Jeu dans l'Espace en HTML/CSS/JS. 8. Google Docs pour la création de documents. 9. Google Sheets pour les tableaux de bord.",
+            
+            skills: "Cédric maîtrise plusieurs compétences : HTML5 pour la structure des pages. CSS3 pour le design et les animations. JavaScript pour les fonctionnalités interactives. Intégration d'IA dans ses projets. Montage vidéo avec OpenShot. Utilisation de GitHub pour le versioning. Création de portfolios professionnels.",
+            
+            contact: "Vous pouvez contacter Cédric de plusieurs façons : Par email via le formulaire de contact sur la page d'accueil. Sur LinkedIn pour voir son réseau professionnel. Sur GitHub pour explorer ses projets et contributions. Il est actuellement à la recherche d'un stage ou d'une alternance à partir de 2026.",
+            
+            bugreport: "Le rapport de bug est une fonctionnalité unique de ce portfolio. Cliquez sur le bouton '🔍 LANCER LE SCAN COMPLET' pour analyser automatiquement toutes les pages. Le scan détecte les erreurs et les succès. Si des erreurs sont trouvées, la page scrolle automatiquement vers elles. Vous pouvez copier le rapport et l'envoyer à Cédric pour correction."
+        };
+
+        // Fonctions audio
+        function playAudio() {
+            audio.play();
+            playBtn.disabled = true;
+            pauseBtn.disabled = false;
+            stopBtn.disabled = false;
+            statusDiv.className = 'ia-status playing';
+            statusDiv.textContent = '🔊 Lecture en cours...';
+        }
+
+        function pauseAudio() {
+            audio.pause();
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            statusDiv.className = 'ia-status paused';
+            statusDiv.textContent = '⏸️ Lecture en pause';
+        }
+
+        function stopAudio() {
+            audio.pause();
+            audio.currentTime = 0;
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            stopBtn.disabled = true;
+            statusDiv.className = 'ia-status';
+            statusDiv.style.display = 'none';
+        }
+
+        function setVolume(value) {
+            audio.volume = value / 100;
+        }
+
+        // Fonctions d'action
+        function showStory() {
+            iaText.textContent = '"' + texts.story + '"';
+            statusDiv.className = 'ia-status playing';
+            statusDiv.textContent = '📖 Histoire du portfolio affichée';
+        }
+
+        function showProjects() {
+            iaText.textContent = '"' + texts.projects + '"';
+            statusDiv.className = 'ia-status playing';
+            statusDiv.textContent = '📂 Projets affichés';
+        }
+
+        function showSkills() {
+            iaText.textContent = '"' + texts.skills + '"';
+            statusDiv.className = 'ia-status playing';
+            statusDiv.textContent = '🎯 Compétences affichées';
+        }
+
+        function showContact() {
+            iaText.textContent = '"' + texts.contact + '"';
+            statusDiv.className = 'ia-status playing';
+            statusDiv.textContent = '📞 Coordonnées affichées';
+        }
+
+        function showBugReport() {
+            iaText.textContent = '"' + texts.bugreport + '"';
+            statusDiv.className = 'ia-status playing';
+            statusDiv.textContent = '🐛 Rapport de bug expliqué';
+        }
+
+        // Événements audio
+        audio.addEventListener('ended', () => {
+            stopAudio();
+        });
+
+        // Initialisation
+        window.addEventListener('DOMContentLoaded', () => {
+            setVolume(80);
+            console.log('✅ Assistante IA initialisée');
+        });
+    </script>
+</body>
+</html>
