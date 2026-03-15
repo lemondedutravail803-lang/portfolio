@@ -577,8 +577,8 @@ function initIAAudio() {
             iaAudio.preload = 'auto';
             
             const source1 = document.createElement('source');
-            source1.src = 'assets/IA introduction.m4a';
-            source1.type = 'audio/mp4';
+            source1.src = 'assets/IA introduction..mp3';
+            source1.type = 'audio/mpeg';
             
             const source2 = document.createElement('source');
             source2.src = 'assets/IA introduction.mp3';
