@@ -154,6 +154,58 @@ if (heroSection) {
 // =========================================
 // 8. ANIMATION DES TITRES H2 AU SCROLL
 // =========================================
+
+// Fonction pour séparer les lettres des titres h2
+function animerTitresH2() {
+    const titresH2 = document.querySelectorAll('h2.anime-lettres');
+    
+    titresH2.forEach(titre => {
+        // Séparer les lettres
+        const texte = titre.textContent;
+        titre.textContent = '';
+        
+        [...texte].forEach((lettre) => {
+            const span = document.createElement('span');
+            if (lettre === ' ') {
+                span.innerHTML = '&nbsp;';
+            } else {
+                span.textContent = lettre;
+            }
+            span.className = 'lettre';
+            titre.appendChild(span);
+        });
+    });
+    
+    // Créer l'IntersectionObserver pour les sections
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15
+    };
+    
+    const observerSections = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const titre = entry.target.querySelector('h2.anime-lettres');
+                if (titre && !titre.classList.contains('active')) {
+                    titre.classList.add('active');
+                }
+            }
+        });
+    }, observerOptions);
+    
+    // Observer toutes les sections
+    document.querySelectorAll('.section').forEach(section => {
+        observerSections.observe(section);
+    });
+}
+
+// Lancer l'animation des titres H2
+animerTitresH2();
+
+// =========================================
+// 9. LECTEUR DE MUSIQUE
+// =========================================
 const audioPlayer = document.getElementById('audio-player');
 const musicSelector = document.getElementById('music-selector');
 
