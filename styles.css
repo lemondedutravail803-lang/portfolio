@@ -446,6 +446,46 @@ h2.anime-lettres .lettre:nth-child(27) { transition-delay: 0.81s; }
 h2.anime-lettres .lettre:nth-child(28) { transition-delay: 0.84s; }
 h2.anime-lettres .lettre:nth-child(29) { transition-delay: 0.87s; }
 h2.anime-lettres .lettre:nth-child(30) { transition-delay: 0.90s; }
+h2.anime-lettres .lettre:nth-child(31) { transition-delay: 0.93s; }
+h2.anime-lettres .lettre:nth-child(32) { transition-delay: 0.96s; }
+h2.anime-lettres .lettre:nth-child(33) { transition-delay: 0.99s; }
+h2.anime-lettres .lettre:nth-child(34) { transition-delay: 1.02s; }
+h2.anime-lettres .lettre:nth-child(35) { transition-delay: 1.05s; }
+h2.anime-lettres .lettre:nth-child(36) { transition-delay: 1.08s; }
+h2.anime-lettres .lettre:nth-child(37) { transition-delay: 1.11s; }
+h2.anime-lettres .lettre:nth-child(38) { transition-delay: 1.14s; }
+h2.anime-lettres .lettre:nth-child(39) { transition-delay: 1.17s; }
+h2.anime-lettres .lettre:nth-child(40) { transition-delay: 1.20s; }
+h2.anime-lettres .lettre:nth-child(41) { transition-delay: 1.23s; }
+h2.anime-lettres .lettre:nth-child(42) { transition-delay: 1.26s; }
+h2.anime-lettres .lettre:nth-child(43) { transition-delay: 1.29s; }
+h2.anime-lettres .lettre:nth-child(44) { transition-delay: 1.32s; }
+h2.anime-lettres .lettre:nth-child(45) { transition-delay: 1.35s; }
+h2.anime-lettres .lettre:nth-child(46) { transition-delay: 1.38s; }
+h2.anime-lettres .lettre:nth-child(47) { transition-delay: 1.41s; }
+h2.anime-lettres .lettre:nth-child(48) { transition-delay: 1.44s; }
+h2.anime-lettres .lettre:nth-child(49) { transition-delay: 1.47s; }
+h2.anime-lettres .lettre:nth-child(50) { transition-delay: 1.50s; }
+h2.anime-lettres .lettre:nth-child(51) { transition-delay: 1.53s; }
+h2.anime-lettres .lettre:nth-child(52) { transition-delay: 1.56s; }
+h2.anime-lettres .lettre:nth-child(53) { transition-delay: 1.59s; }
+h2.anime-lettres .lettre:nth-child(54) { transition-delay: 1.62s; }
+h2.anime-lettres .lettre:nth-child(55) { transition-delay: 1.65s; }
+h2.anime-lettres .lettre:nth-child(56) { transition-delay: 1.68s; }
+h2.anime-lettres .lettre:nth-child(57) { transition-delay: 1.71s; }
+h2.anime-lettres .lettre:nth-child(58) { transition-delay: 1.74s; }
+h2.anime-lettres .lettre:nth-child(59) { transition-delay: 1.77s; }
+h2.anime-lettres .lettre:nth-child(60) { transition-delay: 1.80s; }
+h2.anime-lettres .lettre:nth-child(61) { transition-delay: 1.83s; }
+h2.anime-lettres .lettre:nth-child(62) { transition-delay: 1.86s; }
+h2.anime-lettres .lettre:nth-child(63) { transition-delay: 1.89s; }
+h2.anime-lettres .lettre:nth-child(64) { transition-delay: 1.92s; }
+h2.anime-lettres .lettre:nth-child(65) { transition-delay: 1.95s; }
+h2.anime-lettres .lettre:nth-child(66) { transition-delay: 1.98s; }
+h2.anime-lettres .lettre:nth-child(67) { transition-delay: 2.01s; }
+h2.anime-lettres .lettre:nth-child(68) { transition-delay: 2.04s; }
+h2.anime-lettres .lettre:nth-child(69) { transition-delay: 2.07s; }
+h2.anime-lettres .lettre:nth-child(70) { transition-delay: 2.10s; }
 
 .texte-presentatation, .texte-contact {
     text-align: center;
