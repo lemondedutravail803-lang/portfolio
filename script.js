@@ -122,12 +122,6 @@ heroSpans.forEach(span => {
     separerLettres(span);
 });
 
-// Appliquer aux titres h2 avec la classe anime-lettres
-const titresAnimes = document.querySelectorAll('h2.anime-lettres');
-titresAnimes.forEach(titre => {
-    separerLettres(titre);
-});
-
 // Observer la section Hero pour activer/désactiver l'animation du nom
 const observerOptions = {
     root: null,
@@ -157,36 +151,8 @@ if (heroSection) {
     heroObserver.observe(heroSection);
 }
 
-// Observer les sections pour animer les titres h2
-const observerSections = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        const titre = entry.target.querySelector('h2.anime-lettres');
-        if (titre) {
-            console.log('Section détectée:', entry.target.id, '- Intersecting:', entry.isIntersecting);
-            if (entry.isIntersecting) {
-                // Quand la section est visible : animer
-                titre.classList.add('active');
-                console.log('Classe active ajoutée à:', titre);
-            } else {
-                // Quand la section n'est plus visible : réinitialiser
-                titre.classList.remove('active');
-            }
-        }
-    });
-}, {
-    root: null,
-    rootMargin: '-10% 0px -80% 0px',
-    threshold: 0.1
-});
-
-// Observer chaque section
-document.querySelectorAll('.section').forEach(section => {
-    observerSections.observe(section);
-    console.log('Section observée:', section.id);
-});
-
 // =========================================
-// 16. LECTEUR DE MUSIQUE
+// 8. ANIMATION DES TITRES H2 AU SCROLL
 // =========================================
 const audioPlayer = document.getElementById('audio-player');
 const musicSelector = document.getElementById('music-selector');
