@@ -404,8 +404,8 @@ h2.anime-lettres .lettre {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    opacity: 1;
-    transform: translateY(0) scale(1);
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
     transition: all 0.3s ease;
 }
 
