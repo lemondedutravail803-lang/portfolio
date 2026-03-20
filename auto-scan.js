@@ -258,18 +258,29 @@ const PortfolioScanner = {
 
     // Vérifier les sections
     async scanSections() {
-        console.log('🔍 Vérification des sections...');
+        console.log('🔍 Vérification des sections sur index.html...');
         
-        this.expectedSections.forEach(section => {
-            const element = document.getElementById(section.id);
-            if (element) {
-                this.data.sections.push({ id: section.id, nom: section.nom, present: true });
-                this.data.success.push(`✅ Section "${section.nom}" : Présente`);
-            } else {
-                this.data.sections.push({ id: section.id, nom: section.nom, present: false });
-                this.data.errors.push(`❌ Section "${section.nom}" : Introuvable (ID: ${section.id})`);
-            }
-        });
+        try {
+            const response = await fetch('index.html');
+            const html = await response.text();
+            
+            this.expectedSections.forEach(section => {
+                // Vérifier si la section existe dans le HTML
+                const sectionRegex = new RegExp(`id=["']${section.id}["']`, 'i');
+                const found = sectionRegex.test(html);
+                
+                if (found) {
+                    this.data.sections.push({ id: section.id, nom: section.nom, present: true });
+                    this.data.success.push(`✅ Section "${section.nom}" : Présente (sur index.html)`);
+                } else {
+                    this.data.sections.push({ id: section.id, nom: section.nom, present: false });
+                    this.data.errors.push(`❌ Section "${section.nom}" : Introuvable (ID: ${section.id})`);
+                }
+            });
+        } catch (error) {
+            this.data.errors.push(`❌ Erreur scan sections : ${error.message}`);
+            console.error('❌ Erreur scan sections:', error);
+        }
     },
 
     // Vérifier les projets
