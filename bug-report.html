@@ -572,134 +572,147 @@
 
         // Fonction pour copier le rapport complet
         function copyBugReport() {
-            let report = `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
-            report += `═══════════════════════════════════════════════════════\n\n`;
-            report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n`;
-            report += `📄 Page : bug-report.html\n\n`;
-
-            report += `📊 ÉTAT DU SITE (TEMPS RÉEL)\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `🎨 Thèmes : ${pageBugReport.siteStatus.themes}\n`;
-            report += `🎵 Musique : ${pageBugReport.siteStatus.music}\n`;
-            report += `✨ Animations : ${pageBugReport.siteStatus.animations}\n`;
-            report += `📱 Menu : ${pageBugReport.siteStatus.menu}\n\n`;
-
-            report += `📝 JOURNAL DES ERREURS (TEMPS RÉEL)\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-
-            if (pageBugReport.errors.length === 0 && pageBugReport.warnings.length === 0) {
-                report += `✅ Aucune erreur détectée.\n\n`;
-            } else {
-                pageBugReport.errors.forEach(err => {
-                    report += `❌ [${err.date}] ${err.type}\n`;
-                    report += `   ${err.message}\n`;
-                    report += `   Détails : ${err.details}\n\n`;
+            // Utiliser le rapport généré par PortfolioScanner si disponible
+            if (typeof PortfolioScanner !== 'undefined' && PortfolioScanner.generateFullReport) {
+                const report = PortfolioScanner.generateFullReport();
+                
+                navigator.clipboard.writeText(report).then(() => {
+                    alert('✅ Rapport copié dans le presse-papiers !\n\nMaintenant :\n1. Colle le rapport à Qwen (l\'IA)\n2. Décris ton problème en détail\n3. Qwen va analyser et corriger');
+                }).catch(err => {
+                    console.error('Erreur lors de la copie :', err);
+                    alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
                 });
-                pageBugReport.warnings.forEach(warn => {
-                    report += `⚠️ [${warn.date}] ${warn.type}\n`;
-                    report += `   ${warn.message}\n`;
-                    report += `   Détails : ${warn.details}\n\n`;
+            } else {
+                // Fallback vers l'ancien rapport si PortfolioScanner n'est pas disponible
+                let report = `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
+                report += `═══════════════════════════════════════════════════════\n\n`;
+                report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n`;
+                report += `📄 Page : bug-report.html\n\n`;
+
+                report += `📊 ÉTAT DU SITE (TEMPS RÉEL)\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `🎨 Thèmes : ${pageBugReport.siteStatus.themes}\n`;
+                report += `🎵 Musique : ${pageBugReport.siteStatus.music}\n`;
+                report += `✨ Animations : ${pageBugReport.siteStatus.animations}\n`;
+                report += `📱 Menu : ${pageBugReport.siteStatus.menu}\n\n`;
+
+                report += `📝 JOURNAL DES ERREURS (TEMPS RÉEL)\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+
+                if (pageBugReport.errors.length === 0 && pageBugReport.warnings.length === 0) {
+                    report += `✅ Aucune erreur détectée.\n\n`;
+                } else {
+                    pageBugReport.errors.forEach(err => {
+                        report += `❌ [${err.date}] ${err.type}\n`;
+                        report += `   ${err.message}\n`;
+                        report += `   Détails : ${err.details}\n\n`;
+                    });
+                    pageBugReport.warnings.forEach(warn => {
+                        report += `⚠️ [${warn.date}] ${warn.type}\n`;
+                        report += `   ${warn.message}\n`;
+                        report += `   Détails : ${warn.details}\n\n`;
+                    });
+                }
+
+                report += `📁 STRUCTURE COMPLÈTE DU PORTFOLIO\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
+                report += `│\n`;
+                report += `├── 📄 index.html (Page d'accueil)\n`;
+                report += `├── 📄 videos.html (Page vidéos HSR)\n`;
+                report += `├── 📄 honkai-star-rail.html (Page HSR)\n`;
+                report += `├── 📄 wuthering-waves.html (Page WW)\n`;
+                report += `├── 📄 bug-report.html (Rapport de Bug)\n`;
+                report += `├── 📄 nouvelle-page.html (Page supplémentaire)\n`;
+                report += `├── 📄 styles.css (1516 lignes)\n`;
+                report += `├── 📄 script.js (828 lignes)\n`;
+                report += `├── 📄 auto-scan.js (Script de scan automatique)\n`;
+                report += `├── 📄 push-github.sh\n`;
+                report += `├── 📄 .gitignore\n`;
+                report += `│\n`;
+                report += `├── 📁 assets\\ (Musiques, Images, Sous-titres)\n`;
+                report += `│   ├── 🎵 4 musiques .m4a\n`;
+                report += `│   └── 🖼️ Images (HTML, CSS, JS, Google, etc.)\n`;
+                report += `│\n`;
+                report += `└── 📁 espase\\ (Jeu spatial)\n`;
+                report += `    ├── index.html, script.js, style.css\n`;
+                report += `    └── assets/\n\n`;
+
+                report += `🛠️ FONCTIONNALITÉS IMPLÉMENTÉES\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `✅ 4 Thèmes (Normal, Bleu, Or, Argent)\n`;
+                report += `✅ Lecteur de musique (4 titres)\n`;
+                report += `✅ Animations des lettres\n`;
+                report += `✅ Menu mobile responsive\n`;
+                report += `✅ Bouton retour en haut\n`;
+                report += `✅ Scroll fluide\n`;
+                report += `✅ 8 vidéos YouTube intégrées\n`;
+                report += `✅ Système de Rapport de Bug\n\n`;
+
+                report += `📂 PROJETS (10 projets)\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `1. Jeu Voiture (Scratch)\n`;
+                report += `2. Site Portfolio\n`;
+                report += `3. Figurine (Cap Sciences)\n`;
+                report += `4. Montage Vidéo\n`;
+                report += `5. OpenShot Vidéo\n`;
+                report += `6. Formation Konexio (7 semaines)\n`;
+                report += `7. Jeu dans l'Espace (HTML/CSS/JS)\n`;
+                report += `8. Google Docs\n`;
+                report += `9. Google Sheets\n\n`;
+
+                report += `📺 VIDÉOS YOUTUBE\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `HSR : r4gljUbCzqA, AudFPWzkW-k, u1tkz0Sxa7Q\n`;
+                report += `WW : 5D9K2rz3Uvk, TnXzZxKmGYk, ZRpHFIPp-0M, aMAJhkp0hlc (NOUVELLE)\n\n`;
+
+                report += `📝 HISTORIQUE DE NOTRE TRAVAIL\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `1. Mise en ligne GitHub\n`;
+                report += `2. Ajout vidéos YouTube\n`;
+                report += `3. Ajout musiques .m4a\n`;
+                report += `4. Ajout section OpenShot\n`;
+                report += `5. Réorganisation WW\n`;
+                report += `6. Problème traînée souris (supprimée)\n`;
+                report += `7. Correction bouton thème\n`;
+                report += `8. Vérification globale (0 erreur)\n`;
+                report += `9. Ajout Formation Konexio\n`;
+                report += `10. Création système Rapport de Bug\n`;
+                report += `11. Création document prompt complet\n\n`;
+
+                report += `📄 INFORMATIONS TECHNIQUES\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `Navigateur : ${navigator.userAgent}\n`;
+                report += `Fenêtre : ${window.innerWidth}x${window.innerHeight}\n`;
+                report += `URL : ${window.location.href}\n`;
+                report += `Erreurs totales : ${pageBugReport.errors.length}\n`;
+                report += `Avertissements : ${pageBugReport.warnings.length}\n\n`;
+
+                report += `📝 DESCRIPTION DU PROBLÈME\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `[Décris ton problème ici]\n\n`;
+
+                report += `🔍 CE QUE J'AI DÉJÀ ESSAYÉ\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `- [ ] Actualiser la page (Ctrl + F5)\n`;
+                report += `- [ ] Vider le cache du navigateur\n`;
+                report += `- [ ] Changer de navigateur\n\n`;
+
+                report += `🔧 LIENS UTILES\n`;
+                report += `─────────────────────────────────────────────────────\n`;
+                report += `GitHub : https://github.com/lemondedutravail803-lang/portfolio\n`;
+                report += `Portfolio : https://lemondedutravail803-lang.github.io/portfolio/\n`;
+                report += `Rapport de Bug : https://lemondedutravail803-lang.github.io/portfolio/bug-report.html\n\n`;
+
+                report += `═══════════════════════════════════════════════════════\n`;
+
+                navigator.clipboard.writeText(report).then(() => {
+                    alert('✅ Rapport copié dans le presse-papiers !\n\nMaintenant :\n1. Colle le rapport à Qwen (l\'IA)\n2. Décris ton problème en détail\n3. Qwen va analyser et corriger');
+                }).catch(err => {
+                    console.error('Erreur lors de la copie :', err);
+                    alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
                 });
             }
-
-            report += `📁 STRUCTURE COMPLÈTE DU PORTFOLIO\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
-            report += `│\n`;
-            report += `├── 📄 index.html (Page d'accueil)\n`;
-            report += `├── 📄 videos.html (Page vidéos HSR)\n`;
-            report += `├── 📄 honkai-star-rail.html (Page HSR)\n`;
-            report += `├── 📄 wuthering-waves.html (Page WW)\n`;
-            report += `├── 📄 bug-report.html (Rapport de Bug)\n`;
-            report += `├── 📄 nouvelle-page.html (Page supplémentaire)\n`;
-            report += `├── 📄 styles.css (1516 lignes)\n`;
-            report += `├── 📄 script.js (828 lignes)\n`;
-            report += `├── 📄 auto-scan.js (Script de scan automatique)\n`;
-            report += `├── 📄 push-github.sh\n`;
-            report += `├── 📄 .gitignore\n`;
-            report += `│\n`;
-            report += `├── 📁 assets\\ (Musiques, Images, Sous-titres)\n`;
-            report += `│   ├── 🎵 4 musiques .m4a\n`;
-            report += `│   └── 🖼️ Images (HTML, CSS, JS, Google, etc.)\n`;
-            report += `│\n`;
-            report += `└── 📁 espase\\ (Jeu spatial)\n`;
-            report += `    ├── index.html, script.js, style.css\n`;
-            report += `    └── assets/\n\n`;
-
-            report += `🛠️ FONCTIONNALITÉS IMPLÉMENTÉES\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `✅ 4 Thèmes (Normal, Bleu, Or, Argent)\n`;
-            report += `✅ Lecteur de musique (4 titres)\n`;
-            report += `✅ Animations des lettres\n`;
-            report += `✅ Menu mobile responsive\n`;
-            report += `✅ Bouton retour en haut\n`;
-            report += `✅ Scroll fluide\n`;
-            report += `✅ 8 vidéos YouTube intégrées\n`;
-            report += `✅ Système de Rapport de Bug\n\n`;
-
-            report += `📂 PROJETS (10 projets)\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `1. Jeu Voiture (Scratch)\n`;
-            report += `2. Site Portfolio\n`;
-            report += `3. Figurine (Cap Sciences)\n`;
-            report += `4. Montage Vidéo\n`;
-            report += `5. OpenShot Vidéo\n`;
-            report += `6. Formation Konexio (7 semaines)\n`;
-            report += `7. Jeu dans l'Espace (HTML/CSS/JS)\n`;
-            report += `8. Google Docs\n`;
-            report += `9. Google Sheets\n\n`;
-
-            report += `📺 VIDÉOS YOUTUBE\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `HSR : r4gljUbCzqA, AudFPWzkW-k, u1tkz0Sxa7Q\n`;
-            report += `WW : 5D9K2rz3Uvk, TnXzZxKmGYk, ZRpHFIPp-0M, aMAJhkp0hlc (NOUVELLE)\n\n`;
-
-            report += `📝 HISTORIQUE DE NOTRE TRAVAIL\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `1. Mise en ligne GitHub\n`;
-            report += `2. Ajout vidéos YouTube\n`;
-            report += `3. Ajout musiques .m4a\n`;
-            report += `4. Ajout section OpenShot\n`;
-            report += `5. Réorganisation WW\n`;
-            report += `6. Problème traînée souris (supprimée)\n`;
-            report += `7. Correction bouton thème\n`;
-            report += `8. Vérification globale (0 erreur)\n`;
-            report += `9. Ajout Formation Konexio\n`;
-            report += `10. Création système Rapport de Bug\n`;
-            report += `11. Création document prompt complet\n\n`;
-
-            report += `📄 INFORMATIONS TECHNIQUES\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `Navigateur : ${navigator.userAgent}\n`;
-            report += `Fenêtre : ${window.innerWidth}x${window.innerHeight}\n`;
-            report += `URL : ${window.location.href}\n`;
-            report += `Erreurs totales : ${pageBugReport.errors.length}\n`;
-            report += `Avertissements : ${pageBugReport.warnings.length}\n\n`;
-
-            report += `📝 DESCRIPTION DU PROBLÈME\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `[Décris ton problème ici]\n\n`;
-
-            report += `🔍 CE QUE J'AI DÉJÀ ESSAYÉ\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `- [ ] Actualiser la page (Ctrl + F5)\n`;
-            report += `- [ ] Vider le cache du navigateur\n`;
-            report += `- [ ] Changer de navigateur\n\n`;
-
-            report += `🔧 LIENS UTILES\n`;
-            report += `─────────────────────────────────────────────────────\n`;
-            report += `GitHub : https://github.com/lemondedutravail803-lang/portfolio\n`;
-            report += `Portfolio : https://lemondedutravail803-lang.github.io/portfolio/\n`;
-            report += `Rapport de Bug : https://lemondedutravail803-lang.github.io/portfolio/bug-report.html\n\n`;
-
-            report += `═══════════════════════════════════════════════════════\n`;
-
-            navigator.clipboard.writeText(report).then(() => {
-                alert('✅ Rapport copié dans le presse-papiers !\n\nMaintenant :\n1. Colle le rapport à Qwen (l\'IA)\n2. Décris ton problème en détail\n3. Qwen va analyser et corriger');
-            }).catch(err => {
-                console.error('Erreur lors de la copie :', err);
-                alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
-            });
         }
 
         // Initialiser la page au chargement
