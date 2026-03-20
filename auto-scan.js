@@ -474,16 +474,96 @@ const PortfolioScanner = {
     generateFullReport() {
         const hsrVideos = this.data.videos.filter(v => v.game === 'Honkai Star Rail');
         const wwVideos = this.data.videos.filter(v => v.game === 'Wuthering Waves');
-        
+
         let report = `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
         report += `═══════════════════════════════════════════════════════\n\n`;
-        report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n\n`;
+        report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n`;
+        report += `🔍 Scanner Version 3.0 - Scan Complet\n\n`;
 
         report += `📊 ÉTAT DU SITE\n`;
         report += `─────────────────────────────────────────────────────\n`;
         report += `🎨 Thèmes : ${document.getElementById('theme-toggle') ? '✅ OK' : '❌ Introuvable'}\n`;
         report += `🎵 Musique : ${document.getElementById('audio-player') ? '✅ OK' : '❌ Introuvable'}\n`;
         report += `📱 Menu : ${document.getElementById('menu-toggle') ? '✅ OK' : '❌ Introuvable'}\n\n`;
+
+        report += `🏆 SCORE DE QUALITÉ\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        report += `📊 Score global : ${this.data.qualityScore.total}/100\n`;
+        report += `📁 Fichiers    : ${this.data.qualityScore.files}/100\n`;
+        report += `📂 Sections    : ${this.data.qualityScore.sections}/100\n`;
+        report += `📂 Projets     : ${this.data.qualityScore.projects}/100\n`;
+        report += `🤖 Logiciels IA: ${this.data.qualityScore.iaSoftware}/100\n\n`;
+
+        report += `📁 STRUCTURE COMPLÈTE DU PORTFOLIO\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
+        report += `│\n`;
+        this.data.files.forEach(f => {
+            report += `├── 📄 ${f}\n`;
+        });
+        report += `│\n`;
+        report += `├── 📁 assets\\ (Musiques, Images, Sous-titres)\n`;
+        report += `│   ├── 🎵 4 musiques .m4a\n`;
+        report += `│   └── 🖼️ Images (HTML, CSS, JS, Google, etc.)\n`;
+        report += `│\n`;
+        report += `└── 📁 espase\\ (Jeu spatial)\n`;
+        report += `    ├── index.html, script.js, style.css\n`;
+        report += `    └── assets/\n\n`;
+
+        report += `📂 SECTIONS VÉRIFIÉES (${this.data.sections.length})\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        this.data.sections.forEach(section => {
+            if (section.present) {
+                report += `✅ Section "${section.nom}" : Présente\n`;
+            } else {
+                report += `❌ Section "${section.nom}" : Introuvable\n`;
+            }
+        });
+        report += `\n`;
+
+        report += `📂 PROJETS VÉRIFIÉS (${this.data.projects.length} trouvés / ${this.expectedProjects.length} attendus)\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        this.expectedProjects.forEach(project => {
+            const found = this.data.projects.some(p => p.includes(project) || project.includes(p));
+            if (found) {
+                report += `✅ Projet "${project}" : Trouvé\n`;
+            } else {
+                report += `❌ Projet "${project}" : Manquant\n`;
+            }
+        });
+        report += `\n`;
+
+        report += `🤖 LOGICIELS IA VÉRIFIÉS (${this.data.iaSoftware.length} trouvés / ${this.expectedIASoftware.length} attendus)\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        this.expectedIASoftware.forEach(software => {
+            const found = this.data.iaSoftware.some(s => s.includes(software) || software.includes(s));
+            if (found) {
+                report += `✅ Logiciel IA "${software}" : Trouvé\n`;
+            } else {
+                report += `❌ Logiciel IA "${software}" : Manquant\n`;
+            }
+        });
+        report += `\n`;
+
+        report += `📺 VIDÉOS YOUTUBE (${this.data.videos.length})\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        report += `HSR (${hsrVideos.length}) : ${hsrVideos.map(v => v.id).join(', ')}\n`;
+        report += `WW (${wwVideos.length}) : ${wwVideos.map(v => v.id).join(', ')}\n\n`;
+
+        report += `🔗 LIENS VÉRIFIÉS (${this.data.links.length})\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        report += `✅ ${this.data.links.length} liens vérifiés\n\n`;
+
+        report += `🛠️ FONCTIONNALITÉS IMPLÉMENTÉES\n`;
+        report += `─────────────────────────────────────────────────────\n`;
+        report += `✅ 4 Thèmes (Normal, Bleu, Or, Argent)\n`;
+        report += `✅ Lecteur de musique (4 titres)\n`;
+        report += `✅ Animations des lettres\n`;
+        report += `✅ Menu mobile responsive\n`;
+        report += `✅ Bouton retour en haut\n`;
+        report += `✅ Scroll fluide\n`;
+        report += `✅ 8 vidéos YouTube intégrées\n`;
+        report += `✅ Système de Rapport de Bug\n\n`;
 
         report += `❌ ERREURS DÉTECTÉES (${this.data.errors.length})\n`;
         report += `─────────────────────────────────────────────────────\n`;
@@ -503,22 +583,6 @@ const PortfolioScanner = {
         });
         report += `\n`;
 
-        report += `📁 STRUCTURE DU PORTFOLIO\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
-        report += `│\n`;
-        this.data.files.forEach(f => {
-            report += `├── 📄 ${f}\n`;
-        });
-        report += `│\n`;
-        report += `├── 📁 assets\\ (Musiques, Images)\n`;
-        report += `└── 📁 espase\\ (Jeu spatial)\n\n`;
-
-        report += `📺 VIDÉOS YOUTUBE (${this.data.videos.length})\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `HSR (${hsrVideos.length}) : ${hsrVideos.map(v => v.id).join(', ')}\n`;
-        report += `WW (${wwVideos.length}) : ${wwVideos.map(v => v.id).join(', ')}\n\n`;
-
         report += `📝 DESCRIPTION DU PROBLÈME\n`;
         report += `─────────────────────────────────────────────────────\n`;
         report += `[Décris ton problème ici]\n\n`;
@@ -536,7 +600,7 @@ const PortfolioScanner = {
         report += `Rapport de Bug : https://lemondedutravail803-lang.github.io/portfolio/bug-report.html\n\n`;
 
         report += `═══════════════════════════════════════════════════════\n`;
-        report += `⚡ GÉNÉRÉ AUTOMATIQUEMENT PAR PORTFOLIO SCANNER\n`;
+        report += `⚡ GÉNÉRÉ AUTOMATIQUEMENT PAR PORTFOLIO SCANNER v3.0\n`;
 
         return report;
     }
