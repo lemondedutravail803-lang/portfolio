@@ -82,13 +82,37 @@ const PortfolioScanner = {
 
     // Initialiser le scanner
     init() {
-        console.log('🔍 Portfolio Scanner v3.0 initialisé');
-        this.scanAllPages();
+        console.log('🔍 Portfolio Scanner v3.0 initialisé (en attente du scan manuel)');
+        // Ne pas lancer le scan automatiquement - attendre le clic sur le bouton
     },
 
     // Scanner toutes les pages
     async scanAllPages() {
         console.log('🔍 Début du scan complet...');
+        
+        // Réinitialiser les données avant chaque scan
+        this.data = {
+            files: [],
+            videos: [],
+            projects: [],
+            iaSoftware: [],
+            sections: [],
+            links: [],
+            features: [],
+            history: [],
+            errors: [],
+            success: [],
+            qualityScore: {
+                files: 0,
+                sections: 0,
+                projects: 0,
+                iaSoftware: 0,
+                images: 0,
+                videos: 0,
+                links: 0,
+                total: 0
+            }
+        };
         
         // Scanner index.html
         await this.scanIndex();
@@ -348,30 +372,30 @@ const PortfolioScanner = {
         
         // Score sections (8 sections attendues)
         const sectionsFound = this.data.sections.filter(s => s.present).length;
-        this.data.qualityScore.sections = Math.round((sectionsFound / this.expectedSections.length) * 100);
+        this.data.qualityScore.sections = Math.min(100, Math.round((sectionsFound / this.expectedSections.length) * 100));
         
         // Score projets (9 projets attendus)
         const projectsFound = this.expectedProjects.filter(p => 
             this.data.projects.some(fp => fp.includes(p) || p.includes(fp))
         ).length;
-        this.data.qualityScore.projects = Math.round((projectsFound / this.expectedProjects.length) * 100);
+        this.data.qualityScore.projects = Math.min(100, Math.round((projectsFound / this.expectedProjects.length) * 100));
         
         // Score logiciels IA (8 logiciels attendus)
         const iaFound = this.expectedIASoftware.filter(s => 
             this.data.iaSoftware.some(fs => fs.includes(s) || s.includes(fs))
         ).length;
-        this.data.qualityScore.iaSoftware = Math.round((iaFound / this.expectedIASoftware.length) * 100);
+        this.data.qualityScore.iaSoftware = Math.min(100, Math.round((iaFound / this.expectedIASoftware.length) * 100));
         
         // Score fichiers (11 fichiers attendus)
         this.data.qualityScore.files = 100; // Tous les fichiers sont référencés
         
-        // Score total (moyenne)
-        this.data.qualityScore.total = Math.round(
+        // Score total (moyenne, max 100)
+        this.data.qualityScore.total = Math.min(100, Math.round(
             (this.data.qualityScore.sections + 
              this.data.qualityScore.projects + 
              this.data.qualityScore.iaSoftware + 
              this.data.qualityScore.files) / 4
-        );
+        ));
         
         this.data.success.push(`🏆 Score de qualité : ${this.data.qualityScore.total}/100`);
     },
