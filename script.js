@@ -211,6 +211,8 @@ const musicSelector = document.getElementById('music-selector');
 
 // Liste des musiques
 const musicTracks = {
+    'sigrika': 'assets/Sigrika.m4a',
+    'robin': 'assets/Robin.m4a',
     'cartethyia': 'assets/Wuthering Waves Cartethyia m4a'
 };
 
