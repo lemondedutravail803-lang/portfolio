@@ -686,19 +686,20 @@ function playIA() {
         
         iaUtterance = new SpeechSynthesisUtterance(text);
         iaUtterance.lang = 'fr-FR';
-        iaUtterance.rate = 0.65; // Un peu plus lent (0.75 était trop rapide)
-        iaUtterance.pitch = 1.0;
-        iaUtterance.volume = 1.0;
+        iaUtterance.rate = 0.85; // Plus rapide et naturel
+        iaUtterance.pitch = 1.15; // Légèrement plus haut = plus engageant
+        iaUtterance.volume = 0.9; // Moins agressif
 
-        // Get French voice
+        // Get French voice - Priorité aux voix féminines
         const voices = iaSynth.getVoices();
         const frenchVoice = voices.find(voice =>
-            voice.lang === 'fr-FR' ||
-            voice.lang.includes('fr') ||
-            voice.name.includes('French') ||
-            voice.name.includes('Google français') ||
-            voice.name.includes('Amélie')
-        );
+            voice.lang === 'fr-FR' &&
+            (voice.name.includes('Amélie') ||
+             voice.name.includes('female') ||
+             voice.name.includes('Claire') ||
+             voice.name.includes('Hortense') ||
+             voice.name.includes('Google'))
+        ) || voices.find(voice => voice.lang === 'fr-FR');
 
         if (frenchVoice) {
             iaUtterance.voice = frenchVoice;
