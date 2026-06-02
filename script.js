@@ -686,7 +686,7 @@ function playIA() {
         
         iaUtterance = new SpeechSynthesisUtterance(text);
         iaUtterance.lang = 'fr-FR';
-        iaUtterance.rate = 0.85; // Plus rapide et naturel
+        iaUtterance.rate = 0.75; // Vitesse naturelle et claire
         iaUtterance.pitch = 1.15; // Légèrement plus haut = plus engageant
         iaUtterance.volume = 0.9; // Moins agressif
 
