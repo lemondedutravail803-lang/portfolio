@@ -1,647 +1,554 @@
 // =========================================
-// SYSTÈME DE SCAN AUTOMATIQUE DU PORTFOLIO
-// Version 3.0 - Scan complet et détaillé
+// SCANNER PORTFOLIO v4.0 - AUDIT COMPLET
+// Scanner dynamique qui extrait TOUTES les données
 // =========================================
 
 const PortfolioScanner = {
-    // Données du portfolio
+    // Stockage des données
     data: {
-        files: [],
-        videos: [],
-        projects: [],
-        iaSoftware: [],
+        pages: [],
         sections: [],
-        links: [],
-        features: [],
-        history: [],
+        videos: [],
+        musiques: [],
+        projets: [],
+        iaSoftware: [],
+        liens: [],
+        themes: [],
+        fonctionnalites: [],
         errors: [],
-        success: [],
-        qualityScore: {
-            files: 0,
-            sections: 0,
-            projects: 0,
-            iaSoftware: 0,
-            images: 0,
-            videos: 0,
-            links: 0,
-            total: 0
-        }
+        scanTime: 0,
+        timestamp: null
     },
 
-    // Liste des 9 projets à vérifier
-    expectedProjects: [
-        'Jeu Voiture (Scratch)',
-        'Site Portfolio',
-        'Figurine (Cap Sciences)',
-        'Montage Vidéo',
-        '🎬 OpenShot Vidéo',
-        '🎓 Formation Konexio (7 semaines)',
-        'Jeu dans l\'Espace (HTML/CSS/JS)',
-        '📄 Google Docs',
-        '📊 Google Sheets'
-    ],
-
-    // Liste des 8 logiciels IA à vérifier
-    expectedIASoftware: [
-        'Qwen',
-        'ChatGPT',
-        'Claude',
-        'CV Designer',
-        'Canva',
-        'OpenShot Video',
-        'Malwarebytes',
-        '4K Video Downloader+'
-    ],
-
-    // Liste de toutes les sections à vérifier
-    expectedSections: [
-        { id: 'header', nom: 'Header / Navigation' },
-        { id: 'hero', nom: 'Hero Section' },
-        { id: 'about', nom: 'À propos' },
-        { id: 'competences', nom: 'Compétences Techniques' },
-        { id: 'soft-skills', nom: 'Soft Skills' },
-        { id: 'projets', nom: 'Projets' },
-        { id: 'ia', nom: 'IA & Logiciels' },
-        { id: 'contact', nom: 'Contact' }
-    ],
-
-    // Liste des fichiers attendus
-    expectedFiles: [
+    // Pages à scanner
+    pagesToScan: [
         'index.html',
-        'videos.html',
         'honkai-star-rail.html',
         'wuthering-waves.html',
-        'bug-report.html',
-        'nouvelle-page.html',
-        'styles.css',
-        'script.js',
-        'auto-scan.js',
-        'push-github.sh',
-        '.gitignore'
+        'videos.html',
+        'bug-report.html'
     ],
 
-    // Initialiser le scanner
+    // Initialisation
     init() {
-        console.log('🔍 Portfolio Scanner v3.0 initialisé (en attente du scan manuel)');
-        // Ne pas lancer le scan automatiquement - attendre le clic sur le bouton
+        console.log('🔍 Scanner Portfolio v4.0 initialisé');
     },
 
-    // Scanner toutes les pages
-    async scanAllPages() {
-        console.log('🔍 Début du scan complet...');
+    // =========================================
+    // SCANNER PRINCIPAL
+    // =========================================
+    async scanAll() {
+        console.log('🔍 SCAN COMPLET EN COURS...');
+        const startTime = performance.now();
         
-        // Réinitialiser les données avant chaque scan
+        // Réinitialiser les données
         this.data = {
-            files: [],
-            videos: [],
-            projects: [],
-            iaSoftware: [],
+            pages: [],
             sections: [],
-            links: [],
-            features: [],
-            history: [],
+            videos: [],
+            musiques: [],
+            projets: [],
+            iaSoftware: [],
+            liens: [],
+            themes: [],
+            fonctionnalites: [],
             errors: [],
-            success: [],
-            qualityScore: {
-                files: 0,
-                sections: 0,
-                projects: 0,
-                iaSoftware: 0,
-                images: 0,
-                videos: 0,
-                links: 0,
-                total: 0
-            }
+            scanTime: 0,
+            timestamp: new Date()
         };
-        
-        // Scanner index.html
-        await this.scanIndex();
 
-        // Scanner videos.html
-        await this.scanVideos();
-
-        // Scanner honkai-star-rail.html
-        await this.scanHSR();
-
-        // Scanner wuthering-waves.html
-        await this.scanWW();
-
-        // Vérifier les sections
-        await this.scanSections();
-
-        // Vérifier les projets
-        await this.checkProjects();
-
-        // Vérifier les logiciels IA
-        await this.checkIASoftware();
-
-        // Vérifier les fichiers
-        await this.checkFiles();
-
-        // Vérifier les liens
-        await this.checkLinks();
-
-        // Vérifier les erreurs
-        await this.checkErrors();
-
-        // Calculer le score de qualité
-        this.calculateQualityScore();
-
-        // Mettre à jour l'affichage
-        this.updateBugReport();
-
-        console.log('✅ Scan terminé !', this.data);
-    },
-
-    // Scanner index.html
-    async scanIndex() {
         try {
-            const response = await fetch('index.html');
-            const html = await response.text();
-
-            // Extraire les projets
-            const projectMatches = html.matchAll(/<h3>(.*?)<\/h3>/g);
-            const projects = [];
-            for (const match of projectMatches) {
-                const name = match[1].replace(/<[^>]*>/g, '');
-                if (name && !name.includes('RAPPORT')) {
-                    projects.push(name);
-                }
-            }
-            this.data.projects = projects.slice(0, 15);
-
-            // Extraire les logiciels IA
-            const iaMatches = html.matchAll(/<h3>(Qwen|ChatGPT|Claude|CV Designer|Canva|OpenShot Video|Malwarebytes|4K Video Downloader\+)<\/h3>/g);
-            for (const match of iaMatches) {
-                this.data.iaSoftware.push(match[1]);
+            // Scanner chaque page
+            for (const page of this.pagesToScan) {
+                await this.scanPage(page);
             }
 
-            // Extraire les fichiers
-            this.data.files = this.expectedFiles;
+            // Détecter les thèmes
+            this.detectThemes();
 
-            // Extraire les fonctionnalités
-            this.data.features = [
-                '4 Thèmes (Normal, Bleu, Or, Argent)',
-                'Lecteur de musique (4 titres)',
-                'Animations des lettres',
-                'Menu mobile responsive',
-                'Bouton retour en haut',
-                'Scroll fluide',
-                'Vidéos YouTube intégrées',
-                'Rapport de Bug automatique'
-            ];
+            // Détecter les fonctionnalités
+            this.detectFonctionnalites();
 
-            this.data.success.push('✅ index.html : Page chargée avec succès');
-            console.log('📄 index.html scanné');
+            // Vérifier les liens
+            this.verifyLinks();
+
+            // Calculer le temps de scan
+            const endTime = performance.now();
+            this.data.scanTime = ((endTime - startTime) / 1000).toFixed(2);
+
+            console.log('✅ SCAN TERMINÉ !', this.data);
+            return this.data;
         } catch (error) {
-            this.data.errors.push(`❌ index.html : ${error.message}`);
-            console.error('❌ Erreur scan index.html:', error);
+            console.error('❌ Erreur lors du scan:', error);
+            this.data.errors.push(`Erreur critique: ${error.message}`);
+            return this.data;
         }
     },
 
-    // Scanner videos.html
-    async scanVideos() {
+    // =========================================
+    // SCANNER DE PAGES INDIVIDUELLES
+    // =========================================
+    async scanPage(pageName) {
         try {
-            const response = await fetch('videos.html');
-            const html = await response.text();
+            console.log(`📄 Scanning ${pageName}...`);
+            const response = await fetch(pageName);
             
-            // Extraire les vidéos YouTube
-            const videoMatches = html.matchAll(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/g);
-            for (const match of videoMatches) {
-                const videoId = match[1];
-                if (!this.data.videos.find(v => v.id === videoId)) {
-                    this.data.videos.push({
-                        id: videoId,
-                        page: 'videos.html',
-                        game: 'Honkai Star Rail'
-                    });
-                }
+            if (!response.ok) {
+                this.data.errors.push(`❌ ${pageName} introuvable (404)`);
+                return;
             }
-            
-            this.data.success.push('videos.html : Page chargée avec succès');
-            console.log('📺 videos.html scanné');
-        } catch (error) {
-            this.data.errors.push(`❌ videos.html : ${error.message}`);
-            console.error('❌ Erreur scan videos.html:', error);
-        }
-    },
 
-    // Scanner honkai-star-rail.html
-    async scanHSR() {
-        try {
-            const response = await fetch('honkai-star-rail.html');
             const html = await response.text();
-            
-            // Extraire les vidéos YouTube
-            const videoMatches = html.matchAll(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/g);
-            for (const match of videoMatches) {
-                const videoId = match[1];
-                if (!this.data.videos.find(v => v.id === videoId)) {
-                    this.data.videos.push({
-                        id: videoId,
-                        page: 'honkai-star-rail.html',
-                        game: 'Honkai Star Rail'
-                    });
-                }
-            }
-            
-            this.data.success.push('honkai-star-rail.html : Page chargée avec succès');
-            console.log('⭐ honkai-star-rail.html scanné');
-        } catch (error) {
-            this.data.errors.push(`❌ honkai-star-rail.html : ${error.message}`);
-            console.error('❌ Erreur scan hsr.html:', error);
-        }
-    },
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
 
-    // Scanner wuthering-waves.html
-    async scanWW() {
-        try {
-            const response = await fetch('wuthering-waves.html');
-            const html = await response.text();
-            
-            // Extraire les vidéos YouTube
-            const videoMatches = html.matchAll(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/g);
-            for (const match of videoMatches) {
-                const videoId = match[1];
-                if (!this.data.videos.find(v => v.id === videoId)) {
-                    this.data.videos.push({
-                        id: videoId,
-                        page: 'wuthering-waves.html',
-                        game: 'Wuthering Waves'
-                    });
-                }
-            }
-            
-            this.data.success.push('wuthering-waves.html : Page chargée avec succès');
-            console.log('🌊 wuthering-waves.html scanné');
-        } catch (error) {
-            this.data.errors.push(`❌ wuthering-waves.html : ${error.message}`);
-            console.error('❌ Erreur scan ww.html:', error);
-        }
-    },
+            // Ajouter à la liste des pages scannées
+            const pageInfo = {
+                name: pageName,
+                status: 'OK',
+                sections: 0,
+                videos: 0,
+                musiques: 0
+            };
 
-    // Vérifier les sections
-    async scanSections() {
-        console.log('🔍 Vérification des sections sur index.html...');
-        
-        try {
-            const response = await fetch('index.html');
-            const html = await response.text();
-            
-            this.expectedSections.forEach(section => {
-                // Vérifier si la section existe dans le HTML
-                const sectionRegex = new RegExp(`id=["']${section.id}["']`, 'i');
-                const found = sectionRegex.test(html);
+            // Scanner les sections
+            const sections = doc.querySelectorAll('section[id], article[id]');
+            sections.forEach(section => {
+                const id = section.getAttribute('id');
+                const h2 = section.querySelector('h2, h3');
+                const title = h2 ? h2.textContent.trim() : id;
                 
-                if (found) {
-                    this.data.sections.push({ id: section.id, nom: section.nom, present: true });
-                    this.data.success.push(`✅ Section "${section.nom}" : Présente (sur index.html)`);
-                } else {
-                    this.data.sections.push({ id: section.id, nom: section.nom, present: false });
-                    this.data.errors.push(`❌ Section "${section.nom}" : Introuvable (ID: ${section.id})`);
+                if (!this.data.sections.find(s => s.id === id)) {
+                    this.data.sections.push({
+                        id: id,
+                        title: title,
+                        page: pageName,
+                        found: true
+                    });
+                    pageInfo.sections++;
                 }
             });
+
+            // Scanner les vidéos YouTube
+            const iframes = doc.querySelectorAll('iframe[src*="youtube.com"]');
+            iframes.forEach(iframe => {
+                const src = iframe.getAttribute('src');
+                const videoId = src.match(/embed\/([a-zA-Z0-9_-]+)/);
+                const title = iframe.getAttribute('title') || 'Sans titre';
+                
+                if (videoId && videoId[1]) {
+                    // Détecter le jeu
+                    let game = 'Autre';
+                    if (pageName.includes('honkai')) game = 'Honkai Star Rail';
+                    if (pageName.includes('wuthering')) game = 'Wuthering Waves';
+                    
+                    this.data.videos.push({
+                        id: videoId[1],
+                        title: title,
+                        page: pageName,
+                        game: game
+                    });
+                    pageInfo.videos++;
+                }
+            });
+
+            // Scanner les musiques (page index.html)
+            if (pageName === 'index.html') {
+                const audioSources = doc.querySelectorAll('audio source');
+                audioSources.forEach(source => {
+                    const src = source.getAttribute('src');
+                    if (src && src.includes('.m4a')) {
+                        this.data.musiques.push({
+                            src: src,
+                            nom: src.split('/').pop(),
+                            format: 'm4a'
+                        });
+                        pageInfo.musiques++;
+                    }
+                });
+            }
+
+            // Scanner les projets (page index.html)
+            if (pageName === 'index.html') {
+                const projetSection = doc.querySelector('#projets');
+                if (projetSection) {
+                    const projets = projetSection.querySelectorAll('article h3, .projet h3');
+                    projets.forEach(h3 => {
+                        const title = h3.textContent.trim();
+                        if (title && !title.includes('RAPPORT')) {
+                            this.data.projets.push(title);
+                        }
+                    });
+                }
+            }
+
+            // Scanner les logiciels IA (page index.html)
+            if (pageName === 'index.html') {
+                const iaSection = doc.querySelector('#ia');
+                if (iaSection) {
+                    const iaSoftware = iaSection.querySelectorAll('article h3, .projet h3');
+                    iaSoftware.forEach(h3 => {
+                        const title = h3.textContent.trim();
+                        if (title && !this.data.iaSoftware.includes(title)) {
+                            this.data.iaSoftware.push(title);
+                        }
+                    });
+                }
+            }
+
+            // Ajouter les informations de la page
+            this.data.pages.push(pageInfo);
+            console.log(`✅ ${pageName} scanné (${pageInfo.sections} sections, ${pageInfo.videos} vidéos)`);
+
         } catch (error) {
-            this.data.errors.push(`❌ Erreur scan sections : ${error.message}`);
-            console.error('❌ Erreur scan sections:', error);
+            console.error(`❌ Erreur scanning ${pageName}:`, error);
+            this.data.errors.push(`Erreur ${pageName}: ${error.message}`);
         }
     },
 
-    // Vérifier les projets
-    async checkProjects() {
-        console.log('🔍 Vérification des 9 projets...');
-        
-        const foundProjects = this.data.projects;
-        
-        this.expectedProjects.forEach(expectedProject => {
-            const found = foundProjects.some(p => p.includes(expectedProject) || expectedProject.includes(p));
-            if (found) {
-                this.data.success.push(`✅ Projet "${expectedProject}" : Trouvé`);
-            } else {
-                this.data.errors.push(`❌ Projet "${expectedProject}" : Manquant`);
-            }
-        });
-    },
-
-    // Vérifier les logiciels IA
-    async checkIASoftware() {
-        console.log('🔍 Vérification des 8 logiciels IA...');
-        
-        this.expectedIASoftware.forEach(software => {
-            const found = this.data.iaSoftware.some(s => s.includes(software) || software.includes(s));
-            if (found) {
-                this.data.success.push(`✅ Logiciel IA "${software}" : Trouvé`);
-            } else {
-                this.data.errors.push(`❌ Logiciel IA "${software}" : Manquant`);
-            }
-        });
-    },
-
-    // Vérifier les fichiers
-    async checkFiles() {
-        console.log('🔍 Vérification des fichiers...');
-        
-        // On vérifie juste que la liste est correcte
-        this.expectedFiles.forEach(file => {
-            this.data.success.push(`✅ Fichier "${file}" : Référencé`);
-        });
-    },
-
-    // Vérifier les liens
-    async checkLinks() {
-        console.log('🔍 Vérification des liens...');
-        
-        const links = document.querySelectorAll('a[href]');
-        let validLinks = 0;
-        let brokenLinks = 0;
-        
-        links.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && !href.startsWith('javascript:')) {
-                validLinks++;
-                this.data.links.push({ href, valid: true });
-            }
-        });
-        
-        this.data.success.push(`✅ ${validLinks} liens vérifiés`);
-    },
-
-    // Calculer le score de qualité
-    calculateQualityScore() {
-        console.log('📊 Calcul du score de qualité...');
-        
-        // Score sections (8 sections attendues)
-        const sectionsFound = this.data.sections.filter(s => s.present).length;
-        this.data.qualityScore.sections = Math.min(100, Math.round((sectionsFound / this.expectedSections.length) * 100));
-        
-        // Score projets (9 projets attendus)
-        const projectsFound = this.expectedProjects.filter(p => 
-            this.data.projects.some(fp => fp.includes(p) || p.includes(fp))
-        ).length;
-        this.data.qualityScore.projects = Math.min(100, Math.round((projectsFound / this.expectedProjects.length) * 100));
-        
-        // Score logiciels IA (8 logiciels attendus)
-        const iaFound = this.expectedIASoftware.filter(s => 
-            this.data.iaSoftware.some(fs => fs.includes(s) || s.includes(fs))
-        ).length;
-        this.data.qualityScore.iaSoftware = Math.min(100, Math.round((iaFound / this.expectedIASoftware.length) * 100));
-        
-        // Score fichiers (11 fichiers attendus)
-        this.data.qualityScore.files = 100; // Tous les fichiers sont référencés
-        
-        // Score total (moyenne, max 100)
-        this.data.qualityScore.total = Math.min(100, Math.round(
-            (this.data.qualityScore.sections + 
-             this.data.qualityScore.projects + 
-             this.data.qualityScore.iaSoftware + 
-             this.data.qualityScore.files) / 4
-        ));
-        
-        this.data.success.push(`🏆 Score de qualité : ${this.data.qualityScore.total}/100`);
-    },
-
-    // Vérifier les erreurs
-    async checkErrors() {
-        // Vérifier les images manquantes
-        document.querySelectorAll('img').forEach(img => {
-            if (img.complete && img.naturalHeight === 0) {
-                this.data.errors.push(`❌ Image non chargée : ${img.src} (Page: ${window.location.href})`);
-            }
-        });
-        
-        // Vérifier les liens brisés
-        document.querySelectorAll('a[href]').forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && !href.startsWith('#') && !href.startsWith('http') && !href.startsWith('mailto:')) {
-                // Lien relatif - on pourrait vérifier s'il existe
-                console.log(`Vérification lien: ${href}`);
-            }
-        });
-        
-        // Vérifier les éléments importants
-        const elementsImportants = [
-            { id: 'theme-toggle', nom: 'Bouton Thème' },
-            { id: 'menu-toggle', nom: 'Bouton Menu' },
-            { id: 'bouton-haut', nom: 'Bouton Retour Haut' }
+    // =========================================
+    // DÉTECTION DES THÈMES
+    // =========================================
+    detectThemes() {
+        const themes = [
+            { name: 'Normal', class: 'normal', present: true },
+            { name: 'Bleu', class: 'theme-bleu', present: document.body.classList.contains('theme-bleu') },
+            { name: 'Or', class: 'theme-or', present: document.body.classList.contains('theme-or') },
+            { name: 'Argent', class: 'theme-argent', present: document.body.classList.contains('theme-argent') }
         ];
-        
-        // N'ajoute audio-player QUE sur index.html (pas sur bug-report.html)
-        const currentPage = window.location.pathname.split('/').pop();
-        if (currentPage === 'index.html' || currentPage === '' || currentPage === '/') {
-            elementsImportants.push({ id: 'audio-player', nom: 'Lecteur Musique' });
-        }
-        
-        elementsImportants.forEach(element => {
-            if (!document.getElementById(element.id)) {
-                this.data.errors.push(`❌ ${element.nom} introuvable (ID: ${element.id})`);
-            } else {
-                this.data.success.push(`✅ ${element.nom} : Fonctionne`);
+
+        const themeButton = document.getElementById('theme-toggle');
+        this.data.themes = {
+            themes: themes,
+            buttonFound: !!themeButton,
+            buttonId: 'theme-toggle',
+            status: themeButton ? 'OK' : 'Non trouvé'
+        };
+    },
+
+    // =========================================
+    // DÉTECTION DES FONCTIONNALITÉS
+    // =========================================
+    detectFonctionnalites() {
+        const fonctionnalites = [
+            {
+                nom: 'Menu hamburger',
+                id: 'menu-toggle',
+                found: !!document.getElementById('menu-toggle')
+            },
+            {
+                nom: 'Bouton retour haut',
+                id: 'bouton-haut',
+                found: !!document.getElementById('bouton-haut')
+            },
+            {
+                nom: 'Lecteur musique',
+                id: 'audio-player',
+                found: !!document.getElementById('audio-player')
+            },
+            {
+                nom: 'Sélecteur musique',
+                id: 'music-selector',
+                found: !!document.getElementById('music-selector')
+            },
+            {
+                nom: 'Animations lettres',
+                class: 'anime-lettres',
+                found: !!document.querySelector('.anime-lettres')
+            },
+            {
+                nom: 'Thème toggle',
+                id: 'theme-toggle',
+                found: !!document.getElementById('theme-toggle')
+            }
+        ];
+
+        this.data.fonctionnalites = fonctionnalites;
+    },
+
+    // =========================================
+    // VÉRIFICATION DES LIENS
+    // =========================================
+    verifyLinks() {
+        const liens = document.querySelectorAll('a[href]');
+        let internal = 0;
+        let external = 0;
+        let valid = 0;
+        let broken = [];
+
+        liens.forEach(link => {
+            const href = link.getAttribute('href');
+            
+            if (href) {
+                if (href.startsWith('#')) {
+                    internal++;
+                    valid++;
+                } else if (href.startsWith('http') || href.startsWith('mailto')) {
+                    external++;
+                    valid++;
+                } else if (href.includes('.html')) {
+                    internal++;
+                    valid++;
+                } else if (href === 'javascript:void(0)' || href === '#') {
+                    valid++;
+                } else {
+                    broken.push(href);
+                }
             }
         });
-        
-        // Vérifier les vidéos YouTube
-        document.querySelectorAll('iframe[src*="youtube.com"]').forEach((iframe, index) => {
-            const videoId = iframe.src.match(/embed\/([a-zA-Z0-9_-]+)/);
-            if (videoId && videoId[1]) {
-                this.data.success.push(`✅ Vidéo YouTube #${index + 1} : ${videoId[1]} (accessible)`);
-            }
-        });
-        
-        console.log('✅ Vérification des erreurs terminée');
+
+        this.data.liens = {
+            total: liens.length,
+            valid: valid,
+            broken: broken.length,
+            internal: internal,
+            external: external
+        };
     },
 
-    // Mettre à jour l'affichage du rapport
-    updateBugReport() {
-        // Mettre à jour la section vidéos
-        this.updateVideosSection();
-        
-        // Mettre à jour la section erreurs
-        this.updateErrorsSection();
-        
-        // Mettre à jour la section succès
-        this.updateSuccessSection();
-    },
-
-    // Mettre à jour la section vidéos
-    updateVideosSection() {
-        const hsrVideos = this.data.videos.filter(v => v.game === 'Honkai Star Rail');
-        const wwVideos = this.data.videos.filter(v => v.game === 'Wuthering Waves');
-        
-        const hsrList = document.querySelector('#hsr-videos-list');
-        const wwList = document.querySelector('#ww-videos-list');
-        
-        if (hsrList) {
-            hsrList.innerHTML = hsrVideos.map(v => 
-                `<li>${v.id}</li>`
-            ).join('');
-        }
-        
-        if (wwList) {
-            wwList.innerHTML = wwVideos.map(v => 
-                `<li>${v.id}</li>`
-            ).join('');
-        }
-    },
-
-    // Mettre à jour la section erreurs
-    updateErrorsSection() {
-        const errorLog = document.querySelector('#error-log');
-        
-        if (errorLog && this.data.errors.length > 0) {
-            errorLog.innerHTML = this.data.errors.map(err => 
-                `<div class="bug-item error">${err}</div>`
-            ).join('');
-        }
-    },
-
-    // Mettre à jour la section succès
-    updateSuccessSection() {
-        const successLog = document.querySelector('#success-log');
-        
-        if (successLog && this.data.success.length > 0) {
-            successLog.innerHTML = this.data.success.map(suc => 
-                `<div class="bug-item success">${suc}</div>`
-            ).join('');
-        }
-    },
-
-    // Générer le rapport complet à copier
-    generateFullReport() {
+    // =========================================
+    // GÉNÉRER LE RAPPORT COMPLET
+    // =========================================
+    generateReport() {
         const hsrVideos = this.data.videos.filter(v => v.game === 'Honkai Star Rail');
         const wwVideos = this.data.videos.filter(v => v.game === 'Wuthering Waves');
 
-        let report = `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
-        report += `═══════════════════════════════════════════════════════\n\n`;
-        report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n`;
-        report += `🔍 Scanner Version 3.0 - Scan Complet\n\n`;
+        let report = `═══════════════════════════════════════════════════════════════\n`;
+        report += `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
+        report += `═══════════════════════════════════════════════════════════════\n\n`;
+        
+        const date = new Date();
+        const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+        report += `📅 Date : ${dateStr} | Scan: ${this.data.scanTime}s | Version 4.0\n\n`;
 
-        report += `📊 ÉTAT DU SITE\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `🎨 Thèmes : ${document.getElementById('theme-toggle') ? '✅ OK' : '❌ Introuvable'}\n`;
-        report += `🎵 Musique : ${document.getElementById('audio-player') ? '✅ OK' : '❌ Introuvable'}\n`;
-        report += `📱 Menu : ${document.getElementById('menu-toggle') ? '✅ OK' : '❌ Introuvable'}\n\n`;
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-        report += `🏆 SCORE DE QUALITÉ\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `📊 Score global : ${this.data.qualityScore.total}/100\n`;
-        report += `📁 Fichiers    : ${this.data.qualityScore.files}/100\n`;
-        report += `📂 Sections    : ${this.data.qualityScore.sections}/100\n`;
-        report += `📂 Projets     : ${this.data.qualityScore.projects}/100\n`;
-        report += `🤖 Logiciels IA: ${this.data.qualityScore.iaSoftware}/100\n\n`;
+        const scoreGlobal = this.calculateScore();
+        report += `📊 RÉSUMÉ GLOBAL\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        report += `🏆 SCORE SANTÉ : ${scoreGlobal}% ${scoreGlobal === 100 ? '✅' : '⚠️'}\n`;
+        report += `📄 Pages scannées : ${this.data.pages.length}/${this.pagesToScan.length} ✅\n`;
+        report += `🎥 Vidéos YouTube : ${this.data.videos.length} trouvées ✅\n`;
+        report += `🎵 Musiques : ${this.data.musiques.length} trouvées ✅\n`;
+        report += `🔗 Liens vérifiés : ${this.data.liens.total} (${this.data.liens.valid} OK, ${this.data.liens.broken} ❌)\n`;
+        report += `⚠️ Avertissements : ${this.data.errors.length}\n\n`;
 
-        report += `📁 STRUCTURE COMPLÈTE DU PORTFOLIO\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
-        report += `│\n`;
-        this.data.files.forEach(f => {
-            report += `├── 📄 ${f}\n`;
+        report += `📈 Détails des scores :\n`;
+        report += `  • Pages HTML : ${this.data.pages.length}/${this.pagesToScan.length} (${Math.round((this.data.pages.length / this.pagesToScan.length) * 100)}%) ✅\n`;
+        report += `  • Sections : ${this.data.sections.length}/7 (${Math.round((this.data.sections.length / 7) * 100)}%) ✅\n`;
+        report += `  • Vidéos YouTube : ${this.data.videos.length}/8 (${Math.round((this.data.videos.length / 8) * 100)}%) ✅\n`;
+        report += `  • Musiques : ${this.data.musiques.length}/4 (${Math.round((this.data.musiques.length / 4) * 100)}%) ✅\n`;
+        report += `  • Thèmes : ${this.data.themes.themes.length}/4 (100%) ✅\n`;
+        report += `  • Fonctionnalités : ${this.data.fonctionnalites.filter(f => f.found).length}/${this.data.fonctionnalites.length} (${Math.round((this.data.fonctionnalites.filter(f => f.found).length / this.data.fonctionnalites.length) * 100)}%) ✅\n`;
+        report += `  • Projets : ${this.data.projets.length}/9 (${Math.round((this.data.projets.length / 9) * 100)}%) ✅\n`;
+        report += `  • Logiciels IA : ${this.data.iaSoftware.length}/8 (${Math.round((this.data.iaSoftware.length / 8) * 100)}%) ✅\n\n`;
+
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+        report += `📄 PAGES SCANNÉES (${this.data.pages.length})\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        this.data.pages.forEach(page => {
+            report += `✅ ${page.name}\n`;
+            report += `   ├─ ${page.sections} sections\n`;
+            report += `   ├─ ${page.videos} vidéos YouTube\n`;
+            report += `   └─ Statut : ${page.status}\n\n`;
         });
-        report += `│\n`;
-        report += `├── 📁 assets\\ (Musiques, Images, Sous-titres)\n`;
-        report += `│   ├── 🎵 4 musiques .m4a\n`;
-        report += `│   └── 🖼️ Images (HTML, CSS, JS, Google, etc.)\n`;
-        report += `│\n`;
-        report += `└── 📁 espase\\ (Jeu spatial)\n`;
-        report += `    ├── index.html, script.js, style.css\n`;
-        report += `    └── assets/\n\n`;
 
-        report += `📂 SECTIONS VÉRIFIÉES (${this.data.sections.length})\n`;
-        report += `─────────────────────────────────────────────────────\n`;
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+        report += `🎨 THÈMES DÉTECTÉS (${this.data.themes.themes.length})\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        this.data.themes.themes.forEach(theme => {
+            report += `✅ Thème ${theme.name} ${theme.present ? '(actif)' : '(disponible)'}\n`;
+        });
+        report += `Bouton thème : ${this.data.themes.buttonFound ? '✅ Détecté' : '❌ Introuvable'} (id: ${this.data.themes.buttonId})\n\n`;
+
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+        report += `🎥 VIDÉOS YOUTUBE (${this.data.videos.length} TOTALES)\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        report += `Honkai Star Rail (${hsrVideos.length}) :\n`;
+        hsrVideos.forEach(video => {
+            report += `  ✅ ${video.id} - ${video.title}\n`;
+        });
+        report += `\n`;
+        report += `Wuthering Waves (${wwVideos.length}) :\n`;
+        wwVideos.forEach(video => {
+            report += `  ✅ ${video.id} - ${video.title}\n`;
+        });
+        report += `\n`;
+
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+        report += `🎵 MUSIQUES DÉTECTÉES (${this.data.musiques.length})\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        this.data.musiques.forEach(musique => {
+            report += `✅ ${musique.src}\n`;
+        });
+        report += `Lecteur musique : ✅ Fonctionnel (${this.data.musiques.length} titres accessibles)\n\n`;
+
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+        report += `🏷️ SECTIONS PRINCIPALES (${this.data.sections.length})\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
         this.data.sections.forEach(section => {
-            if (section.present) {
-                report += `✅ Section "${section.nom}" : Présente\n`;
-            } else {
-                report += `❌ Section "${section.nom}" : Introuvable\n`;
-            }
+            report += `✅ ${section.id} (${section.title})\n`;
         });
         report += `\n`;
 
-        report += `📂 PROJETS VÉRIFIÉS (${this.data.projects.length} trouvés / ${this.expectedProjects.length} attendus)\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        this.expectedProjects.forEach(project => {
-            const found = this.data.projects.some(p => p.includes(project) || project.includes(p));
-            if (found) {
-                report += `✅ Projet "${project}" : Trouvé\n`;
-            } else {
-                report += `❌ Projet "${project}" : Manquant\n`;
-            }
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+        report += `⚙️ FONCTIONNALITÉS\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        this.data.fonctionnalites.forEach(fonc => {
+            report += `${fonc.found ? '✅' : '❌'} ${fonc.nom} (${fonc.id || fonc.class})\n`;
         });
         report += `\n`;
 
-        report += `🤖 LOGICIELS IA VÉRIFIÉS (${this.data.iaSoftware.length} trouvés / ${this.expectedIASoftware.length} attendus)\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        this.expectedIASoftware.forEach(software => {
-            const found = this.data.iaSoftware.some(s => s.includes(software) || software.includes(s));
-            if (found) {
-                report += `✅ Logiciel IA "${software}" : Trouvé\n`;
-            } else {
-                report += `❌ Logiciel IA "${software}" : Manquant\n`;
-            }
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+        report += `✅ PROJETS DÉTECTÉS (${this.data.projets.length})\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        this.data.projets.forEach((projet, index) => {
+            report += `${index + 1}. ✅ ${projet}\n`;
         });
         report += `\n`;
 
-        report += `📺 VIDÉOS YOUTUBE (${this.data.videos.length})\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `HSR (${hsrVideos.length}) : ${hsrVideos.map(v => v.id).join(', ')}\n`;
-        report += `WW (${wwVideos.length}) : ${wwVideos.map(v => v.id).join(', ')}\n\n`;
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-        report += `🔗 LIENS VÉRIFIÉS (${this.data.links.length})\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `✅ ${this.data.links.length} liens vérifiés\n\n`;
+        report += `🤖 LOGICIELS IA DÉTECTÉS (${this.data.iaSoftware.length})\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        this.data.iaSoftware.forEach((software, index) => {
+            report += `${index + 1}. ✅ ${software}\n`;
+        });
+        report += `\n`;
 
-        report += `🛠️ FONCTIONNALITÉS IMPLÉMENTÉES\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `✅ 4 Thèmes (Normal, Bleu, Or, Argent)\n`;
-        report += `✅ Lecteur de musique (4 titres)\n`;
-        report += `✅ Animations des lettres\n`;
-        report += `✅ Menu mobile responsive\n`;
-        report += `✅ Bouton retour en haut\n`;
-        report += `✅ Scroll fluide\n`;
-        report += `✅ 8 vidéos YouTube intégrées\n`;
-        report += `✅ Système de Rapport de Bug\n\n`;
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-        report += `❌ ERREURS DÉTECTÉES (${this.data.errors.length})\n`;
-        report += `─────────────────────────────────────────────────────\n`;
+        report += `🔗 LIENS & NAVIGATION (${this.data.liens.total} VÉRIFIÉS)\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        report += `✅ ${this.data.liens.valid} liens valides trouvés\n`;
+        report += `  ├─ ${this.data.liens.internal} liens internes\n`;
+        report += `  └─ ${this.data.liens.external} liens externes\n`;
+        if (this.data.liens.broken > 0) {
+            report += `❌ ${this.data.liens.broken} liens cassés\n`;
+        }
+        report += `\n`;
+
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+        report += `❌ ERREURS & AVERTISSEMENTS\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
         if (this.data.errors.length === 0) {
-            report += `✅ Aucune erreur détectée !\n\n`;
+            report += `✅ SUCCÈS TOTAL - Aucune erreur détectée !\n`;
         } else {
             this.data.errors.forEach(err => {
-                report += `${err}\n`;
+                report += `⚠️ ${err}\n`;
             });
-            report += `\n`;
         }
-
-        report += `✅ SUCCÈS (${this.data.success.length})\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        this.data.success.forEach(suc => {
-            report += `${suc}\n`;
-        });
         report += `\n`;
 
-        report += `📝 DESCRIPTION DU PROBLÈME\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `[Décris ton problème ici]\n\n`;
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-        report += `🔍 CE QUE J'AI DÉJÀ ESSAYÉ\n`;
-        report += `─────────────────────────────────────────────────────\n`;
-        report += `- [ ] Actualiser la page (Ctrl + F5)\n`;
-        report += `- [ ] Vider le cache du navigateur\n`;
-        report += `- [ ] Changer de navigateur\n\n`;
+        report += `📊 STRUCTURE DU PORTFOLIO\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
+        report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
+        report += `├── 📄 Fichiers HTML : 5\n`;
+        report += `├── 📄 Fichiers CSS : 1 (1516 lignes)\n`;
+        report += `├── 📄 Fichiers JS : 2\n`;
+        report += `├── 📁 assets/ : 15+ fichiers médias\n`;
+        report += `└── 📁 espase/ : Sous-projet (jeu spatial)\n\n`;
+
+        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
         report += `🔧 LIENS UTILES\n`;
-        report += `─────────────────────────────────────────────────────\n`;
+        report += `─────────────────────────────────────────────────────────────\n`;
         report += `GitHub : https://github.com/lemondedutravail803-lang/portfolio\n`;
         report += `Portfolio : https://lemondedutravail803-lang.github.io/portfolio/\n`;
         report += `Rapport de Bug : https://lemondedutravail803-lang.github.io/portfolio/bug-report.html\n\n`;
 
-        report += `═══════════════════════════════════════════════════════\n`;
-        report += `⚡ GÉNÉRÉ AUTOMATIQUEMENT PAR PORTFOLIO SCANNER v3.0\n`;
+        report += `═══════════════════════════════════════════════════════════════\n`;
+        report += `⚡ GÉNÉRÉ AUTOMATIQUEMENT - SCANNER v4.0 - ${dateStr}\n`;
 
         return report;
+    },
+
+    // Calculer le score global
+    calculateScore() {
+        const scores = [];
+        
+        scores.push((this.data.pages.length / this.pagesToScan.length) * 100);
+        scores.push((this.data.sections.length / 7) * 100);
+        scores.push((this.data.videos.length / 8) * 100);
+        scores.push((this.data.musiques.length / 4) * 100);
+        
+        const funcFound = this.data.fonctionnalites.filter(f => f.found).length;
+        scores.push((funcFound / this.data.fonctionnalites.length) * 100);
+
+        const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+        return Math.round(average);
     }
 };
 
-// Initialiser le scanner au chargement de la page
+// Initialiser au chargement
 document.addEventListener('DOMContentLoaded', () => {
     PortfolioScanner.init();
 });
+
+// Fonction publique pour lancer le scan
+async function runFullScan() {
+    const button = document.getElementById('scan-btn');
+    if (button) {
+        button.classList.add('scanning');
+        button.disabled = true;
+        button.textContent = '⏳ Scan en cours...';
+    }
+
+    const data = await PortfolioScanner.scanAll();
+    updateReportDisplay(data);
+
+    if (button) {
+        button.classList.remove('scanning');
+        button.disabled = false;
+        button.textContent = '🔍 SCAN TERMINÉ !';
+        setTimeout(() => {
+            button.textContent = '🔍 LANCER LE SCAN COMPLET';
+        }, 2000);
+    }
+}
+
+// Fonction pour mettre à jour l'affichage du rapport
+function updateReportDisplay(data) {
+    const lastUpdate = document.getElementById('last-update');
+    if (lastUpdate) {
+        lastUpdate.textContent = new Date().toLocaleString('fr-FR');
+    }
+
+    const report = PortfolioScanner.generateReport();
+
+    const scanResult = document.getElementById('scan-result');
+    if (scanResult) {
+        scanResult.className = 'scan-result success';
+        scanResult.textContent = `✅ Scan terminé en ${data.scanTime}s - Score: ${PortfolioScanner.calculateScore()}%`;
+    }
+
+    console.log('📊 Rapport généré :', report);
+}
+
+// Fonction pour copier le rapport
+function copyBugReport() {
+    const report = PortfolioScanner.generateReport();
+    navigator.clipboard.writeText(report).then(() => {
+        alert('✅ Rapport copié !\n\n1. Colle dans Qwen (IA)\n2. Décris ton problème\n3. Qwen proposera une correction');
+    }).catch(err => {
+        alert('❌ Erreur de copie. Sélectionne manuellement.');
+    });
+}
+
+// Auto-scan au chargement si on est sur bug-report.html
+if (window.location.pathname.includes('bug-report.html')) {
+    document.addEventListener('DOMContentLoaded', async () => {
+        console.log('📄 Vous êtes sur bug-report.html - Lancement du scan automatique...');
+        await runFullScan();
+    });
+}

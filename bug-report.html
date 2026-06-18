@@ -463,7 +463,20 @@
     <button id="bouton-haut" class="bouton-haut" title="Retour en haut">⬆</button>
     <script src="script.js"></script>
     <script>
-        // Journal des erreurs pour cette page
+        // Fonction pour copier une section
+        function copySection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                const text = section.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('✅ Section copiée !');
+                }).catch(err => {
+                    alert('❌ Erreur de copie. Sélectionne manuellement.');
+                });
+            }
+        }
+
+        // Anciens code - remplacé par le scanner v4.0
         const pageBugReport = {
             errors: [],
             warnings: [],
