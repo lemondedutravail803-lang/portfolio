@@ -107,7 +107,7 @@ function separerLettres(element) {
     [...texte].forEach((lettre) => {
         const span = document.createElement('span');
         if (lettre === ' ') {
-            span.innerHTML = '&nbsp;';
+            span.textContent = '\u00A0';
         } else {
             span.textContent = lettre;
         }
@@ -167,7 +167,7 @@ function animerTitresH2() {
         [...texte].forEach((lettre) => {
             const span = document.createElement('span');
             if (lettre === ' ') {
-                span.innerHTML = '&nbsp;';
+                span.textContent = '\u00A0';
             } else {
                 span.textContent = lettre;
             }
@@ -353,51 +353,85 @@ let iaStartTime = 0;
 let iaElapsedTime = 0;
 let iaTimerInterval = null;
 
+// Créer un élément IA accessible
+function createElement(tag, options = {}) {
+    const element = document.createElement(tag);
+    if (options.className) element.className = options.className;
+    if (options.id) element.id = options.id;
+    if (options.text) element.textContent = options.text;
+    if (options.attrs) {
+        Object.keys(options.attrs).forEach((key) => {
+            element.setAttribute(key, options.attrs[key]);
+        });
+    }
+    return element;
+}
+
 // Créer le widget IA
 function createIAWidget() {
-    // Bouton flottant
-    const btn = document.createElement('button');
-    btn.className = 'ia-float-btn';
-    btn.innerHTML = '🤖';
-    btn.onclick = toggleIAWidget;
+    const btn = createElement('button', { className: 'ia-float-btn', text: '🤖' });
     btn.title = 'Assistante IA';
+    btn.addEventListener('click', toggleIAWidget);
     document.body.appendChild(btn);
 
-    // Panneau IA
-    const panel = document.createElement('div');
-    panel.className = 'ia-float-panel';
-    panel.id = 'ia-float-panel';
-    panel.innerHTML = `
-        <div class="ia-panel-header">
-            <span>🤖 Assistante IA</span>
-            <button class="ia-panel-close" onclick="toggleIAWidget()">✕</button>
-        </div>
-        <div class="ia-panel-content">
-            <div id="ia-page-title" class="ia-page-title"></div>
-            
-            <div id="ia-statistics" class="ia-statistics">
-                <div class="ia-stat-row">
-                    <span>⏱️ Temps écoulé : <span id="ia-time-elapsed">0:00</span></span>
-                    <span>⏱️ Temps restant : <span id="ia-time-remaining">--:--</span></span>
-                </div>
-                <div class="ia-stat-row">
-                    <span>📖 Sections lues : <span id="ia-sections-read">0/0</span></span>
-                    <span>📊 Progression : <span id="ia-progress-percent">0%</span></span>
-                </div>
-            </div>
-            
-            <div id="ia-progress-bar-container" class="ia-progress-bar-container">
-                <div id="ia-progress-bar" class="ia-progress-bar"></div>
-            </div>
-            <div id="ia-progress-text" class="ia-progress-text">Section 0/0 - 0%</div>
-            <div id="ia-sections-list" class="ia-sections-list"></div>
-        </div>
-        <div class="ia-panel-controls">
-            <button onclick="playIA()" id="ia-play-btn">▶️</button>
-            <button onclick="pauseIA()" id="ia-pause-btn" disabled>⏸️</button>
-            <button onclick="stopIA()" id="ia-stop-btn" disabled>⏹️</button>
-        </div>
-    `;
+    const panel = createElement('div', { className: 'ia-float-panel', id: 'ia-float-panel' });
+
+    const header = createElement('div', { className: 'ia-panel-header' });
+    const headerTitle = createElement('span', { text: '🤖 Assistante IA' });
+    const closeButton = createElement('button', { className: 'ia-panel-close', text: '✕', attrs: { type: 'button', 'aria-label': 'Fermer l\'assistante IA' } });
+    closeButton.addEventListener('click', toggleIAWidget);
+    header.appendChild(headerTitle);
+    header.appendChild(closeButton);
+
+    const content = createElement('div', { className: 'ia-panel-content' });
+    const pageTitle = createElement('div', { id: 'ia-page-title', className: 'ia-page-title' });
+
+    const statistics = createElement('div', { id: 'ia-statistics', className: 'ia-statistics' });
+    const statRow1 = createElement('div', { className: 'ia-stat-row' });
+    statRow1.appendChild(createElement('span', { text: '⏱️ Temps écoulé : ' }));
+    statRow1.appendChild(createElement('span', { id: 'ia-time-elapsed', text: '0:00' }));
+    statRow1.appendChild(createElement('span', { text: '⏱️ Temps restant : ' }));
+    statRow1.appendChild(createElement('span', { id: 'ia-time-remaining', text: '--:--' }));
+
+    const statRow2 = createElement('div', { className: 'ia-stat-row' });
+    statRow2.appendChild(createElement('span', { text: '📖 Sections lues : ' }));
+    statRow2.appendChild(createElement('span', { id: 'ia-sections-read', text: '0/0' }));
+    statRow2.appendChild(createElement('span', { text: '📊 Progression : ' }));
+    statRow2.appendChild(createElement('span', { id: 'ia-progress-percent', text: '0%' }));
+
+    statistics.appendChild(statRow1);
+    statistics.appendChild(statRow2);
+
+    const progressBarContainer = createElement('div', { id: 'ia-progress-bar-container', className: 'ia-progress-bar-container' });
+    const progressBar = createElement('div', { id: 'ia-progress-bar', className: 'ia-progress-bar' });
+    progressBarContainer.appendChild(progressBar);
+
+    const progressText = createElement('div', { id: 'ia-progress-text', className: 'ia-progress-text', text: 'Section 0/0 - 0%' });
+    const sectionsList = createElement('div', { id: 'ia-sections-list', className: 'ia-sections-list' });
+
+    content.appendChild(pageTitle);
+    content.appendChild(statistics);
+    content.appendChild(progressBarContainer);
+    content.appendChild(progressText);
+    content.appendChild(sectionsList);
+
+    const controls = createElement('div', { className: 'ia-panel-controls' });
+    const playBtn = createElement('button', { id: 'ia-play-btn', text: '▶️', attrs: { type: 'button' } });
+    const pauseBtn = createElement('button', { id: 'ia-pause-btn', text: '⏸️', attrs: { type: 'button', disabled: 'disabled' } });
+    const stopBtn = createElement('button', { id: 'ia-stop-btn', text: '⏹️', attrs: { type: 'button', disabled: 'disabled' } });
+
+    playBtn.addEventListener('click', playIA);
+    pauseBtn.addEventListener('click', pauseIA);
+    stopBtn.addEventListener('click', stopIA);
+
+    controls.appendChild(playBtn);
+    controls.appendChild(pauseBtn);
+    controls.appendChild(stopBtn);
+
+    panel.appendChild(header);
+    panel.appendChild(content);
+    panel.appendChild(controls);
+
     document.body.appendChild(panel);
 
     console.log('✅ Widget IA créé');
@@ -438,33 +472,46 @@ function loadCurrentPageContent() {
     updateProgressBar(content.sections.length);
 
     if (sectionsEl) {
-        sectionsEl.innerHTML = `
-            <div style="font-size: 0.8rem; color: var(--couleur-texte-sombre); margin-bottom: 0.5rem; font-style: italic;">
-                💡 Clique sur une section pour y aller directement
-            </div>
-        ` + content.sections.map((section, index) => {
-            let statusIcon = '⬜'; // Pas encore lu
+        clearElement(sectionsEl);
+
+        const helperNote = createElement('div', {
+            className: 'ia-section-helper',
+            text: '💡 Clique sur une section pour y aller directement'
+        });
+        helperNote.style.fontSize = '0.8rem';
+        helperNote.style.color = 'var(--couleur-texte-sombre)';
+        helperNote.style.marginBottom = '0.5rem';
+        helperNote.style.fontStyle = 'italic';
+        sectionsEl.appendChild(helperNote);
+
+        content.sections.forEach((section, index) => {
+            let statusIcon = '⬜';
             let statusClass = '';
-            
+
             if (index < currentSectionIndex) {
-                statusIcon = '✅'; // Déjà lu
+                statusIcon = '✅';
                 statusClass = 'finished';
             } else if (index === currentSectionIndex) {
-                statusIcon = '🟢'; // En cours
+                statusIcon = '🟢';
                 statusClass = 'active';
             }
-            
-            return `
-                <div class="ia-section-item ${statusClass}"
-                     data-index="${index}"
-                     data-section-id="${section.id || ''}"
-                     onclick="goToSection(${index})">
-                    <span class="ia-section-status">${statusIcon}</span>
-                    <strong>${section.name}</strong>
-                    <p>${section.text}</p>
-                </div>
-            `;
-        }).join('');
+
+            const sectionItem = createElement('div', { className: 'ia-section-item ' + statusClass });
+            sectionItem.setAttribute('data-index', String(index));
+            sectionItem.setAttribute('data-section-id', section.id || '');
+            sectionItem.addEventListener('click', function () {
+                goToSection(index);
+            });
+
+            const statusSpan = createElement('span', { className: 'ia-section-status', text: statusIcon });
+            const title = createElement('strong', { text: section.name });
+            const description = createElement('p', { text: section.text });
+
+            sectionItem.appendChild(statusSpan);
+            sectionItem.appendChild(title);
+            sectionItem.appendChild(description);
+            sectionsEl.appendChild(sectionItem);
+        });
     }
 }
 

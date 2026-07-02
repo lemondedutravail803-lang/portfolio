@@ -273,9 +273,10 @@
             <p class="tech-info">Dernière mise à jour : <span id="last-update">--</span></p>
             
             <!-- BOUTON SCAN -->
-            <button id="scan-btn" class="scan-btn" onclick="runFullScan()">
+            <button id="scan-btn" class="scan-btn">
                 🔍 LANCER LE SCAN COMPLET
             </button>
+            <button id="copy-bug-report-btn" class="copy-btn">📋 COPIER LE RAPPORT COMPLET</button>
             <div id="scan-result" class="scan-result"></div>
         </div>
 
@@ -300,37 +301,35 @@
         </section>
 
         <section class="bug-section">
-            <h2>📊 ÉTAT DU SITE (TEMPS RÉEL) <button class="copy-section-btn" onclick="copySection('site-status')" title="Copier cette section">📋 COPIER</button></h2>
+            <h2>📊 ÉTAT DU SITE (TEMPS RÉEL) <button class="copy-section-btn" data-section="site-status" title="Copier cette section">📋 COPIER</button></h2>
             <div id="site-status" class="bug-list">
                 <p>Chargement de l'état du site...</p>
             </div>
         </section>
 
         <section class="bug-section">
-            <h2>📝 JOURNAL DES ERREURS (TEMPS RÉEL) <button class="copy-section-btn" onclick="copySection('error-log')" title="Copier cette section">📋 COPIER</button></h2>
+            <h2>📝 JOURNAL DES ERREURS (TEMPS RÉEL) <button class="copy-section-btn" data-section="error-log" title="Copier cette section">📋 COPIER</button></h2>
             <div id="error-log" class="bug-list">
                 <p>Aucune erreur détectée pour le moment.</p>
             </div>
         </section>
 
         <section class="bug-section">
-            <h2>✅ SUCCÈS (TEMPS RÉEL) <button class="copy-section-btn" onclick="copySection('success-log')" title="Copier cette section">📋 COPIER</button></h2>
+            <h2>✅ SUCCÈS (TEMPS RÉEL) <button class="copy-section-btn" data-section="success-log" title="Copier cette section">📋 COPIER</button></h2>
             <div id="success-log" class="bug-list">
                 <p>Chargement des succès...</p>
             </div>
         </section>
 
         <section class="bug-section">
-            <h2>📄 INFORMATIONS TECHNIQUES <button class="copy-section-btn" onclick="copySection('tech-info')" title="Copier cette section">📋 COPIER</button></h2>
+            <h2>📄 INFORMATIONS TECHNIQUES <button class="copy-section-btn" data-section="tech-info" title="Copier cette section">📋 COPIER</button></h2>
             <div id="tech-info" class="bug-list tech-info">
                 <p>Chargement des informations...</p>
             </div>
         </section>
 
-        <button class="copy-btn" onclick="copyBugReport()">📋 COPIER LE RAPPORT COMPLET</button>
-
         <section class="bug-section">
-            <h2>📁 STRUCTURE COMPLÈTE DU PORTFOLIO <button class="copy-section-btn" onclick="copySection('structure-content')" title="Copier cette section">📋 COPIER</button></h2>
+            <h2>📁 STRUCTURE COMPLÈTE DU PORTFOLIO <button class="copy-section-btn" data-section="structure-content" title="Copier cette section">📋 COPIER</button></h2>
             <div id="structure-content" class="bug-list" style="white-space: pre-wrap; font-family: 'Space Mono', monospace; font-size: 0.85rem; overflow-x: auto;">
                 <strong>📁 c:\Users\keqin\Desktop\portfolio\</strong>
 │
@@ -369,7 +368,7 @@
         </section>
 
         <section class="bug-section">
-            <h2>🛠️ FONCTIONNALITÉS IMPLÉMENTÉES <button class="copy-section-btn" onclick="copySection('features-content')" title="Copier cette section">📋 COPIER</button></h2>
+            <h2>🛠️ FONCTIONNALITÉS IMPLÉMENTÉES <button class="copy-section-btn" data-section="features-content" title="Copier cette section">📋 COPIER</button></h2>
             <div id="features-content" class="bug-list">
                 <ul style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li><strong>🎨 4 Thèmes</strong> (Normal, Bleu, Or, Argent) - Bouton 🎨 en haut à droite</li>
@@ -387,7 +386,7 @@
         </section>
 
         <section class="bug-section">
-            <h2>📂 SECTION PROJETS <button class="copy-section-btn" onclick="copySection('projects-content')" title="Copier cette section">📋 COPIER</button></h2>
+            <h2>📂 SECTION PROJETS <button class="copy-section-btn" data-section="projects-content" title="Copier cette section">📋 COPIER</button></h2>
             <div id="projects-content" class="bug-list">
                 <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li>Jeu Voiture (Scratch)</li>
@@ -404,7 +403,7 @@
         </section>
 
         <section class="bug-section">
-            <h2>📺 VIDÉOS YOUTUBE INTÉGRÉES (AUTOMATIQUE) <button class="copy-section-btn" onclick="copySection('videos-content')" title="Copier cette section">📋 COPIER</button></h2>
+            <h2>📺 VIDÉOS YOUTUBE INTÉGRÉES (AUTOMATIQUE) <button class="copy-section-btn" data-section="videos-content" title="Copier cette section">📋 COPIER</button></h2>
             <div id="videos-content" class="bug-list">
                 <strong>Honkai Star Rail :</strong>
                 <ul id="hsr-videos-list" style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
@@ -421,7 +420,7 @@
         </section>
 
         <section class="bug-section">
-            <h2>📝 HISTORIQUE DE NOTRE TRAVAIL <button class="copy-section-btn" onclick="copySection('history-content')" title="Copier cette section">📋 COPIER</button></h2>
+            <h2>📝 HISTORIQUE DE NOTRE TRAVAIL <button class="copy-section-btn" data-section="history-content" title="Copier cette section">📋 COPIER</button></h2>
             <div id="history-content" class="bug-list">
                 <ol style="padding-left: 1.5rem; color: var(--couleur-texte); line-height: 1.8;">
                     <li>Mise en ligne sur GitHub</li>
@@ -463,17 +462,74 @@
     <button id="bouton-haut" class="bouton-haut" title="Retour en haut">⬆</button>
     <script src="script.js"></script>
     <script>
-        // Fonction pour copier une section
-        function copySection(sectionId) {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                const text = section.innerText;
-                navigator.clipboard.writeText(text).then(() => {
-                    alert('✅ Section copiée !');
-                }).catch(err => {
-                    alert('❌ Erreur de copie. Sélectionne manuellement.');
-                });
+        function clearElement(element) {
+            while (element.firstChild) {
+                element.removeChild(element.firstChild);
             }
+        }
+
+        function createStatusRow(label, value, isOk) {
+            const row = document.createElement('div');
+            row.className = 'bug-item ' + (isOk ? 'success' : 'error');
+
+            const strong = document.createElement('strong');
+            strong.className = isOk ? 'status-ok' : 'status-error';
+            strong.textContent = label;
+
+            row.appendChild(strong);
+            row.appendChild(document.createTextNode(' ' + value));
+            return row;
+        }
+
+        function createBugEntry(strongClass, strongText, message, details) {
+            const item = document.createElement('div');
+            item.className = 'bug-item ' + (strongClass === 'status-error' ? 'error' : 'warning');
+
+            const strong = document.createElement('strong');
+            strong.className = strongClass;
+            strong.textContent = strongText;
+
+            const messageText = document.createTextNode(message);
+            const small = document.createElement('small');
+            small.style.color = 'var(--couleur-texte-sombre)';
+            small.textContent = details;
+
+            item.appendChild(strong);
+            item.appendChild(messageText);
+            item.appendChild(document.createElement('br'));
+            item.appendChild(small);
+            return item;
+        }
+
+        function createInfoLine(label, value) {
+            const p = document.createElement('p');
+            const strong = document.createElement('strong');
+            strong.textContent = label;
+            p.appendChild(strong);
+            p.appendChild(document.createTextNode(' ' + value));
+            return p;
+        }
+
+        function bindBugReportButtons() {
+            const scanBtn = document.getElementById('scan-btn');
+            if (scanBtn) {
+                scanBtn.addEventListener('click', runFullScan);
+            }
+
+            const copyReportBtn = document.getElementById('copy-bug-report-btn');
+            if (copyReportBtn) {
+                copyReportBtn.addEventListener('click', copyBugReport);
+            }
+
+            const copyButtons = document.querySelectorAll('.copy-section-btn[data-section]');
+            copyButtons.forEach((button) => {
+                const sectionId = button.getAttribute('data-section');
+                if (sectionId) {
+                    button.addEventListener('click', function () {
+                        copySection(sectionId);
+                    });
+                }
+            });
         }
 
         // Anciens code - remplacé par le scanner v4.0
@@ -517,79 +573,62 @@
 
         // Mettre à jour l'affichage de la page
         function updateBugPage() {
-            // Mettre à jour la date
             document.getElementById('last-update').textContent = new Date().toLocaleString('fr-FR');
 
-            // État du site
             const statusDiv = document.getElementById('site-status');
             if (statusDiv) {
-                statusDiv.innerHTML = `
-                    <div class="bug-item ${pageBugReport.siteStatus.themes === 'OK' ? 'success' : 'error'}">
-                        <strong class="${pageBugReport.siteStatus.themes === 'OK' ? 'status-ok' : 'status-error'}">🎨 Thèmes :</strong> ${pageBugReport.siteStatus.themes}
-                    </div>
-                    <div class="bug-item ${pageBugReport.siteStatus.music === 'OK' ? 'success' : 'error'}">
-                        <strong class="${pageBugReport.siteStatus.music === 'OK' ? 'status-ok' : 'status-error'}">🎵 Musique :</strong> ${pageBugReport.siteStatus.music}
-                    </div>
-                    <div class="bug-item ${pageBugReport.siteStatus.animations === 'OK' ? 'success' : 'error'}">
-                        <strong class="${pageBugReport.siteStatus.animations === 'OK' ? 'status-ok' : 'status-error'}">✨ Animations :</strong> ${pageBugReport.siteStatus.animations}
-                    </div>
-                    <div class="bug-item ${pageBugReport.siteStatus.menu === 'OK' ? 'success' : 'error'}">
-                        <strong class="${pageBugReport.siteStatus.menu === 'OK' ? 'status-ok' : 'status-error'}">📱 Menu :</strong> ${pageBugReport.siteStatus.menu}
-                    </div>
-                `;
+                clearElement(statusDiv);
+                statusDiv.appendChild(createStatusRow('🎨 Thèmes :', pageBugReport.siteStatus.themes, pageBugReport.siteStatus.themes === 'OK'));
+                statusDiv.appendChild(createStatusRow('🎵 Musique :', pageBugReport.siteStatus.music, pageBugReport.siteStatus.music === 'OK'));
+                statusDiv.appendChild(createStatusRow('✨ Animations :', pageBugReport.siteStatus.animations, pageBugReport.siteStatus.animations === 'OK'));
+                statusDiv.appendChild(createStatusRow('📱 Menu :', pageBugReport.siteStatus.menu, pageBugReport.siteStatus.menu === 'OK'));
             }
 
-            // Journal des erreurs
             const logDiv = document.getElementById('error-log');
             if (logDiv) {
-                let html = '';
-
+                clearElement(logDiv);
                 if (pageBugReport.errors.length === 0 && pageBugReport.warnings.length === 0) {
-                    html = '<p class="status-ok">✅ Aucune erreur détectée pour le moment.</p>';
+                    const p = document.createElement('p');
+                    p.className = 'status-ok';
+                    p.textContent = '✅ Aucune erreur détectée pour le moment.';
+                    logDiv.appendChild(p);
                 } else {
                     pageBugReport.errors.forEach(err => {
-                        html += `
-                            <div class="bug-item error">
-                                <strong class="status-error">❌ [${err.date}] ${err.type}</strong>
-                                ${err.message}<br>
-                                <small style="color: var(--couleur-texte-sombre);">${err.details}</small>
-                            </div>
-                        `;
+                        logDiv.appendChild(createBugEntry(
+                            'status-error',
+                            `❌ [${err.date}] ${err.type}`,
+                            err.message,
+                            err.details
+                        ));
                     });
                     pageBugReport.warnings.forEach(warn => {
-                        html += `
-                            <div class="bug-item warning">
-                                <strong class="status-warning">⚠️ [${warn.date}] ${warn.type}</strong>
-                                ${warn.message}<br>
-                                <small style="color: var(--couleur-texte-sombre);">${warn.details}</small>
-                            </div>
-                        `;
+                        logDiv.appendChild(createBugEntry(
+                            'status-warning',
+                            `⚠️ [${warn.date}] ${warn.type}`,
+                            warn.message,
+                            warn.details
+                        ));
                     });
                 }
-
-                logDiv.innerHTML = html;
             }
 
-            // Informations techniques
             const infoDiv = document.getElementById('tech-info');
             if (infoDiv) {
-                infoDiv.innerHTML = `
-                    <p><strong>Navigateur :</strong> ${navigator.userAgent}</p>
-                    <p><strong>Fenêtre :</strong> ${window.innerWidth}x${window.innerHeight}</p>
-                    <p><strong>URL :</strong> ${window.location.href}</p>
-                    <p><strong>Erreurs totales :</strong> ${pageBugReport.errors.length}</p>
-                    <p><strong>Avertissements :</strong> ${pageBugReport.warnings.length}</p>
-                    <p><strong>Page :</strong> bug-report.html</p>
-                `;
+                clearElement(infoDiv);
+                infoDiv.appendChild(createInfoLine('Navigateur :', navigator.userAgent));
+                infoDiv.appendChild(createInfoLine('Fenêtre :', `${window.innerWidth}x${window.innerHeight}`));
+                infoDiv.appendChild(createInfoLine('URL :', window.location.href));
+                infoDiv.appendChild(createInfoLine('Erreurs totales :', pageBugReport.errors.length));
+                infoDiv.appendChild(createInfoLine('Avertissements :', pageBugReport.warnings.length));
+                infoDiv.appendChild(createInfoLine('Page :', 'bug-report.html'));
             }
         }
 
         // Fonction pour copier le rapport complet
         function copyBugReport() {
-            // Utiliser le rapport généré par PortfolioScanner si disponible
             if (typeof PortfolioScanner !== 'undefined' && PortfolioScanner.generateFullReport) {
                 const report = PortfolioScanner.generateFullReport();
-                
+
                 navigator.clipboard.writeText(report).then(() => {
                     alert('✅ Rapport copié dans le presse-papiers !\n\nMaintenant :\n1. Colle le rapport à Qwen (l\'IA)\n2. Décris ton problème en détail\n3. Qwen va analyser et corriger');
                 }).catch(err => {
@@ -597,19 +636,16 @@
                     alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
                 });
             } else {
-                // Fallback vers l'ancien rapport si PortfolioScanner n'est pas disponible
                 let report = `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
                 report += `═══════════════════════════════════════════════════════\n\n`;
                 report += `📅 Date : ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}\n`;
                 report += `📄 Page : bug-report.html\n\n`;
-
                 report += `📊 ÉTAT DU SITE (TEMPS RÉEL)\n`;
                 report += `─────────────────────────────────────────────────────\n`;
                 report += `🎨 Thèmes : ${pageBugReport.siteStatus.themes}\n`;
                 report += `🎵 Musique : ${pageBugReport.siteStatus.music}\n`;
                 report += `✨ Animations : ${pageBugReport.siteStatus.animations}\n`;
                 report += `📱 Menu : ${pageBugReport.siteStatus.menu}\n\n`;
-
                 report += `📝 JOURNAL DES ERREURS (TEMPS RÉEL)\n`;
                 report += `─────────────────────────────────────────────────────\n`;
 
@@ -726,36 +762,107 @@
                     alert('✅ Rapport copié dans le presse-papiers !\n\nMaintenant :\n1. Colle le rapport à Qwen (l\'IA)\n2. Décris ton problème en détail\n3. Qwen va analyser et corriger');
                 }).catch(err => {
                     console.error('Erreur lors de la copie :', err);
-                    alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
+                    alert('❌ Erreur lors de la copie. Sélectionne manuellement.');
                 });
             }
         }
 
-        // Initialiser la page au chargement
+        function copySection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (!section) {
+                alert('❌ Section introuvable');
+                return;
+            }
+
+            let text = section.innerText;
+            const sectionTitle = section.closest('.bug-section').querySelector('h2').childNodes[0].textContent.trim();
+            text = `${sectionTitle}\n${'═'.repeat(50)}\n\n${text}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`✅ Section "${sectionTitle}" copiée !\n\nTu peux la coller maintenant.`);
+            }).catch(err => {
+                console.error('Erreur lors de la copie :', err);
+                alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
+            });
+        }
+
+        function runFullScan() {
+            const scanBtn = document.getElementById('scan-btn');
+            const scanResult = document.getElementById('scan-result');
+            const lastUpdate = document.getElementById('last-update');
+            const errorSection = document.getElementById('error-log').closest('.bug-section');
+
+            lastUpdate.textContent = new Date().toLocaleString('fr-FR');
+            scanBtn.classList.add('scanning');
+            scanBtn.textContent = '🔍 SCAN EN COURS...';
+
+            if (typeof PortfolioScanner !== 'undefined') {
+                PortfolioScanner.data.errors = [];
+                PortfolioScanner.data.success = [];
+
+                PortfolioScanner.scanAllPages().then(() => {
+                    scanBtn.classList.remove('scanning');
+                    scanBtn.textContent = '✅ SCAN TERMINÉ';
+
+                    clearElement(scanResult);
+                    const errorCount = PortfolioScanner.data.errors.length;
+                    const successCount = PortfolioScanner.data.success.length;
+
+                    if (errorCount === 0) {
+                        scanResult.className = 'scan-result success';
+                        scanResult.appendChild(document.createTextNode('✅ AUCUNE ERREUR DÉTECTÉE !'));
+                        scanResult.appendChild(document.createElement('br'));
+                        const small = document.createElement('small');
+                        small.textContent = `${successCount} succès détectés - Tout fonctionne parfaitement`;
+                        scanResult.appendChild(small);
+                        scanResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                        scanResult.className = 'scan-result error';
+                        scanResult.appendChild(document.createTextNode(`❌ ${errorCount} ERREUR(S) DÉTECTÉE(S) !`));
+                        scanResult.appendChild(document.createElement('br'));
+                        const small = document.createElement('small');
+                        small.textContent = `${successCount} succès - ${errorCount} erreurs à corriger`;
+                        scanResult.appendChild(small);
+
+                        setTimeout(() => {
+                            errorSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            errorSection.style.animation = 'highlightError 2s ease';
+                        }, 500);
+                    }
+
+                    PortfolioScanner.updateBugReport();
+                });
+            } else {
+                scanBtn.classList.remove('scanning');
+                scanBtn.textContent = '❌ ERREUR';
+                clearElement(scanResult);
+                scanResult.className = 'scan-result error';
+                scanResult.appendChild(document.createTextNode('❌ PortfolioScanner non chargé'));
+                scanResult.appendChild(document.createElement('br'));
+                const small = document.createElement('small');
+                small.textContent = 'Actualise la page (Ctrl + F5)';
+                scanResult.appendChild(small);
+                scanResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
-                // Vérifier les thèmes
                 const themeToggle = document.getElementById('theme-toggle');
                 pageBugReport.siteStatus.themes = themeToggle ? '✅ OK' : '❌ Introuvable';
 
-                // Vérifier le menu
                 const menuToggle = document.getElementById('menu-toggle');
                 pageBugReport.siteStatus.menu = menuToggle ? '✅ OK' : '❌ Introuvable';
 
-                // La musique n'est pas sur cette page
                 pageBugReport.siteStatus.music = 'ℹ️ Non disponible sur cette page';
-
-                // Les animations non plus
                 pageBugReport.siteStatus.animations = 'ℹ️ Non disponible sur cette page';
 
+                bindBugReportButtons();
                 updateBugPage();
-
-                // Logger le chargement réussi
                 console.log('✅ Page Rapport de Bug chargée avec succès');
             }, 500);
         });
 
-        // Filet de sécurité - Attraper les erreurs sur cette page
         window.addEventListener('error', (event) => {
             logPageError(
                 'JavaScript',
@@ -776,103 +883,6 @@
             return true;
         });
 
-        // Fonction pour copier une section individuelle
-        function copySection(sectionId) {
-            const section = document.getElementById(sectionId);
-            if (!section) {
-                alert('❌ Section introuvable');
-                return;
-            }
-
-            // Récupérer le texte de la section
-            let text = section.innerText;
-
-            // Ajouter le titre de la section
-            const sectionTitle = section.closest('.bug-section').querySelector('h2').childNodes[0].textContent.trim();
-            text = `${sectionTitle}\n${'═'.repeat(50)}\n\n${text}`;
-
-            // Copier dans le presse-papiers
-            navigator.clipboard.writeText(text).then(() => {
-                alert(`✅ Section "${sectionTitle}" copiée !\n\nTu peux la coller maintenant.`);
-            }).catch(err => {
-                console.error('Erreur lors de la copie :', err);
-                alert('❌ Erreur lors de la copie. Sélectionne et copie manuellement.');
-            });
-        }
-
-        // Fonction pour lancer le scan complet
-        function runFullScan() {
-            const scanBtn = document.getElementById('scan-btn');
-            const scanResult = document.getElementById('scan-result');
-            const lastUpdate = document.getElementById('last-update');
-            const errorSection = document.getElementById('error-log').closest('.bug-section');
-
-            // Mettre à jour l'heure
-            lastUpdate.textContent = new Date().toLocaleString('fr-FR');
-
-            // Animation du bouton
-            scanBtn.classList.add('scanning');
-            scanBtn.textContent = '🔍 SCAN EN COURS...';
-
-            // Lancer le scan
-            if (typeof PortfolioScanner !== 'undefined') {
-                // Réinitialiser les données
-                PortfolioScanner.data.errors = [];
-                PortfolioScanner.data.success = [];
-
-                // Lancer le scan
-                PortfolioScanner.scanAllPages().then(() => {
-                    // Scan terminé
-                    scanBtn.classList.remove('scanning');
-                    scanBtn.textContent = '✅ SCAN TERMINÉ';
-
-                    // Afficher le résultat
-                    const errorCount = PortfolioScanner.data.errors.length;
-                    const successCount = PortfolioScanner.data.success.length;
-
-                    if (errorCount === 0) {
-                        // ✅ Tout va bien
-                        scanResult.className = 'scan-result success';
-                        scanResult.innerHTML = `
-                            ✅ AUCUNE ERREUR DÉTECTÉE !<br>
-                            <small>${successCount} succès détectés - Tout fonctionne parfaitement</small>
-                        `;
-                        // Scroll vers le résultat
-                        scanResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    } else {
-                        // ❌ Il y a des erreurs
-                        scanResult.className = 'scan-result error';
-                        scanResult.innerHTML = `
-                            ❌ ${errorCount} ERREUR(S) DÉTECTÉE(S) !<br>
-                            <small>${successCount} succès - ${errorCount} erreurs à corriger</small>
-                        `;
-
-                        // ⚠️ SCROLL AUTOMATIQUE VERS LA SECTION DES ERREURS
-                        setTimeout(() => {
-                            errorSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            
-                            // Mettre en évidence la section des erreurs
-                            errorSection.style.animation = 'highlightError 2s ease';
-                        }, 500);
-                    }
-
-                    // Mettre à jour l'affichage
-                    PortfolioScanner.updateBugReport();
-                });
-            } else {
-                // PortfolioScanner non chargé
-                scanBtn.classList.remove('scanning');
-                scanBtn.textContent = '❌ ERREUR';
-                scanResult.className = 'scan-result error';
-                scanResult.innerHTML = `
-                    ❌ PortfolioScanner non chargé<br>
-                    <small>Actualise la page (Ctrl + F5)</small>
-                `;
-                scanResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-
-        // Initialiser le scanner automatique
         if (typeof PortfolioScanner !== 'undefined') {
             PortfolioScanner.init();
         }
