@@ -1,554 +1,563 @@
-// =========================================
-// SCANNER PORTFOLIO v4.0 - AUDIT COMPLET
-// Scanner dynamique qui extrait TOUTES les données
-// =========================================
+﻿// auto-scan.js
+// Scanner portfolio premium avec modale, progression par paliers et protection CORS.
 
-const PortfolioScanner = {
-    // Stockage des données
-    data: {
-        pages: [],
-        sections: [],
-        videos: [],
-        musiques: [],
-        projets: [],
-        iaSoftware: [],
-        liens: [],
-        themes: [],
-        fonctionnalites: [],
-        errors: [],
-        scanTime: 0,
-        timestamp: null
-    },
-
-    // Pages à scanner
-    pagesToScan: [
+const ScanApp = (() => {
+    const PAGES_TO_SCAN = [
         'index.html',
         'honkai-star-rail.html',
         'wuthering-waves.html',
         'videos.html',
         'bug-report.html'
-    ],
+    ];
 
-    // Initialisation
-    init() {
-        console.log('🔍 Scanner Portfolio v4.0 initialisé');
-    },
+    const PALIER_RULES = [
+        { max: 15, className: 'palier-1', label: 'Initialisation & Démarrage', color: '#ef4444' },
+        { max: 30, className: 'palier-2', label: 'Analyse Structure & IA', color: '#f97316' },
+        { max: 50, className: 'palier-3', label: 'Découverte Médias', color: '#f59e0b' },
+        { max: 70, className: 'palier-4', label: 'Analyse Projets', color: '#10b981' },
+        { max: 85, className: 'palier-5', label: 'Vérification Liens', color: '#3b82f6' },
+        { max: 99, className: 'palier-6', label: 'Validation finale', color: '#8b5cf6' },
+        { max: 100, className: 'palier-7', label: 'SUCCÈS', color: '#22c55e' }
+    ];
 
-    // =========================================
-    // SCANNER PRINCIPAL
-    // =========================================
-    async scanAll() {
-        console.log('🔍 SCAN COMPLET EN COURS...');
-        const startTime = performance.now();
-        
-        // Réinitialiser les données
-        this.data = {
-            pages: [],
-            sections: [],
-            videos: [],
-            musiques: [],
-            projets: [],
-            iaSoftware: [],
-            liens: [],
-            themes: [],
-            fonctionnalites: [],
-            errors: [],
-            scanTime: 0,
-            timestamp: new Date()
+    const state = {
+        pages: [],
+        sections: [],
+        videos: [],
+        musics: [],
+        projects: [],
+        iaSoftwares: [],
+        links: {
+            total: 0,
+            valid: 0,
+            broken: []
+        },
+        features: [],
+        errors: [],
+        warnings: [],
+        score: 0,
+        progress: 0,
+        startedAt: 0
+    };
+
+    let elements = null;
+
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+    }
+
+    function createModalMarkup() {
+        if (document.getElementById('scan-modal-overlay')) {
+            return;
+        }
+
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `
+            <div class="scan-banner" id="scan-banner"></div>
+            <div class="scan-modal-overlay" id="scan-modal-overlay">
+                <div class="scan-modal" role="dialog" aria-labelledby="scan-modal-title" aria-modal="true">
+                    <div class="scan-modal-header">
+                        <div>
+                            <h2 id="scan-modal-title">Scanner Portfolio — Rapport en direct</h2>
+                            <p class="scan-status-text" id="scan-status-text">Prêt à lancer le scan</p>
+                        </div>
+                        <button class="scan-modal-close" id="scan-modal-close" aria-label="Fermer la modale">✕</button>
+                    </div>
+
+                    <div class="scan-progress">
+                        <div class="scan-progress-label">
+                            <strong>Progression</strong>
+                            <span id="scan-progress-percent">0%</span>
+                        </div>
+                        <div class="scan-progress-bar">
+                            <div class="scan-progress-bar-fill palier-1" id="scan-progress-bar-fill"></div>
+                            <div class="scan-progress-percent">0%</div>
+                        </div>
+                        <p class="scan-status-text" id="scan-status-line">Initialisation du scanner...</p>
+                    </div>
+
+                    <div class="scan-results" id="scan-results"></div>
+
+                    <div class="scan-local-warning" id="scan-local-warning" style="display:none;"></div>
+
+                    <div class="scan-success-banner" id="scan-success-banner" style="display:none;">
+                        <strong>✅ AUCUN PROBLÈME DÉTECTÉ !</strong>
+                        <div class="scan-success-score" id="scan-success-score">100%</div>
+                        <p>Tout est vert. Le portfolio est sain et optimisé.</p>
+                    </div>
+
+                    <div class="confetti-wrapper" id="confetti-wrapper"></div>
+
+                    <div class="scan-modal-footer">
+                        <button class="scan-modal-button close" id="scan-modal-close-button">✕ FERMER</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(wrapper);
+    }
+
+    function ensureElements() {
+        if (elements) {
+            return;
+        }
+
+        elements = {
+            banner: document.getElementById('scan-banner'),
+            overlay: document.getElementById('scan-modal-overlay'),
+            closeButton: document.getElementById('scan-modal-close'),
+            closeFooterButton: document.getElementById('scan-modal-close-button'),
+            progressFill: document.getElementById('scan-progress-bar-fill'),
+            progressPercent: document.getElementById('scan-progress-percent'),
+            statusText: document.getElementById('scan-status-text'),
+            statusLine: document.getElementById('scan-status-line'),
+            results: document.getElementById('scan-results'),
+            localWarning: document.getElementById('scan-local-warning'),
+            successBanner: document.getElementById('scan-success-banner'),
+            successScore: document.getElementById('scan-success-score'),
+            confettiWrapper: document.getElementById('confetti-wrapper'),
+            scanButton: document.getElementById('scan-btn')
+        };
+    }
+
+    function attachModalEvents() {
+        if (!elements) {
+            return;
+        }
+
+        const closeAction = () => closeModal();
+
+        elements.closeButton?.addEventListener('click', closeAction);
+        elements.closeFooterButton?.addEventListener('click', closeAction);
+
+        elements.overlay?.addEventListener('click', (event) => {
+            if (event.target === elements.overlay) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && elements.overlay?.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    }
+
+    function openModal() {
+        if (!elements) {
+            return;
+        }
+
+        elements.overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        elements.banner.style.display = 'block';
+        elements.banner.style.transform = 'translateY(-100%)';
+        setTimeout(() => {
+            elements.banner.style.transform = 'translateY(0)';
+        }, 20);
+    }
+
+    function closeModal() {
+        if (!elements) {
+            return;
+        }
+
+        elements.overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function resetModalVisuals() {
+        if (!elements) {
+            return;
+        }
+
+        elements.progressFill.style.width = '0%';
+        elements.progressFill.className = 'scan-progress-bar-fill palier-1';
+        elements.progressPercent.textContent = '0%';
+        elements.statusText.textContent = 'Prêt à lancer le scan';
+        elements.statusText.style.color = '#cbd5e1';
+        elements.statusLine.textContent = 'Initialisation du scanner...';
+        elements.results.innerHTML = '';
+        elements.localWarning.style.display = 'none';
+        elements.successBanner.style.display = 'none';
+        elements.confettiWrapper.innerHTML = '';
+    }
+
+    function getPalier(progress) {
+        return PALIER_RULES.find((palier) => progress <= palier.max) || PALIER_RULES[PALIER_RULES.length - 1];
+    }
+
+    function updateProgress(progress, label) {
+        if (!elements) {
+            return;
+        }
+
+        const clamped = clamp(Math.round(progress), 0, 100);
+        const palier = getPalier(clamped);
+
+        elements.progressFill.style.width = `${clamped}%`;
+        elements.progressFill.className = `scan-progress-bar-fill ${palier.className}`;
+        elements.progressPercent.textContent = `${clamped}%`;
+        elements.statusText.textContent = label || palier.label;
+        elements.statusText.style.color = palier.color;
+        elements.statusLine.textContent = palier.label;
+        state.progress = clamped;
+    }
+
+    function scrollToProblem(item) {
+        item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        item.classList.add('focused');
+        setTimeout(() => {
+            item.classList.remove('focused');
+        }, 600);
+    }
+
+    function addResultItem({ index, total, icon, message, type = 'success' }) {
+        if (!elements) {
+            return null;
+        }
+
+        const item = document.createElement('div');
+        item.className = `scan-result-item ${type}`;
+        const timestamp = new Date().toLocaleTimeString('fr-FR', { minute: '2-digit', second: '2-digit' });
+        item.innerHTML = `
+            <span class="meta">[${index}/${total}] [${timestamp}] <span class="icon">${icon}</span></span>
+            <p>${message}</p>
+        `;
+
+        elements.results.appendChild(item);
+        elements.results.scrollTop = elements.results.scrollHeight;
+
+        if (type === 'error' || type === 'warning') {
+            scrollToProblem(item);
+        }
+
+        return item;
+    }
+
+    function showLocalModeWarning() {
+        if (!elements) {
+            return;
+        }
+
+        const existingCount = elements.results.querySelectorAll('.scan-result-item').length;
+        const nextIndex = existingCount + 1;
+
+        elements.localWarning.textContent = '⚠️ Mode local détecté. Pour un scan complet, veuillez utiliser Live Server ou GitHub Pages.';
+        elements.localWarning.style.display = 'block';
+
+        addResultItem({
+            index: nextIndex,
+            total: nextIndex,
+            icon: '⚠️',
+            message: 'Scan partiel désactivé en mode local. Aucune requête fetch n\'a été lancée.',
+            type: 'warning'
+        });
+
+        updateProgress(10, 'Mode local détecté');
+    }
+
+    function resetState() {
+        state.pages = [];
+        state.sections = [];
+        state.videos = [];
+        state.musics = [];
+        state.projects = [];
+        state.iaSoftwares = [];
+        state.links = { total: 0, valid: 0, broken: [] };
+        state.features = [];
+        state.errors = [];
+        state.warnings = [];
+        state.score = 0;
+        state.progress = 0;
+        state.startedAt = 0;
+    }
+
+    function countFeatures() {
+        const checks = [
+            { name: 'Bouton Scan', found: !!document.getElementById('scan-btn') },
+            { name: 'Bouton Copier Rapport', found: !!document.querySelector('.copy-btn') },
+            { name: 'Thème toggle', found: !!document.getElementById('theme-toggle') },
+            { name: 'Menu hamburger', found: !!document.getElementById('menu-toggle') },
+            { name: 'Retour en haut', found: !!document.getElementById('bouton-haut') },
+            { name: 'Lecteur musique', found: !!document.getElementById('audio-player') }
+        ];
+
+        state.features = checks.filter((item) => item.found);
+        return state.features.length;
+    }
+
+    function calculateScore() {
+        const totals = [
+            { value: state.pages.length, max: 5, weight: 20 },
+            { value: state.sections.length, max: 7, weight: 15 },
+            { value: state.videos.length, max: 8, weight: 15 },
+            { value: state.musics.length, max: 4, weight: 10 },
+            { value: state.projects.length, max: 9, weight: 10 },
+            { value: state.iaSoftwares.length, max: 8, weight: 10 },
+            { value: state.links.valid, max: 26, weight: 10 },
+            { value: countFeatures(), max: 6, weight: 10 }
+        ];
+
+        const score = totals.reduce((sum, item) => {
+            const ratio = item.max === 0 ? 0 : Math.min(1, item.value / item.max);
+            return sum + ratio * item.weight;
+        }, 0);
+
+        state.score = Math.round(score);
+        return state.score;
+    }
+
+    function isLinkValid(href) {
+        if (!href || href.trim() === '') {
+            return false;
+        }
+
+        return href.startsWith('#')
+            || href.startsWith('http')
+            || href.startsWith('mailto:')
+            || href.endsWith('.html')
+            || href === 'javascript:void(0)';
+    }
+
+    async function scanPage(page) {
+        const pageResult = {
+            name: page,
+            sections: 0,
+            videos: 0,
+            musics: 0,
+            projects: 0,
+            iaSoftwares: 0,
+            errors: []
         };
 
         try {
-            // Scanner chaque page
-            for (const page of this.pagesToScan) {
-                await this.scanPage(page);
-            }
-
-            // Détecter les thèmes
-            this.detectThemes();
-
-            // Détecter les fonctionnalités
-            this.detectFonctionnalites();
-
-            // Vérifier les liens
-            this.verifyLinks();
-
-            // Calculer le temps de scan
-            const endTime = performance.now();
-            this.data.scanTime = ((endTime - startTime) / 1000).toFixed(2);
-
-            console.log('✅ SCAN TERMINÉ !', this.data);
-            return this.data;
-        } catch (error) {
-            console.error('❌ Erreur lors du scan:', error);
-            this.data.errors.push(`Erreur critique: ${error.message}`);
-            return this.data;
-        }
-    },
-
-    // =========================================
-    // SCANNER DE PAGES INDIVIDUELLES
-    // =========================================
-    async scanPage(pageName) {
-        try {
-            console.log(`📄 Scanning ${pageName}...`);
-            const response = await fetch(pageName);
-            
+            const response = await fetch(page, { cache: 'no-store' });
             if (!response.ok) {
-                this.data.errors.push(`❌ ${pageName} introuvable (404)`);
-                return;
+                pageResult.errors.push(`❌ ${page} introuvable (${response.status})`);
+                return pageResult;
             }
 
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
 
-            // Ajouter à la liste des pages scannées
-            const pageInfo = {
-                name: pageName,
-                status: 'OK',
-                sections: 0,
-                videos: 0,
-                musiques: 0
-            };
+            const sectionElements = Array.from(doc.querySelectorAll('section[id], article[id]'));
+            state.sections.push(...sectionElements.map((section) => {
+                return {
+                    id: section.getAttribute('id') || '',
+                    title: (section.querySelector('h2, h3') || { textContent: '' }).textContent.trim(),
+                    page
+                };
+            }));
+            pageResult.sections = sectionElements.length;
 
-            // Scanner les sections
-            const sections = doc.querySelectorAll('section[id], article[id]');
-            sections.forEach(section => {
-                const id = section.getAttribute('id');
-                const h2 = section.querySelector('h2, h3');
-                const title = h2 ? h2.textContent.trim() : id;
-                
-                if (!this.data.sections.find(s => s.id === id)) {
-                    this.data.sections.push({
-                        id: id,
-                        title: title,
-                        page: pageName,
-                        found: true
-                    });
-                    pageInfo.sections++;
+            const iframes = Array.from(doc.querySelectorAll('iframe[src*="youtube.com"]'));
+            pageResult.videos = iframes.length;
+            iframes.forEach((iframe) => {
+                const src = iframe.getAttribute('src') || '';
+                const match = src.match(/embed\/([a-zA-Z0-9_-]+)/);
+                if (match) {
+                    state.videos.push({ id: match[1], title: iframe.getAttribute('title') || 'Vidéo YouTube', page });
                 }
             });
 
-            // Scanner les vidéos YouTube
-            const iframes = doc.querySelectorAll('iframe[src*="youtube.com"]');
-            iframes.forEach(iframe => {
-                const src = iframe.getAttribute('src');
-                const videoId = src.match(/embed\/([a-zA-Z0-9_-]+)/);
-                const title = iframe.getAttribute('title') || 'Sans titre';
-                
-                if (videoId && videoId[1]) {
-                    // Détecter le jeu
-                    let game = 'Autre';
-                    if (pageName.includes('honkai')) game = 'Honkai Star Rail';
-                    if (pageName.includes('wuthering')) game = 'Wuthering Waves';
-                    
-                    this.data.videos.push({
-                        id: videoId[1],
-                        title: title,
-                        page: pageName,
-                        game: game
-                    });
-                    pageInfo.videos++;
-                }
-            });
-
-            // Scanner les musiques (page index.html)
-            if (pageName === 'index.html') {
-                const audioSources = doc.querySelectorAll('audio source');
-                audioSources.forEach(source => {
+            if (page === 'index.html') {
+                const audioSources = Array.from(doc.querySelectorAll('audio source[src$=".m4a"], audio[src$=".m4a"]'));
+                pageResult.musics = audioSources.length;
+                audioSources.forEach((source) => {
                     const src = source.getAttribute('src');
-                    if (src && src.includes('.m4a')) {
-                        this.data.musiques.push({
-                            src: src,
-                            nom: src.split('/').pop(),
-                            format: 'm4a'
-                        });
-                        pageInfo.musiques++;
+                    if (src) {
+                        state.musics.push(src);
+                    }
+                });
+
+                const projetTitles = Array.from(doc.querySelectorAll('#projets article h3, .projet h3'));
+                pageResult.projects = projetTitles.length;
+                projetTitles.forEach((el) => {
+                    const title = el.textContent.trim();
+                    if (title) {
+                        state.projects.push(title);
+                    }
+                });
+
+                const iaTitles = Array.from(doc.querySelectorAll('#ia article h3, .ia-software, .projet h3'));
+                pageResult.iaSoftwares = iaTitles.length;
+                iaTitles.forEach((el) => {
+                    const title = el.textContent.trim();
+                    if (title && !state.iaSoftwares.includes(title)) {
+                        state.iaSoftwares.push(title);
                     }
                 });
             }
 
-            // Scanner les projets (page index.html)
-            if (pageName === 'index.html') {
-                const projetSection = doc.querySelector('#projets');
-                if (projetSection) {
-                    const projets = projetSection.querySelectorAll('article h3, .projet h3');
-                    projets.forEach(h3 => {
-                        const title = h3.textContent.trim();
-                        if (title && !title.includes('RAPPORT')) {
-                            this.data.projets.push(title);
-                        }
-                    });
-                }
-            }
-
-            // Scanner les logiciels IA (page index.html)
-            if (pageName === 'index.html') {
-                const iaSection = doc.querySelector('#ia');
-                if (iaSection) {
-                    const iaSoftware = iaSection.querySelectorAll('article h3, .projet h3');
-                    iaSoftware.forEach(h3 => {
-                        const title = h3.textContent.trim();
-                        if (title && !this.data.iaSoftware.includes(title)) {
-                            this.data.iaSoftware.push(title);
-                        }
-                    });
-                }
-            }
-
-            // Ajouter les informations de la page
-            this.data.pages.push(pageInfo);
-            console.log(`✅ ${pageName} scanné (${pageInfo.sections} sections, ${pageInfo.videos} vidéos)`);
-
-        } catch (error) {
-            console.error(`❌ Erreur scanning ${pageName}:`, error);
-            this.data.errors.push(`Erreur ${pageName}: ${error.message}`);
-        }
-    },
-
-    // =========================================
-    // DÉTECTION DES THÈMES
-    // =========================================
-    detectThemes() {
-        const themes = [
-            { name: 'Normal', class: 'normal', present: true },
-            { name: 'Bleu', class: 'theme-bleu', present: document.body.classList.contains('theme-bleu') },
-            { name: 'Or', class: 'theme-or', present: document.body.classList.contains('theme-or') },
-            { name: 'Argent', class: 'theme-argent', present: document.body.classList.contains('theme-argent') }
-        ];
-
-        const themeButton = document.getElementById('theme-toggle');
-        this.data.themes = {
-            themes: themes,
-            buttonFound: !!themeButton,
-            buttonId: 'theme-toggle',
-            status: themeButton ? 'OK' : 'Non trouvé'
-        };
-    },
-
-    // =========================================
-    // DÉTECTION DES FONCTIONNALITÉS
-    // =========================================
-    detectFonctionnalites() {
-        const fonctionnalites = [
-            {
-                nom: 'Menu hamburger',
-                id: 'menu-toggle',
-                found: !!document.getElementById('menu-toggle')
-            },
-            {
-                nom: 'Bouton retour haut',
-                id: 'bouton-haut',
-                found: !!document.getElementById('bouton-haut')
-            },
-            {
-                nom: 'Lecteur musique',
-                id: 'audio-player',
-                found: !!document.getElementById('audio-player')
-            },
-            {
-                nom: 'Sélecteur musique',
-                id: 'music-selector',
-                found: !!document.getElementById('music-selector')
-            },
-            {
-                nom: 'Animations lettres',
-                class: 'anime-lettres',
-                found: !!document.querySelector('.anime-lettres')
-            },
-            {
-                nom: 'Thème toggle',
-                id: 'theme-toggle',
-                found: !!document.getElementById('theme-toggle')
-            }
-        ];
-
-        this.data.fonctionnalites = fonctionnalites;
-    },
-
-    // =========================================
-    // VÉRIFICATION DES LIENS
-    // =========================================
-    verifyLinks() {
-        const liens = document.querySelectorAll('a[href]');
-        let internal = 0;
-        let external = 0;
-        let valid = 0;
-        let broken = [];
-
-        liens.forEach(link => {
-            const href = link.getAttribute('href');
-            
-            if (href) {
-                if (href.startsWith('#')) {
-                    internal++;
-                    valid++;
-                } else if (href.startsWith('http') || href.startsWith('mailto')) {
-                    external++;
-                    valid++;
-                } else if (href.includes('.html')) {
-                    internal++;
-                    valid++;
-                } else if (href === 'javascript:void(0)' || href === '#') {
-                    valid++;
+            const anchors = Array.from(doc.querySelectorAll('a[href]'));
+            state.links.total += anchors.length;
+            anchors.forEach((anchor) => {
+                const href = anchor.getAttribute('href') || '';
+                if (isLinkValid(href)) {
+                    state.links.valid += 1;
                 } else {
-                    broken.push(href);
+                    state.links.broken.push(href);
                 }
-            }
-        });
+            });
 
-        this.data.liens = {
-            total: liens.length,
-            valid: valid,
-            broken: broken.length,
-            internal: internal,
-            external: external
-        };
-    },
-
-    // =========================================
-    // GÉNÉRER LE RAPPORT COMPLET
-    // =========================================
-    generateReport() {
-        const hsrVideos = this.data.videos.filter(v => v.game === 'Honkai Star Rail');
-        const wwVideos = this.data.videos.filter(v => v.game === 'Wuthering Waves');
-
-        let report = `═══════════════════════════════════════════════════════════════\n`;
-        report += `🐛 RAPPORT DE BUG - PORTFOLIO CÉDRIC AUGUSTO\n`;
-        report += `═══════════════════════════════════════════════════════════════\n\n`;
-        
-        const date = new Date();
-        const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-        report += `📅 Date : ${dateStr} | Scan: ${this.data.scanTime}s | Version 4.0\n\n`;
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        const scoreGlobal = this.calculateScore();
-        report += `📊 RÉSUMÉ GLOBAL\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        report += `🏆 SCORE SANTÉ : ${scoreGlobal}% ${scoreGlobal === 100 ? '✅' : '⚠️'}\n`;
-        report += `📄 Pages scannées : ${this.data.pages.length}/${this.pagesToScan.length} ✅\n`;
-        report += `🎥 Vidéos YouTube : ${this.data.videos.length} trouvées ✅\n`;
-        report += `🎵 Musiques : ${this.data.musiques.length} trouvées ✅\n`;
-        report += `🔗 Liens vérifiés : ${this.data.liens.total} (${this.data.liens.valid} OK, ${this.data.liens.broken} ❌)\n`;
-        report += `⚠️ Avertissements : ${this.data.errors.length}\n\n`;
-
-        report += `📈 Détails des scores :\n`;
-        report += `  • Pages HTML : ${this.data.pages.length}/${this.pagesToScan.length} (${Math.round((this.data.pages.length / this.pagesToScan.length) * 100)}%) ✅\n`;
-        report += `  • Sections : ${this.data.sections.length}/7 (${Math.round((this.data.sections.length / 7) * 100)}%) ✅\n`;
-        report += `  • Vidéos YouTube : ${this.data.videos.length}/8 (${Math.round((this.data.videos.length / 8) * 100)}%) ✅\n`;
-        report += `  • Musiques : ${this.data.musiques.length}/4 (${Math.round((this.data.musiques.length / 4) * 100)}%) ✅\n`;
-        report += `  • Thèmes : ${this.data.themes.themes.length}/4 (100%) ✅\n`;
-        report += `  • Fonctionnalités : ${this.data.fonctionnalites.filter(f => f.found).length}/${this.data.fonctionnalites.length} (${Math.round((this.data.fonctionnalites.filter(f => f.found).length / this.data.fonctionnalites.length) * 100)}%) ✅\n`;
-        report += `  • Projets : ${this.data.projets.length}/9 (${Math.round((this.data.projets.length / 9) * 100)}%) ✅\n`;
-        report += `  • Logiciels IA : ${this.data.iaSoftware.length}/8 (${Math.round((this.data.iaSoftware.length / 8) * 100)}%) ✅\n\n`;
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        report += `📄 PAGES SCANNÉES (${this.data.pages.length})\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        this.data.pages.forEach(page => {
-            report += `✅ ${page.name}\n`;
-            report += `   ├─ ${page.sections} sections\n`;
-            report += `   ├─ ${page.videos} vidéos YouTube\n`;
-            report += `   └─ Statut : ${page.status}\n\n`;
-        });
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        report += `🎨 THÈMES DÉTECTÉS (${this.data.themes.themes.length})\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        this.data.themes.themes.forEach(theme => {
-            report += `✅ Thème ${theme.name} ${theme.present ? '(actif)' : '(disponible)'}\n`;
-        });
-        report += `Bouton thème : ${this.data.themes.buttonFound ? '✅ Détecté' : '❌ Introuvable'} (id: ${this.data.themes.buttonId})\n\n`;
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        report += `🎥 VIDÉOS YOUTUBE (${this.data.videos.length} TOTALES)\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        report += `Honkai Star Rail (${hsrVideos.length}) :\n`;
-        hsrVideos.forEach(video => {
-            report += `  ✅ ${video.id} - ${video.title}\n`;
-        });
-        report += `\n`;
-        report += `Wuthering Waves (${wwVideos.length}) :\n`;
-        wwVideos.forEach(video => {
-            report += `  ✅ ${video.id} - ${video.title}\n`;
-        });
-        report += `\n`;
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        report += `🎵 MUSIQUES DÉTECTÉES (${this.data.musiques.length})\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        this.data.musiques.forEach(musique => {
-            report += `✅ ${musique.src}\n`;
-        });
-        report += `Lecteur musique : ✅ Fonctionnel (${this.data.musiques.length} titres accessibles)\n\n`;
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        report += `🏷️ SECTIONS PRINCIPALES (${this.data.sections.length})\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        this.data.sections.forEach(section => {
-            report += `✅ ${section.id} (${section.title})\n`;
-        });
-        report += `\n`;
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        report += `⚙️ FONCTIONNALITÉS\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        this.data.fonctionnalites.forEach(fonc => {
-            report += `${fonc.found ? '✅' : '❌'} ${fonc.nom} (${fonc.id || fonc.class})\n`;
-        });
-        report += `\n`;
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        report += `✅ PROJETS DÉTECTÉS (${this.data.projets.length})\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        this.data.projets.forEach((projet, index) => {
-            report += `${index + 1}. ✅ ${projet}\n`;
-        });
-        report += `\n`;
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        report += `🤖 LOGICIELS IA DÉTECTÉS (${this.data.iaSoftware.length})\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        this.data.iaSoftware.forEach((software, index) => {
-            report += `${index + 1}. ✅ ${software}\n`;
-        });
-        report += `\n`;
-
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        report += `🔗 LIENS & NAVIGATION (${this.data.liens.total} VÉRIFIÉS)\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        report += `✅ ${this.data.liens.valid} liens valides trouvés\n`;
-        report += `  ├─ ${this.data.liens.internal} liens internes\n`;
-        report += `  └─ ${this.data.liens.external} liens externes\n`;
-        if (this.data.liens.broken > 0) {
-            report += `❌ ${this.data.liens.broken} liens cassés\n`;
+            return pageResult;
+        } catch (error) {
+            pageResult.errors.push(`❌ Erreur lors du scan ${page} : ${error.message}`);
+            return pageResult;
         }
-        report += `\n`;
+    }
 
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    function createConfetti() {
+        if (!elements) {
+            return;
+        }
 
-        report += `❌ ERREURS & AVERTISSEMENTS\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        if (this.data.errors.length === 0) {
-            report += `✅ SUCCÈS TOTAL - Aucune erreur détectée !\n`;
+        elements.confettiWrapper.innerHTML = '';
+        const count = 18;
+
+        for (let i = 0; i < count; i += 1) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            piece.style.left = `${Math.random() * 100}%`;
+            piece.style.background = i % 2 === 0
+                ? 'linear-gradient(180deg, #22c55e, #a7f3d0)'
+                : 'linear-gradient(180deg, #c084fc, #f5d0fe)';
+            piece.style.width = `${8 + Math.random() * 6}px`;
+            piece.style.height = `${12 + Math.random() * 12}px`;
+            piece.style.animationDelay = `${Math.random() * 0.6}s`;
+            elements.confettiWrapper.appendChild(piece);
+        }
+
+        setTimeout(() => {
+            elements.confettiWrapper.innerHTML = '';
+        }, 2400);
+    }
+
+    async function runFullScan() {
+        createModalMarkup();
+        ensureElements();
+        attachModalEvents();
+        resetState();
+        resetModalVisuals();
+        openModal();
+
+        state.startedAt = performance.now();
+        updateProgress(5, 'Initialisation & Démarrage');
+        addResultItem({ index: 1, total: 8, icon: '⏳', message: 'Démarrage du scanner...', type: 'success' });
+        await delay(250);
+
+        if (window.location.protocol === 'file:') {
+            showLocalModeWarning();
+            return;
+        }
+
+        const stepCount = PAGES_TO_SCAN.length + 2;
+        let currentStep = 1;
+
+        for (const page of PAGES_TO_SCAN) {
+            currentStep += 1;
+            const pageResult = await scanPage(page);
+            state.pages.push(pageResult);
+
+            const icon = pageResult.errors.length ? '❌' : '✅';
+            const type = pageResult.errors.length ? 'error' : 'success';
+            const message = `Scan ${page} — ${pageResult.sections} sections, ${pageResult.videos} vidéos, ${pageResult.musics} musiques`;
+
+            addResultItem({ index: currentStep, total: stepCount, icon, message, type });
+            updateProgress(calculateScore(), `Analyse ${page}`);
+            await delay(260);
+        }
+
+        if (state.links.broken.length > 0) {
+            state.warnings.push(`⚠️ ${state.links.broken.length} lien(s) cassé(s) détecté(s)`);
+        }
+
+        const issues = state.errors.length + state.warnings.length;
+        if (issues === 0) {
+            addResultItem({ index: stepCount - 1, total: stepCount, icon: '✅', message: 'Aucun problème détecté. Tous les tests passent.', type: 'success' });
         } else {
-            this.data.errors.forEach(err => {
-                report += `⚠️ ${err}\n`;
+            state.warnings.forEach((warning, index) => {
+                addResultItem({ index: stepCount - state.warnings.length + index, total: stepCount, icon: '⚠️', message: warning, type: 'warning' });
+            });
+
+            state.errors.forEach((error, index) => {
+                addResultItem({ index: stepCount - state.errors.length + index + 1, total: stepCount, icon: '❌', message: error, type: 'error' });
             });
         }
-        report += `\n`;
 
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+        const finalScore = calculateScore();
+        updateProgress(finalScore, finalScore === 100 ? 'SUCCÈS' : 'Scan terminé');
 
-        report += `📊 STRUCTURE DU PORTFOLIO\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        report += `📁 c:\\Users\\keqin\\Desktop\\portfolio\\\n`;
-        report += `├── 📄 Fichiers HTML : 5\n`;
-        report += `├── 📄 Fichiers CSS : 1 (1516 lignes)\n`;
-        report += `├── 📄 Fichiers JS : 2\n`;
-        report += `├── 📁 assets/ : 15+ fichiers médias\n`;
-        report += `└── 📁 espase/ : Sous-projet (jeu spatial)\n\n`;
+        if (finalScore === 100) {
+            elements.successBanner.style.display = 'grid';
+            elements.successScore.textContent = '100%';
+            createConfetti();
+        }
 
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+        addResultItem({
+            index: stepCount,
+            total: stepCount,
+            icon: finalScore === 100 ? '✨' : '🔎',
+            message: `Score final : ${finalScore}% — ${state.errors.length} erreur(s), ${state.warnings.length} warning(s)`,
+            type: finalScore === 100 ? 'success' : state.errors.length ? 'error' : 'warning'
+        });
 
-        report += `🔧 LIENS UTILES\n`;
-        report += `─────────────────────────────────────────────────────────────\n`;
-        report += `GitHub : https://github.com/lemondedutravail803-lang/portfolio\n`;
-        report += `Portfolio : https://lemondedutravail803-lang.github.io/portfolio/\n`;
-        report += `Rapport de Bug : https://lemondedutravail803-lang.github.io/portfolio/bug-report.html\n\n`;
-
-        report += `═══════════════════════════════════════════════════════════════\n`;
-        report += `⚡ GÉNÉRÉ AUTOMATIQUEMENT - SCANNER v4.0 - ${dateStr}\n`;
-
-        return report;
-    },
-
-    // Calculer le score global
-    calculateScore() {
-        const scores = [];
-        
-        scores.push((this.data.pages.length / this.pagesToScan.length) * 100);
-        scores.push((this.data.sections.length / 7) * 100);
-        scores.push((this.data.videos.length / 8) * 100);
-        scores.push((this.data.musiques.length / 4) * 100);
-        
-        const funcFound = this.data.fonctionnalites.filter(f => f.found).length;
-        scores.push((funcFound / this.data.fonctionnalites.length) * 100);
-
-        const average = scores.reduce((a, b) => a + b, 0) / scores.length;
-        return Math.round(average);
-    }
-};
-
-// Initialiser au chargement
-document.addEventListener('DOMContentLoaded', () => {
-    PortfolioScanner.init();
-});
-
-// Fonction publique pour lancer le scan
-async function runFullScan() {
-    const button = document.getElementById('scan-btn');
-    if (button) {
-        button.classList.add('scanning');
-        button.disabled = true;
-        button.textContent = '⏳ Scan en cours...';
+        const elapsed = ((performance.now() - state.startedAt) / 1000).toFixed(2);
+        if (elements.statusLine) {
+            elements.statusLine.textContent = `Scan complété en ${elapsed}s`;
+        }
     }
 
-    const data = await PortfolioScanner.scanAll();
-    updateReportDisplay(data);
+    return {
+        runFullScan,
+        getData: () => JSON.parse(JSON.stringify(state)),
+        getScore: () => state.score,
+        getPageCount: () => PAGES_TO_SCAN.length
+    };
+})();
 
-    if (button) {
-        button.classList.remove('scanning');
-        button.disabled = false;
-        button.textContent = '🔍 SCAN TERMINÉ !';
-        setTimeout(() => {
-            button.textContent = '🔍 LANCER LE SCAN COMPLET';
-        }, 2000);
-    }
+function runFullScan() {
+    ScanApp.runFullScan();
 }
 
-// Fonction pour mettre à jour l'affichage du rapport
-function updateReportDisplay(data) {
-    const lastUpdate = document.getElementById('last-update');
-    if (lastUpdate) {
-        lastUpdate.textContent = new Date().toLocaleString('fr-FR');
-    }
-
-    const report = PortfolioScanner.generateReport();
-
-    const scanResult = document.getElementById('scan-result');
-    if (scanResult) {
-        scanResult.className = 'scan-result success';
-        scanResult.textContent = `✅ Scan terminé en ${data.scanTime}s - Score: ${PortfolioScanner.calculateScore()}%`;
-    }
-
-    console.log('📊 Rapport généré :', report);
-}
-
-// Fonction pour copier le rapport
 function copyBugReport() {
-    const report = PortfolioScanner.generateReport();
+    const report = buildReport();
     navigator.clipboard.writeText(report).then(() => {
-        alert('✅ Rapport copié !\n\n1. Colle dans Qwen (IA)\n2. Décris ton problème\n3. Qwen proposera une correction');
-    }).catch(err => {
-        alert('❌ Erreur de copie. Sélectionne manuellement.');
+        alert('✅ Rapport copié !\nColle le contenu dans Qwen pour analyser le résultat.');
+    }).catch(() => {
+        alert('❌ Impossible de copier automatiquement. Copie manuelle requise.');
     });
 }
 
-// Auto-scan au chargement si on est sur bug-report.html
-if (window.location.pathname.includes('bug-report.html')) {
-    document.addEventListener('DOMContentLoaded', async () => {
-        console.log('📄 Vous êtes sur bug-report.html - Lancement du scan automatique...');
-        await runFullScan();
-    });
+function buildReport() {
+    const data = ScanApp.getData();
+    const score = ScanApp.getScore();
+    const now = new Date();
+    const date = now.toLocaleString('fr-FR');
+
+    return `
+═══════════════════════════════════════════════════════════════
+🐛 RAPPORT DE SCAN PORTFOLIO
+Date : ${date}
+
+Score : ${score}%
+
+Pages scannées : ${data.pages.length}/${ScanApp.getPageCount()}
+Sections détectées : ${data.sections.length}
+Vidéos détectées : ${data.videos.length}
+Musiques détectées : ${data.musics.length}
+Projets détectés : ${data.projects.length}
+Logiciels IA détectés : ${data.iaSoftwares.length}
+Liens valides : ${data.links.valid}/${data.links.total}
+
+Erreurs : ${data.errors.length}
+Warnings : ${data.warnings.length}
+
+═══════════════════════════════════════════════════════════════
+`; 
 }
