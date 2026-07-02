@@ -86,48 +86,73 @@ const ScanApp = (() => {
         }
     }
 
-    function createModalMarkup() {
-        if (document.getElementById('scan-modal-overlay')) {
+    function getPalier(progress) {
+        for (let i = 0; i < PALIER_RULES.length; i += 1) {
+            if (progress <= PALIER_RULES[i].max) {
+                return PALIER_RULES[i];
+            }
+        }
+        return PALIER_RULES[PALIER_RULES.length - 1];
+    }
+
+    function ensureElements() {
+        if (elements) {
             return;
         }
 
-        const banner = createElement('div', { id: 'scan-banner', className: 'scan-banner' });
+        elements = {
+            container: document.getElementById('inline-scan-container'),
+            progressFill: document.getElementById('scan-progress-bar-fill'),
+            progressPercent: document.getElementById('scan-progress-percent'),
+            statusText: document.getElementById('scan-status-text'),
+            statusLine: document.getElementById('scan-status-line'),
+            results: document.getElementById('scan-results'),
+            localWarning: document.getElementById('scan-local-warning'),
+            successBanner: document.getElementById('scan-success-banner'),
+            successScore: document.getElementById('scan-success-score'),
+            confettiWrapper: document.getElementById('confetti-wrapper')
+        };
+    }
 
-        const closeButton = createElement('button', {
-            id: 'scan-modal-close',
-            className: 'scan-modal-close',
-            ariaLabel: 'Fermer la modale'
+    function buildInlineScanLayout() {
+        ensureElements();
+        if (!elements || !elements.container) {
+            return;
+        }
+
+        clearElement(elements.container);
+        elements.container.style.display = 'block';
+        elements.container.style.position = 'relative';
+
+        const title = createElement('h2', { text: 'Scanner Portfolio — Rapport en direct' });
+        const statusText = createElement('p', {
+            id: 'scan-status-text',
+            className: 'scan-status-text',
+            text: 'Prêt à lancer le scan'
         });
-        closeButton.textContent = '✕';
 
-        const title = createElement('h2', { id: 'scan-modal-title' });
-        title.textContent = 'Scanner Portfolio — Rapport en direct';
-
-        const statusText = createElement('p', { id: 'scan-status-text', className: 'scan-status-text' });
-        statusText.textContent = 'Prêt à lancer le scan';
-
-        const headerLeft = createElement('div');
-        appendChildren(headerLeft, title, statusText);
-
-        const header = createElement('div', { className: 'scan-modal-header' });
-        appendChildren(header, headerLeft, closeButton);
+        const header = createElement('div', { className: 'scan-inline-header' });
+        appendChildren(header, title, statusText);
 
         const progressLabel = createElement('div', { className: 'scan-progress-label' });
         const progressTitle = createElement('strong', { text: 'Progression' });
-        const progressPercentLabel = createElement('span', { id: 'scan-progress-percent', text: '0%' });
-        appendChildren(progressLabel, progressTitle, progressPercentLabel);
+        const progressPercent = createElement('span', { id: 'scan-progress-percent', text: '0%' });
+        appendChildren(progressLabel, progressTitle, progressPercent);
 
         const progressFill = createElement('div', { id: 'scan-progress-bar-fill', className: 'scan-progress-bar-fill palier-1' });
         const progressBar = createElement('div', { className: 'scan-progress-bar' });
         progressBar.appendChild(progressFill);
-
         const progressCenter = createElement('div', { className: 'scan-progress-percent', text: '0%' });
         progressBar.appendChild(progressCenter);
 
-        const progressLine = createElement('p', { id: 'scan-status-line', className: 'scan-status-text', text: 'Initialisation du scanner...' });
+        const statusLine = createElement('p', {
+            id: 'scan-status-line',
+            className: 'scan-status-text',
+            text: 'Initialisation du scanner...'
+        });
 
         const progressBlock = createElement('div', { className: 'scan-progress' });
-        appendChildren(progressBlock, progressLabel, progressBar, progressLine);
+        appendChildren(progressBlock, progressLabel, progressBar, statusLine);
 
         const resultsBlock = createElement('div', { id: 'scan-results', className: 'scan-results' });
 
@@ -143,92 +168,28 @@ const ScanApp = (() => {
 
         const confettiWrapper = createElement('div', { id: 'confetti-wrapper', className: 'confetti-wrapper' });
 
-        const closeFooter = createElement('button', { id: 'scan-modal-close-button', className: 'scan-modal-button close' });
-        closeFooter.textContent = '✕ FERMER';
-        const footer = createElement('div', { className: 'scan-modal-footer' });
-        footer.appendChild(closeFooter);
+        appendChildren(
+            elements.container,
+            header,
+            progressBlock,
+            resultsBlock,
+            localWarning,
+            successBanner,
+            confettiWrapper
+        );
 
-        const modal = createElement('div', { className: 'scan-modal' });
-        appendChildren(modal, header, progressBlock, resultsBlock, localWarning, successBanner, confettiWrapper, footer);
-
-        const overlay = createElement('div', { id: 'scan-modal-overlay', className: 'scan-modal-overlay' });
-        overlay.appendChild(modal);
-
-        const container = document.createElement('div');
-        container.appendChild(banner);
-        container.appendChild(overlay);
-
-        document.body.appendChild(container);
+        elements.progressFill = progressFill;
+        elements.progressPercent = progressPercent;
+        elements.statusText = statusText;
+        elements.statusLine = statusLine;
+        elements.results = resultsBlock;
+        elements.localWarning = localWarning;
+        elements.successBanner = successBanner;
+        elements.successScore = successScore;
+        elements.confettiWrapper = confettiWrapper;
     }
 
-    function ensureElements() {
-        if (elements) {
-            return;
-        }
-
-        elements = {
-            banner: document.getElementById('scan-banner'),
-            overlay: document.getElementById('scan-modal-overlay'),
-            closeButton: document.getElementById('scan-modal-close'),
-            closeFooterButton: document.getElementById('scan-modal-close-button'),
-            progressFill: document.getElementById('scan-progress-bar-fill'),
-            progressPercent: document.getElementById('scan-progress-percent'),
-            statusText: document.getElementById('scan-status-text'),
-            statusLine: document.getElementById('scan-status-line'),
-            results: document.getElementById('scan-results'),
-            localWarning: document.getElementById('scan-local-warning'),
-            successBanner: document.getElementById('scan-success-banner'),
-            successScore: document.getElementById('scan-success-score'),
-            confettiWrapper: document.getElementById('confetti-wrapper')
-        };
-    }
-
-    function attachModalEvents() {
-        if (!elements) {
-            return;
-        }
-
-        const closeAction = function () {
-            closeModal();
-        };
-
-        elements.closeButton.addEventListener('click', closeAction);
-        elements.closeFooterButton.addEventListener('click', closeAction);
-
-        elements.overlay.addEventListener('click', function (event) {
-            if (event.target === elements.overlay) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape' && elements.overlay.classList.contains('active')) {
-                closeModal();
-            }
-        });
-    }
-
-    function openModal() {
-        if (!elements) {
-            return;
-        }
-        elements.overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        elements.banner.style.transform = 'translateY(-100%)';
-        setTimeout(function () {
-            elements.banner.style.transform = 'translateY(0)';
-        }, 20);
-    }
-
-    function closeModal() {
-        if (!elements) {
-            return;
-        }
-        elements.overlay.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    function resetModalVisuals() {
+    function resetInlineVisuals() {
         if (!elements) {
             return;
         }
@@ -244,22 +205,12 @@ const ScanApp = (() => {
         clearElement(elements.confettiWrapper);
     }
 
-    function getPalier(progress) {
-        var i;
-        for (i = 0; i < PALIER_RULES.length; i += 1) {
-            if (progress <= PALIER_RULES[i].max) {
-                return PALIER_RULES[i];
-            }
-        }
-        return PALIER_RULES[PALIER_RULES.length - 1];
-    }
-
     function updateProgress(progress, label) {
         if (!elements) {
             return;
         }
-        var clamped = clamp(Math.round(progress), 0, 100);
-        var palier = getPalier(clamped);
+        const clamped = clamp(Math.round(progress), 0, 100);
+        const palier = getPalier(clamped);
         elements.progressFill.style.width = clamped + '%';
         elements.progressFill.className = 'scan-progress-bar-fill ' + palier.className;
         elements.progressPercent.textContent = clamped + '%';
@@ -281,12 +232,12 @@ const ScanApp = (() => {
         if (!elements) {
             return;
         }
-        var item = createElement('div', { className: 'scan-result-item ' + options.type });
-        var meta = createElement('span', { className: 'meta' });
-        var timestamp = new Date().toLocaleTimeString('fr-FR', { minute: '2-digit', second: '2-digit' });
-        var metaText = document.createTextNode('[' + options.index + '/' + options.total + '] [' + timestamp + '] ');
-        var iconSpan = createElement('span', { className: 'icon', text: options.icon });
-        var messageParagraph = createElement('p', { text: options.message });
+        const item = createElement('div', { className: 'scan-result-item ' + options.type });
+        const meta = createElement('span', { className: 'meta' });
+        const timestamp = new Date().toLocaleTimeString('fr-FR', { minute: '2-digit', second: '2-digit' });
+        const metaText = document.createTextNode('[' + options.index + '/' + options.total + '] [' + timestamp + '] ');
+        const iconSpan = createElement('span', { className: 'icon', text: options.icon });
+        const messageParagraph = createElement('p', { text: options.message });
         meta.appendChild(metaText);
         meta.appendChild(iconSpan);
         item.appendChild(meta);
@@ -303,8 +254,8 @@ const ScanApp = (() => {
         if (!elements) {
             return;
         }
-        var existingCount = elements.results.querySelectorAll('.scan-result-item').length;
-        var nextIndex = existingCount + 1;
+        const existingCount = elements.results.querySelectorAll('.scan-result-item').length;
+        const nextIndex = existingCount + 1;
         elements.localWarning.textContent = '⚠️ Mode local détecté. Pour un scan complet, veuillez utiliser Live Server ou GitHub Pages.';
         elements.localWarning.style.display = 'block';
         addResultItem({
@@ -334,7 +285,7 @@ const ScanApp = (() => {
     }
 
     function countFeatures() {
-        var checks = [
+        const checks = [
             !!document.getElementById('scan-btn'),
             !!document.querySelector('.copy-btn'),
             !!document.getElementById('theme-toggle'),
@@ -349,7 +300,7 @@ const ScanApp = (() => {
     }
 
     function calculateScore() {
-        var totals = [
+        const totals = [
             { value: state.pages.length, max: 5, weight: 20 },
             { value: state.sections.length, max: 7, weight: 15 },
             { value: state.videos.length, max: 8, weight: 15 },
@@ -359,8 +310,8 @@ const ScanApp = (() => {
             { value: state.links.valid, max: 26, weight: 10 },
             { value: countFeatures(), max: 6, weight: 10 }
         ];
-        var score = totals.reduce(function (sum, item) {
-            var ratio = item.max === 0 ? 0 : Math.min(1, item.value / item.max);
+        const score = totals.reduce(function (sum, item) {
+            const ratio = item.max === 0 ? 0 : Math.min(1, item.value / item.max);
             return sum + ratio * item.weight;
         }, 0);
         state.score = Math.round(score);
@@ -375,7 +326,7 @@ const ScanApp = (() => {
     }
 
     async function scanPage(page) {
-        var pageResult = {
+        const pageResult = {
             name: page,
             sections: 0,
             videos: 0,
@@ -386,67 +337,67 @@ const ScanApp = (() => {
         };
 
         try {
-            var response = await fetch(page, { cache: 'no-store' });
+            const response = await fetch(page, { cache: 'no-store' });
             if (!response.ok) {
                 pageResult.errors.push('❌ ' + page + ' introuvable (' + response.status + ')');
                 return pageResult;
             }
 
-            var html = await response.text();
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(html, 'text/html');
+            const html = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
 
-            var sectionElements = Array.from(doc.querySelectorAll('section[id], article[id]'));
+            const sectionElements = Array.from(doc.querySelectorAll('section[id], article[id]'));
             sectionElements.forEach(function (section) {
-                var id = section.getAttribute('id') || '';
-                var title = (section.querySelector('h2, h3') || { textContent: '' }).textContent.trim();
+                const id = section.getAttribute('id') || '';
+                const title = (section.querySelector('h2, h3') || { textContent: '' }).textContent.trim();
                 state.sections.push({ id: id, title: title, page: page });
             });
             pageResult.sections = sectionElements.length;
 
-            var iframes = Array.from(doc.querySelectorAll('iframe[src*="youtube.com"]'));
+            const iframes = Array.from(doc.querySelectorAll('iframe[src*="youtube.com"]'));
             pageResult.videos = iframes.length;
             iframes.forEach(function (iframe) {
-                var src = iframe.getAttribute('src') || '';
-                var match = src.match(/embed\/([a-zA-Z0-9_-]+)/);
+                const src = iframe.getAttribute('src') || '';
+                const match = src.match(/embed\/([a-zA-Z0-9_-]+)/);
                 if (match) {
                     state.videos.push({ id: match[1], title: iframe.getAttribute('title') || 'Vidéo YouTube', page: page });
                 }
             });
 
             if (page === 'index.html') {
-                var audioSources = Array.from(doc.querySelectorAll('audio source[src$=".m4a"], audio[src$=".m4a"]'));
+                const audioSources = Array.from(doc.querySelectorAll('audio source[src$=".m4a"], audio[src$=".m4a"]'));
                 pageResult.musics = audioSources.length;
                 audioSources.forEach(function (source) {
-                    var src = source.getAttribute('src');
+                    const src = source.getAttribute('src');
                     if (src) {
                         state.musics.push(src);
                     }
                 });
 
-                var projetTitles = Array.from(doc.querySelectorAll('#projets article h3, .projet h3'));
+                const projetTitles = Array.from(doc.querySelectorAll('#projets article h3, .projet h3'));
                 pageResult.projects = projetTitles.length;
                 projetTitles.forEach(function (el) {
-                    var title = el.textContent.trim();
+                    const title = el.textContent.trim();
                     if (title) {
                         state.projects.push(title);
                     }
                 });
 
-                var iaTitles = Array.from(doc.querySelectorAll('#ia article h3, .ia-software, .projet h3'));
+                const iaTitles = Array.from(doc.querySelectorAll('#ia article h3, .ia-software, .projet h3'));
                 pageResult.iaSoftwares = iaTitles.length;
                 iaTitles.forEach(function (el) {
-                    var title = el.textContent.trim();
+                    const title = el.textContent.trim();
                     if (title && state.iaSoftwares.indexOf(title) === -1) {
                         state.iaSoftwares.push(title);
                     }
                 });
             }
 
-            var anchors = Array.from(doc.querySelectorAll('a[href]'));
+            const anchors = Array.from(doc.querySelectorAll('a[href]'));
             state.links.total += anchors.length;
             anchors.forEach(function (anchor) {
-                var href = anchor.getAttribute('href') || '';
+                const href = anchor.getAttribute('href') || '';
                 if (isLinkValid(href)) {
                     state.links.valid += 1;
                 } else {
@@ -462,37 +413,41 @@ const ScanApp = (() => {
     }
 
     function createConfetti() {
-        if (!elements) {
+        if (!elements || !elements.confettiWrapper) {
             return;
         }
 
         clearElement(elements.confettiWrapper);
 
-        for (var i = 0; i < 18; i += 1) {
-            var piece = createElement('div', { className: 'confetti-piece' });
+        for (let i = 0; i < 18; i += 1) {
+            const piece = createElement('div', { className: 'confetti-piece' });
             piece.style.position = 'absolute';
             piece.style.left = Math.random() * 100 + '%';
+            piece.style.top = '-20px';
             piece.style.background = i % 2 === 0
                 ? 'linear-gradient(180deg, #22c55e, #a7f3d0)'
                 : 'linear-gradient(180deg, #c084fc, #f5d0fe)';
             piece.style.width = 8 + Math.random() * 6 + 'px';
             piece.style.height = 12 + Math.random() * 12 + 'px';
+            piece.style.opacity = '0.9';
+            piece.style.animation = 'confetti-fall 2.4s ease-out forwards';
             piece.style.animationDelay = Math.random() * 0.6 + 's';
             elements.confettiWrapper.appendChild(piece);
         }
 
         setTimeout(function () {
             clearElement(elements.confettiWrapper);
-        }, 2400);
+        }, 2600);
     }
 
     async function runFullScan() {
-        createModalMarkup();
-        ensureElements();
-        attachModalEvents();
         resetState();
-        resetModalVisuals();
-        openModal();
+        buildInlineScanLayout();
+        resetInlineVisuals();
+
+        if (!elements || !elements.container) {
+            return;
+        }
 
         state.startedAt = performance.now();
         updateProgress(5, 'Initialisation & Démarrage');
@@ -504,17 +459,17 @@ const ScanApp = (() => {
             return;
         }
 
-        var stepCount = PAGES_TO_SCAN.length + 2;
-        var currentStep = 1;
+        const stepCount = PAGES_TO_SCAN.length + 2;
+        let currentStep = 1;
 
-        for (var idx = 0; idx < PAGES_TO_SCAN.length; idx += 1) {
+        for (let idx = 0; idx < PAGES_TO_SCAN.length; idx += 1) {
             currentStep += 1;
-            var pageResult = await scanPage(PAGES_TO_SCAN[idx]);
+            const pageResult = await scanPage(PAGES_TO_SCAN[idx]);
             state.pages.push(pageResult);
 
-            var icon = pageResult.errors.length ? '❌' : '✅';
-            var type = pageResult.errors.length ? 'error' : 'success';
-            var message = 'Scan ' + PAGES_TO_SCAN[idx] + ' — ' + pageResult.sections + ' sections, ' + pageResult.videos + ' vidéos, ' + pageResult.musics + ' musiques';
+            const icon = pageResult.errors.length ? '❌' : '✅';
+            const type = pageResult.errors.length ? 'error' : 'success';
+            const message = 'Scan ' + PAGES_TO_SCAN[idx] + ' — ' + pageResult.sections + ' sections, ' + pageResult.videos + ' vidéos, ' + pageResult.musics + ' musiques';
 
             addResultItem({ index: currentStep, total: stepCount, icon: icon, message: message, type: type });
             updateProgress(calculateScore(), 'Analyse ' + PAGES_TO_SCAN[idx]);
@@ -525,7 +480,7 @@ const ScanApp = (() => {
             state.warnings.push('⚠️ ' + state.links.broken.length + ' lien(s) cassé(s) détecté(s)');
         }
 
-        var issues = state.errors.length + state.warnings.length;
+        const issues = state.errors.length + state.warnings.length;
         if (issues === 0) {
             addResultItem({
                 index: stepCount - 1,
@@ -556,7 +511,7 @@ const ScanApp = (() => {
             });
         }
 
-        var finalScore = calculateScore();
+        const finalScore = calculateScore();
         updateProgress(finalScore, finalScore === 100 ? 'SUCCÈS' : 'Scan terminé');
 
         if (finalScore === 100) {
@@ -573,7 +528,7 @@ const ScanApp = (() => {
             type: finalScore === 100 ? 'success' : state.errors.length ? 'error' : 'warning'
         });
 
-        var elapsed = ((performance.now() - state.startedAt) / 1000).toFixed(2);
+        const elapsed = ((performance.now() - state.startedAt) / 1000).toFixed(2);
         elements.statusLine.textContent = 'Scan complété en ' + elapsed + 's';
     }
 
@@ -590,10 +545,10 @@ const ScanApp = (() => {
     }
 
     function buildReport() {
-        var data = getData();
-        var score = getScore();
-        var now = new Date();
-        var date = now.toLocaleString('fr-FR');
+        const data = getData();
+        const score = getScore();
+        const now = new Date();
+        const date = now.toLocaleString('fr-FR');
         return [
             '═══════════════════════════════════════════════════════════════',
             '🐛 RAPPORT DE SCAN PORTFOLIO',
@@ -617,7 +572,7 @@ const ScanApp = (() => {
     }
 
     function copyBugReport() {
-        var report = buildReport();
+        const report = buildReport();
         navigator.clipboard.writeText(report).then(function () {
             window.alert('✅ Rapport copié !\nColle-le dans Qwen pour analyser le résultat.');
         }).catch(function () {
