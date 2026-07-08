@@ -1911,10 +1911,4 @@ header.en-tete.ia-highlight {
     50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); }
     100% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.4); }
 }
-    
-    .ia-float-panel {
-        width: 90%;
-        right: 5%;
-        bottom: 80px;
-    }
 
