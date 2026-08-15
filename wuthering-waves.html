@@ -199,6 +199,40 @@
     </footer>
 
     <button id="bouton-haut" class="bouton-haut" title="Retour en haut">⬆</button>
+
+    <!-- SECTION COMMENTAIRES & AVIS -->
+    <section id="commentaires" class="section commentaires-section">
+        <h2 class="anime-lettres">Laissez votre avis</h2>
+        <p class="sous-titre-avis">Choisissez votre poste, notez la page et laissez un commentaire !</p>
+
+        <div class="choix-postes">
+            <button type="button" class="poste-bloc poste-admin" data-poste="administrateur">🪽💻👑 Administrateur du site</button>
+            <button type="button" class="poste-bloc" data-poste="direction">👑 Direction</button>
+            <button type="button" class="poste-bloc" data-poste="enseignement">📚 Enseignement</button>
+            <button type="button" class="poste-bloc" data-poste="sante">💉 Santé</button>
+            <button type="button" class="poste-bloc" data-poste="social">🤲 Social</button>
+            <button type="button" class="poste-bloc" data-poste="vie-scolaire">🔔 Vie scolaire</button>
+            <button type="button" class="poste-bloc" data-poste="sport">🏃 Sport</button>
+            <button type="button" class="poste-bloc" data-poste="technique">🔧 Technique</button>
+            <button type="button" class="poste-bloc" data-poste="numerique">💻 Numérique</button>
+        </div>
+
+        <div class="formulaire-avis">
+            <div class="etoiles">
+                <span class="etoile" data-note="1">★</span>
+                <span class="etoile" data-note="2">★</span>
+                <span class="etoile" data-note="3">★</span>
+                <span class="etoile" data-note="4">★</span>
+                <span class="etoile" data-note="5">★</span>
+            </div>
+            <input type="text" id="avis-pseudo" placeholder="Votre prénom ou pseudo (optionnel)" maxlength="30">
+            <textarea id="avis-texte" rows="4" placeholder="Écrivez votre commentaire ici..." maxlength="500"></textarea>
+            <button type="button" id="avis-envoyer" class="bouton-envoyer">📨 Envoyer mon avis</button>
+        </div>
+
+        <div class="archive-avis" id="archive-avis"></div>
+    </section>
+
     <script src="script.js"></script>
 </body>
 </html>
