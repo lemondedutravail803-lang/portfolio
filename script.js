@@ -874,3 +874,182 @@ document.addEventListener('DOMContentLoaded', () => {
     createIAWidget();
     console.log('✅ Assistante IA initialisée');
 });
+
+// =========================================
+// 8. SYSTÈME DE COMMENTAIRES & AVIS
+// =========================================
+
+(function () {
+    const conteneurPostes = document.querySelector('.choix-postes');
+    if (!conteneurPostes) return;
+
+    const POSTES = {
+        'administrateur': { emoji: '🪽💻👑', label: 'Administrateur du site', couleur: '#34d399' },
+        'direction':      { emoji: '👑',  label: 'Direction',       couleur: '#ffd700' },
+        'enseignement':   { emoji: '📚',  label: 'Enseignement',    couleur: '#3b82f6' },
+        'sante':          { emoji: '💉',  label: 'Santé',           couleur: '#ef4444' },
+        'social':         { emoji: '🤲',  label: 'Social',          couleur: '#ec4899' },
+        'vie-scolaire':   { emoji: '🔔',  label: 'Vie scolaire',    couleur: '#f97316' },
+        'sport':          { emoji: '🏃',  label: 'Sport',           couleur: '#22c55e' },
+        'technique':      { emoji: '🔧',  label: 'Technique',       couleur: '#a16207' },
+        'numerique':      { emoji: '💻',  label: 'Numérique',       couleur: '#06b6d4' }
+    };
+
+    let posteChoisi = null;
+    let noteActuelle = 0;
+
+    const formulaire = document.querySelector('.formulaire-avis');
+    const etoiles = Array.from(document.querySelectorAll('.etoile'));
+    const champPseudo = document.getElementById('avis-pseudo');
+    const champTexte = document.getElementById('avis-texte');
+    const boutonEnvoyer = document.getElementById('avis-envoyer');
+    const archive = document.getElementById('archive-avis');
+
+    if (!formulaire || !archive || !boutonEnvoyer || etoiles.length === 0) return;
+
+    const clePage = 'avis-' + (location.pathname.split('/').pop() || 'index.html');
+
+    function chargerAvis() {
+        try {
+            return JSON.parse(localStorage.getItem(clePage) || '[]');
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function sauvegarderAvis(avis) {
+        try {
+            localStorage.setItem(clePage, JSON.stringify(avis));
+        } catch (error) {
+            console.warn('Impossible de sauvegarder les avis :', error);
+        }
+    }
+
+    function allumerEtoiles(n) {
+        etoiles.forEach((etoile) => {
+            const note = Number(etoile.dataset.note);
+            etoile.classList.toggle('allumee', note <= n);
+        });
+    }
+
+    conteneurPostes.addEventListener('click', (e) => {
+        const bloc = e.target.closest('.poste-bloc');
+        if (!bloc) return;
+
+        document.querySelectorAll('.poste-bloc').forEach((b) => b.classList.remove('choisi'));
+        bloc.classList.add('choisi');
+        posteChoisi = bloc.dataset.poste;
+
+        if (POSTES[posteChoisi]) {
+            formulaire.style.borderColor = POSTES[posteChoisi].couleur;
+        }
+    });
+
+    etoiles.forEach((etoile) => {
+        etoile.addEventListener('mouseenter', () => {
+            allumerEtoiles(Number(etoile.dataset.note));
+        });
+
+        etoile.addEventListener('click', () => {
+            noteActuelle = Number(etoile.dataset.note);
+            allumerEtoiles(noteActuelle);
+        });
+    });
+
+    etoiles[0].parentElement.addEventListener('mouseleave', () => {
+        allumerEtoiles(noteActuelle);
+    });
+
+    function escapeHTML(texte) {
+        const div = document.createElement('div');
+        div.textContent = texte;
+        return div.innerHTML;
+    }
+
+    function renderEtoiles(note) {
+        const couleurs = ['mini-0', 'mini-1', 'mini-2', 'mini-3', 'mini-4', 'mini-5'];
+        const morceaux = [];
+
+        for (let i = 1; i <= 5; i++) {
+            const classe = i <= note ? `mini-${i}` : 'mini-0';
+            morceaux.push(`<span class="${classe}">★</span>`);
+        }
+
+        return morceaux.join('');
+    }
+
+    function afficherAvis() {
+        const avis = chargerAvis();
+
+        if (!avis.length) {
+            archive.innerHTML = '<p class="carte-texte">Aucun avis pour le moment. Soyez le premier à donner votre opinion !</p>';
+            return;
+        }
+
+        archive.innerHTML = avis.slice().reverse().map((item) => {
+            const poste = POSTES[item.poste] || POSTES['direction'];
+            const pseudo = item.pseudo ? escapeHTML(item.pseudo) : 'Anonyme';
+            const texte = escapeHTML(item.texte);
+            const date = new Date(item.date).toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+
+            return `
+                <article class="carte-avis" style="--couleur-poste:${poste.couleur};">
+                    <div class="carte-entete">
+                        <span>${poste.emoji} ${poste.label}</span>
+                        <span class="carte-date">${date}</span>
+                    </div>
+                    <div class="carte-etoiles">${renderEtoiles(item.note)}</div>
+                    <div class="carte-texte"><strong>${pseudo}</strong> : ${texte}</div>
+                </article>
+            `;
+        }).join('');
+    }
+
+    function validerEtEnvoyer() {
+        const pseudo = champPseudo.value.trim();
+        const texte = champTexte.value.trim();
+
+        if (!posteChoisi) {
+            alert('Choisissez un poste avant d’envoyer votre avis.');
+            return;
+        }
+
+        if (noteActuelle === 0) {
+            alert('Notez le site avant d’envoyer votre avis.');
+            return;
+        }
+
+        if (!texte) {
+            alert('Écrivez un commentaire avant d’envoyer votre avis.');
+            return;
+        }
+
+        const avis = chargerAvis();
+        const nouvelAvis = {
+            poste: posteChoisi,
+            pseudo: pseudo || 'Anonyme',
+            texte: texte,
+            note: noteActuelle,
+            date: new Date().toISOString()
+        };
+
+        avis.push(nouvelAvis);
+        sauvegarderAvis(avis);
+
+        champPseudo.value = '';
+        champTexte.value = '';
+        noteActuelle = 0;
+        posteChoisi = null;
+        document.querySelectorAll('.poste-bloc').forEach((b) => b.classList.remove('choisi'));
+        formulaire.style.borderColor = 'var(--couleur-emeraude)';
+        allumerEtoiles(0);
+        afficherAvis();
+    }
+
+    boutonEnvoyer.addEventListener('click', validerEtEnvoyer);
+    afficherAvis();
+})();

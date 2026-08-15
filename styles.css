@@ -1978,6 +1978,170 @@ header.en-tete.ia-highlight {
     line-height: 1.6;
 }
 
+/* ========================================= */
+/* SECTION COMMENTAIRES & AVIS               */
+/* ========================================= */
+
+.commentaires-section {
+    padding: 4rem 2rem;
+    background: var(--couleur-fond-sombre);
+    text-align: center;
+}
+
+.sous-titre-avis {
+    color: #9ca3af;
+    margin-bottom: 2rem;
+}
+
+.choix-postes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.poste-bloc {
+    background: var(--couleur-carte);
+    border: 2px solid #9ca3af;
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    color: #e5e7eb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.poste-bloc:hover {
+    transform: translateY(-3px);
+    border-color: var(--couleur-poste, var(--couleur-emeraude));
+}
+
+.poste-bloc[data-poste="direction"]    { --couleur-poste: #ffd700; }
+.poste-bloc[data-poste="enseignement"] { --couleur-poste: #3b82f6; }
+.poste-bloc[data-poste="sante"]        { --couleur-poste: #ef4444; }
+.poste-bloc[data-poste="social"]       { --couleur-poste: #ec4899; }
+.poste-bloc[data-poste="vie-scolaire"] { --couleur-poste: #f97316; }
+.poste-bloc[data-poste="sport"]        { --couleur-poste: #22c55e; }
+.poste-bloc[data-poste="technique"]    { --couleur-poste: #a16207; }
+.poste-bloc[data-poste="numerique"]    { --couleur-poste: #06b6d4; }
+
+.poste-bloc.choisi {
+    border-color: var(--couleur-poste);
+    box-shadow: 0 0 12px var(--couleur-poste);
+    transform: translateY(-3px);
+}
+
+.poste-admin {
+    background: linear-gradient(135deg, var(--couleur-emeraude), var(--couleur-violet));
+    color: var(--couleur-fond);
+    font-weight: bold;
+    border: none;
+}
+
+.poste-admin.choisi {
+    box-shadow: 0 0 15px var(--couleur-emeraude);
+}
+
+.formulaire-avis {
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+    background: var(--couleur-carte);
+    border: 2px solid var(--couleur-emeraude);
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.etoiles {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 2rem;
+}
+
+.etoile {
+    color: #444444;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.etoile:hover { transform: scale(1.2); }
+
+.etoile.allumee:nth-child(1) { color: #c0c0c0; text-shadow: 0 0 8px #c0c0c0; }
+.etoile.allumee:nth-child(2) { color: #ef4444; text-shadow: 0 0 8px #ef4444; }
+.etoile.allumee:nth-child(3) { color: #3b82f6; text-shadow: 0 0 8px #3b82f6; }
+.etoile.allumee:nth-child(4) { color: #22c55e; text-shadow: 0 0 8px #22c55e; }
+.etoile.allumee:nth-child(5) { color: #a855f7; text-shadow: 0 0 8px #a855f7; }
+
+#avis-pseudo, #avis-texte {
+    background: var(--couleur-fond);
+    border: 1px solid #9ca3af;
+    border-radius: 8px;
+    color: #e5e7eb;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.bouton-envoyer {
+    background: linear-gradient(135deg, var(--couleur-violet), var(--couleur-emeraude));
+    border: none;
+    border-radius: 10px;
+    color: var(--couleur-fond);
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.bouton-envoyer:hover { transform: scale(1.05); }
+
+.archive-avis {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.carte-avis {
+    background: var(--couleur-carte);
+    border-left: 5px solid var(--couleur-poste, var(--couleur-emeraude));
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: left;
+}
+
+.carte-entete {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #e5e7eb;
+    margin-bottom: 0.5rem;
+}
+
+.carte-date {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    font-weight: normal;
+}
+
+.carte-etoiles { font-size: 1.2rem; margin-bottom: 0.5rem; }
+.carte-etoiles .mini-0 { color: #444444; }
+.carte-etoiles .mini-1 { color: #c0c0c0; }
+.carte-etoiles .mini-2 { color: #ef4444; }
+.carte-etoiles .mini-3 { color: #3b82f6; }
+.carte-etoiles .mini-4 { color: #22c55e; }
+.carte-etoiles .mini-5 { color: #a855f7; }
+
+.carte-texte { color: #e5e7eb; }
+
+
 .stage-content strong {
     color: var(--couleur-emeraude);
 }
