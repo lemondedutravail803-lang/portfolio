@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Silver Palace — Un ARPG immersif en métropole victorienne. Découvrez le gameplay, les personnages, Red Rose et l'histoire officielle.">
+    <meta name="author" content="Cédric AUGUSTO">
+    <title>Silver Palace — Cédric AUGUSTO</title>
+    <link rel="icon" href="assets/HTML5_logo_and_wordmark.svg.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <button id="theme-toggle" class="theme-toggle" title="Changer le thème" aria-label="Changer le thème">
+        <span class="theme-icon">🎨</span>
+    </button>
+    <style>
+        /* Styles supplémentaires pour Silver Palace */
+        h2.section-title {
+            color: #3b82f6;
+            font-family: 'Space Mono', monospace;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        h3.card-title {
+            color: #3b82f6;
+            font-family: 'Space Mono', monospace;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .sp-card {
+            background: var(--couleur-carte);
+            border: 1px solid var(--couleur-bordure);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .sp-card .ligne-lumineuse {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--couleur-violet), var(--couleur-emeraude));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .sp-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--couleur-emeraude);
+            box-shadow: var(--glow-emeraude);
+        }
+
+        .sp-card:hover .ligne-lumineuse {
+            transform: scaleX(1);
+        }
+
+        .sp-card h3 {
+            color: #3b82f6;
+        }
+
+        .sp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .sp-alert {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(52, 211, 153, 0.1));
+            border: 2px solid var(--couleur-violet);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .sp-alert h2 {
+            color: var(--couleur-violet);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .sp-alert p {
+            color: var(--couleur-texte);
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .red-rose-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0 0.75rem;
+            align-items: stretch;
+        }
+
+        .red-rose-image {
+            display: block;
+            border-radius: 8px;
+            border: 1px solid var(--couleur-bordure);
+            height: 420px;
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        .red-rose-image img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            transition: transform 0.3s ease;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .red-rose-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .red-rose-names {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 0.25rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .red-rose-name {
+            color: var(--couleur-texte-sombre);
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+            min-height: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .video-item {
+            background: var(--couleur-carte);
+            border: 1px solid var(--couleur-bordure);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        .video-item iframe {
+            width: 100%;
+            height: 315px;
+            border: none;
+            border-radius: 6px;
+        }
+
+        .official-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .official-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--couleur-carte);
+            border: 1px solid var(--couleur-bordure);
+            border-radius: 8px;
+            color: var(--couleur-texte);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .official-link:hover {
+            border-color: var(--couleur-emeraude);
+            color: var(--couleur-emeraude);
+            box-shadow: var(--glow-emeraude);
+        }
+
+        .development-note {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(52, 211, 153, 0.1));
+            border: 1px solid var(--couleur-bordure);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            color: var(--couleur-texte);
+            line-height: 1.8;
+        }
+
+        .development-note strong {
+            color: var(--couleur-emeraude);
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER & NAVIGATION -->
+    <header id="header" class="en-tete">
+        <div class="conteneur">
+            <div class="logo">
+                <span class="prenom">Cédric</span>
+                <span class="separateur"> — </span>
+                <span class="nom">AUGUSTO</span>
+                <span class="curseur">_</span>
+            </div>
+            <button class="bouton-menu" id="menu-toggle">☰</button>
+            <nav>
+                <ul class="liste-liens" id="liste-liens">
+                    <li><a href="index.html">🏠 Accueil</a></li>
+                    <li><a href="honkai-star-rail.html">⭐ HSR</a></li>
+                    <li><a href="wuthering-waves.html">🌊 Wuthering Waves</a></li>
+                    <li><a href="bug-report.html">🐛 Rapport de Bug</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="section">
+        <div class="conteneur">
+            <h1 style="font-size: 3rem; color: #3b82f6; text-align: center; margin-bottom: 1rem; font-family: 'Space Mono', monospace; font-weight: 700;">👑 SILVER PALACE</h1>
+            <p style="font-size: 1.2rem; text-align: center; color: var(--couleur-texte-sombre); max-width: 800px; margin: 0 auto 2rem;">
+                Un ARPG immersif situé dans une métropole prospère à l'esthétique victorienne.
+                Incarnez un Détective et partez à l'aventure pour vaincre des ennemis inconnus et percer les mystères de Silvernia.
+            </p>
+
+            <!-- BANDEAU DÉVELOPPEMENT -->
+            <div class="sp-alert">
+                <h2>⚠️ SILVER PALACE EST TOUJOURS EN DÉVELOPPEMENT</h2>
+                <p><strong>Le jeu n'est pas terminé.</strong> Le développement est actuellement en cours.</p>
+                <p>Des bêta-tests ont déjà eu lieu. Les informations, personnages, gameplay et éléments narratifs présentés peuvent encore évoluer.</p>
+                <p>Cette page sera mise à jour au fur et à mesure que de nouvelles informations officielles seront révélées.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION HISTOIRE -->
+    <section id="histoire" class="section fond-sombre">
+        <div class="conteneur">
+            <h2 class="section-title">📖 HISTOIRE</h2>
+            
+            <div class="sp-card">
+                <span class="ligne-lumineuse"></span>
+                <h3 class="card-title">L'Univers de Silvernia</h3>
+                <p>
+                    Silver Palace propose une <strong>histoire captivante</strong> dans un univers riche et immersif.
+                    Le joueur incarne un <strong>Détective</strong> et part à l'aventure avec un groupe diversifié de partenaires.
+                    Ensemble, ils affrontent des ennemis inconnus et percent progressivement les mystères cachés de Silvernia.
+                </p>
+                <p style="margin-top: 1rem;">
+                    Le jeu combine une <strong>esthétique victorienne</strong> avec une atmosphère moderne,
+                    créant un contraste unique et captivant. Chaque zone révèle des secrets et des intrigues narratives complexes.
+                </p>
+            </div>
+
+            <div class="sp-card">
+                <span class="ligne-lumineuse"></span>
+                <h3 class="card-title">Système de Découverte Progressive</h3>
+                <p>
+                    L'histoire de Silvernia se dévoile progressivement à travers les quêtes et l'exploration.
+                    Vous découvrirez les lore des différentes factions, leurs motivations et leurs conflits cachés.
+                    Chaque choix et chaque victoire vous rapproche de la vérité.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION SILVERNIA ET SILVERIUM -->
+    <section id="silvernia" class="section">
+        <div class="conteneur">
+            <h2 class="section-title">🏛️ SILVERNIA ET SILVERIUM</h2>
+
+            <div class="sp-grid">
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Silvernia - La Métropole</h3>
+                    <p>
+                        Silvernia est devenue un centre prospère de miracles et d'innovation.
+                        La métropole se caractérise par une esthétique <strong>victorienne distinctive</strong>,
+                        avec des architectures somptueuses et une technologie avancée.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        Autrefois une ville ordinaire, elle s'est transformée grâce à la découverte du Silverium.
+                        Cet événement a attiré de nombreux habitants et favorisé une industrialisation massive.
+                    </p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Silverium - L'Élément Révolutionnaire</h3>
+                    <p>
+                        La découverte du <strong>Silverium</strong> fut la clé de l'industrialisation de Silvernia.
+                        Cet élément révolutionnaire a <strong>transformé la technologie</strong> et la vie quotidienne
+                        au-delà de l'imagination.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        Sa monétisation massive sous l'administration actuelle a fait de Silvernia
+                        un centre économique puissant, mais aussi un foyer de tensions et de rivalités.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION LE DÉTECTIVE ET LES FACTIONS -->
+    <section id="detective" class="section fond-sombre">
+        <div class="conteneur">
+            <h2 class="section-title">🕵️ LE DÉTECTIVE ET LES MYSTÈRES</h2>
+
+            <div class="sp-card">
+                <span class="ligne-lumineuse"></span>
+                <h3 class="card-title">Le Rôle du Joueur</h3>
+                <p>
+                    Vous incarnez un <strong>Détective</strong> chargé d'enquêter sur les crimes et de découvrir les vérités cachées.
+                    Votre investigation vous entraînera à travers les différentes facettes de Silvernia,
+                    révélant des secrets que certains préféreraient garder cachés.
+                </p>
+            </div>
+
+            <div class="sp-grid">
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Les Monopoles Corporatifs</h3>
+                    <p>
+                        Organisations puissantes qui contrôlent l'extraction et la distribution du Silverium.
+                        Elles poursuivent leurs propres intérêts économiques, souvent au détriment de la population générale.
+                    </p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Les Syndicats Clandestins</h3>
+                    <p>
+                        Organisations souterraines qui opèrent dans l'ombre pour s'opposer aux monopoles.
+                        Elles cherchent à redistribuer le Silverium et à établir un équilibre des pouvoirs.
+                    </p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Les Affiliés Royaux</h3>
+                    <p>
+                        Groupe aristocratique maintenant le pouvoir politique traditionnel.
+                        Ils travaillent à préserver l'ordre social établi et leur influence.
+                    </p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Les Cultes</h3>
+                    <p>
+                        Organisations mystérieuses ayant leurs propres croyances et objectifs concernant le Silverium.
+                        Leurs motivations restent énigmatiques et dangereuses.
+                    </p>
+                </div>
+            </div>
+
+            <div class="development-note" style="margin-top: 2rem;">
+                <strong>Les tensions augmentent progressivement.</strong> Les différentes factions se disputent le contrôle du Silverium,
+                et votre enquête vous placera au cœur de conflits majeurs. Vos choix influenceront le destin de Silvernia.
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION GAMEPLAY -->
+    <section id="gameplay" class="section">
+        <div class="conteneur">
+            <h2 class="section-title">🎮 GAMEPLAY</h2>
+
+            <div class="sp-card">
+                <span class="ligne-lumineuse"></span>
+                <h3 class="card-title">Moteur et Technologie</h3>
+                <p>
+                    Silver Palace utilise <strong>Unreal Engine 5</strong>, offrant des graphismes exceptionnels
+                    et une fluidité de jeu impressionnante.
+                </p>
+            </div>
+
+            <div class="sp-grid">
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Personnages et Visuels</h3>
+                    <p>Personnages de style anime haute qualité avec un rendu visuel distinctif.</p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Combat Fluide et Dynamique</h3>
+                    <p>Système de combat immersif centré sur l'action avec des mécaniques réactives.</p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Changement de Personnage</h3>
+                    <p>Basculez entre les personnages en temps réel pour adapter votre stratégie.</p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Compétences Puissantes</h3>
+                    <p>Débloquez et maîtrisez des compétences uniques pour chaque personnage.</p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Combos et QTE</h3>
+                    <p>Enchaînez les combos et participez à des séquences QTE spectaculaires.</p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Exploration Urbaine</h3>
+                    <p>Explorez de vastes environnements urbains remplis de détails et de secrets.</p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Enquête et Investigation</h3>
+                    <p>Enquêtez sur les scènes de crime, collectez des indices et découvrez la vérité.</p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Combats Contre Ennemis</h3>
+                    <p>Affrontez des ennemis variés dans des combats tactiques et intenses.</p>
+                </div>
+
+                <div class="sp-card">
+                    <span class="ligne-lumineuse"></span>
+                    <h3 class="card-title">Progression Narrative</h3>
+                    <p>Découvrez progressivement l'histoire complète de Silvernia à travers vos actions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION PERSONNAGES -->
+    <section id="personnages" class="section fond-sombre">
+        <div class="conteneur">
+            <h2 class="section-title">👥 PERSONNAGES</h2>
+
+            <p style="text-align: center; color: var(--couleur-texte-sombre); margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Silver Palace met en avant des personnages distinctifs avec leurs propres histoires.
+                Les informations détaillées sur les personnages seront progressivement révélées au fur et à mesure du développement du jeu.
+            </p>
+
+            <div class="development-note">
+                <strong>ℹ️ Informations en évolution</strong><br>
+                Les noms, rôles, personnalités, histoires, capacités et styles de combat des personnages
+                sont actuellement en cours de développement et de révélation officielle.
+                Cette page sera mise à jour dès que les développeurs publieront des informations officielles supplémentaires.
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION RED ROSE -->
+    <section id="red-rose" class="section">
+        <div class="conteneur">
+            <h2 class="section-title">🌹 RED ROSE</h2>
+
+            <p style="text-align: center; color: var(--couleur-texte-sombre); margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Red Rose est une composante importante de l'univers de Silver Palace.
+                Découvrez les visuels officiels ci-dessous.
+            </p>
+
+            <div class="red-rose-gallery">
+                <div class="red-rose-image">
+                    <img src="assets/Red Rose 1.png" alt="Red Rose 1">
+                </div>
+                <div class="red-rose-image">
+                    <img src="assets/Red Rose 2.png" alt="Red Rose 2">
+                </div>
+            </div>
+
+            <div class="red-rose-names">
+                <div class="red-rose-name">Red Rose 1</div>
+                <div class="red-rose-name">Red Rose 2</div>
+            </div>
+
+            <div class="development-note">
+                <strong>Informations à venir</strong><br>
+                Des informations officielles sur Red Rose seront révélées à mesure que le jeu progresse en développement.
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION VIDÉOS -->
+    <section id="videos" class="section fond-sombre">
+        <div class="conteneur">
+            <h2 class="section-title">📹 VIDÉOS OFFICIELLES</h2>
+
+            <p style="text-align: center; color: var(--couleur-texte-sombre); margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Découvrez les vidéos officielles et les trailers de Silver Palace.
+            </p>
+
+            <div class="video-grid">
+                <div class="video-item">
+                    <iframe src="https://www.youtube.com/embed/ELC4r7fbKEQ" allowfullscreen></iframe>
+                </div>
+                <div class="video-item">
+                    <iframe src="https://www.youtube.com/embed/EIUa74hDJiQ" allowfullscreen></iframe>
+                </div>
+                <div class="video-item">
+                    <iframe src="https://www.youtube.com/embed/H_mgS0oQQM0" allowfullscreen></iframe>
+                </div>
+                <div class="video-item">
+                    <iframe src="https://www.youtube.com/embed/ySF0oEP_aA4" allowfullscreen></iframe>
+                </div>
+                <div class="video-item">
+                    <iframe src="https://www.youtube.com/embed/5kn2PqGuhY4" allowfullscreen></iframe>
+                </div>
+                <div class="video-item">
+                    <iframe src="https://www.youtube.com/embed/ofTnT5Bk1_Y" allowfullscreen></iframe>
+                </div>
+                <div class="video-item">
+                    <iframe src="https://www.youtube.com/embed/hDHFxsh02aE" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION BÊTA-TESTS -->
+    <section id="beta-tests" class="section">
+        <div class="conteneur">
+            <h2 class="section-title">🧪 BÊTA-TESTS</h2>
+
+            <div class="sp-card">
+                <span class="ligne-lumineuse"></span>
+                <h3 class="card-title">Phases de Bêta-Tests</h3>
+                <p>
+                    Silver Palace a déjà fait l'objet de plusieurs phases de bêta-tests.
+                    Ces tests sont une étape essentielle du processus de développement,
+                    permettant aux développeurs de recueillir des retours précieux et d'optimiser le jeu.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>Important :</strong> Les bêta-tests ne signifient pas que le jeu est complet.
+                    Ils sont une partie du développement actif et continu du jeu.
+                </p>
+            </div>
+
+            <div class="development-note">
+                <strong>Les bêta-tests ne sont pas la version finale.</strong><br>
+                Les informations et contenus présentés durant les phases de bêta-tests peuvent différer significativement
+                de la version finale. Le développement se poursuit avec les retours des testeurs.
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION RÉSEAUX OFFICIELS -->
+    <section id="official-channels" class="section fond-sombre">
+        <div class="conteneur">
+            <h2 class="section-title">📱 RÉSEAUX OFFICIELS</h2>
+
+            <p style="text-align: center; color: var(--couleur-texte-sombre); margin-bottom: 2rem;">
+                Suivez Silver Palace sur les réseaux officiels pour les dernières nouvelles et annonces.
+            </p>
+
+            <div class="official-links">
+                <a href="https://twitter.com/SilverPalace_EN" class="official-link" target="_blank" rel="noopener">
+                    𝕏 @SilverPalace_EN
+                </a>
+                <a href="https://www.facebook.com/SilverPalace" class="official-link" target="_blank" rel="noopener">
+                    f Silver Palace
+                </a>
+                <a href="https://www.youtube.com/@SilverPalace-Official" class="official-link" target="_blank" rel="noopener">
+                    ▶️ @SilverPalace-Official
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE ÉVOLUTIVE NOTE -->
+    <section id="evolution-note" class="section">
+        <div class="conteneur">
+            <div class="development-note">
+                <h3 style="color: var(--couleur-emeraude); margin-bottom: 1rem;">📝 Cette Page Est Évolutive</h3>
+                <p>
+                    Cette encyclopédie de Silver Palace est vivante et évoluera au fur et à mesure que le jeu se développe.
+                </p>
+                <p style="margin-top: 0.5rem;">
+                    <strong>Dernière mise à jour :</strong> Décembre 2026<br>
+                    <strong>Statut du jeu :</strong> Développement actif en cours
+                </p>
+                <p style="margin-top: 1rem; font-size: 0.95rem;">
+                    Toutes les informations présentées ici proviennent de sources officielles et sont sujettes à modification.
+                    Consultez régulièrement cette page et les canaux officiels pour les dernières mises à jour.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
