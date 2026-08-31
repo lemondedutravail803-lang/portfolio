@@ -147,24 +147,48 @@
 
         .video-grid {
             display: grid;
-            gap: 1.5rem;
+            gap: 2rem;
             margin-bottom: 3rem;
         }
 
         .video-item {
             background: var(--couleur-carte);
             border: 1px solid var(--couleur-bordure);
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 1rem;
             overflow: hidden;
+            width: min(100%, 1100px);
+            margin: 0 auto;
+            transition: all 0.4s ease;
+        }
+
+        .video-item:hover {
+            transform: translateY(-6px);
+            border-color: var(--couleur-emeraude);
+            box-shadow: var(--glow-emeraude);
         }
 
         .video-item iframe {
+            display: block;
             width: 100%;
-            height: 315px;
+            aspect-ratio: 16 / 9;
+            height: auto;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.6);
         }
+
+        /* Présentation fixe des titres vidéo Silver Palace. */
+        h3.video-title {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #3b82f6, var(--couleur-emeraude));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
 
         .official-links {
             display: flex;
@@ -512,24 +536,31 @@
 
             <div class="video-grid">
                 <div class="video-item">
+                    <h3 class="video-title">Silver Palace Trailer | The Golden Age of Detectives</h3>
                     <iframe src="https://www.youtube.com/embed/ELC4r7fbKEQ" allowfullscreen></iframe>
                 </div>
                 <div class="video-item">
+                    <h3 class="video-title">Silver Palace Gameplay Showcase</h3>
                     <iframe src="https://www.youtube.com/embed/EIUa74hDJiQ" allowfullscreen></iframe>
                 </div>
                 <div class="video-item">
+                    <h3 class="video-title">Silver Palace丨Monotype Beta Test Trailer</h3>
                     <iframe src="https://www.youtube.com/embed/H_mgS0oQQM0" allowfullscreen></iframe>
                 </div>
                 <div class="video-item">
+                    <h3 class="video-title">Silver Palace丨Monotype Beta Test Gameplay Showcase</h3>
                     <iframe src="https://www.youtube.com/embed/ySF0oEP_aA4" allowfullscreen></iframe>
                 </div>
                 <div class="video-item">
+                    <h3 class="video-title">Silver Palace丨Dichotomy Beta Test Trailer - Black Knights' Tango</h3>
                     <iframe src="https://www.youtube.com/embed/5kn2PqGuhY4" allowfullscreen></iframe>
                 </div>
                 <div class="video-item">
+                    <h3 class="video-title">Silver Palace丨Dichotomy Beta Test Gameplay Showcase - The Raven and the Rose</h3>
                     <iframe src="https://www.youtube.com/embed/ofTnT5Bk1_Y" allowfullscreen></iframe>
                 </div>
                 <div class="video-item">
+                    <h3 class="video-title">Silver Palace | gamescom 2026 Special Trailer - The Price of Truth</h3>
                     <iframe src="https://www.youtube.com/embed/hDHFxsh02aE" allowfullscreen></iframe>
                 </div>
             </div>
